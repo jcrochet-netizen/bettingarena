@@ -739,6 +739,48 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
   });
 });
 
+// ========== OCR : helpers partagés (preprocessing + parsing) ==========
+
+// Pré-traitement : upscale + grayscale + contraste boosté.
+// Améliore drastiquement l'OCR sur des fonds colorés (jaune, vert…) où
+// le texte est noir mais le fond proche du gris moyen.
+function preprocessForOCR(blob) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const targetMax = 2000;
+      const longest = Math.max(img.width, img.height);
+      let scale = 1;
+      if (longest < 1500) scale = Math.max(2, targetMax / longest);
+      else if (longest > targetMax) scale = targetMax / longest;
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      const ctx = canvas.getContext('2d');
+      ctx.imageSmoothingQuality = 'high';
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      // Grayscale + courbe : dark → noir, light → blanc, milieu rampé
+      const id = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const d = id.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const gray = d[i] * 0.299 + d[i+1] * 0.587 + d[i+2] * 0.114;
+        let v;
+        if (gray < 100) v = 0;
+        else if (gray > 175) v = 255;
+        else v = Math.round((gray - 100) * 255 / 75);
+        d[i] = d[i+1] = d[i+2] = v;
+      }
+      ctx.putImageData(id, 0, 0);
+      URL.revokeObjectURL(img.src);
+      resolve(canvas);
+    };
+    img.onerror = () => { URL.revokeObjectURL(img.src); reject(new Error("Image illisible")); };
+    img.src = URL.createObjectURL(blob);
+  });
+}
+
 // ========== OCR : capture d'écran → cotes ==========
 let currentImageBlob = null;
 
@@ -761,6 +803,8 @@ async function runOCR(blob) {
       status.textContent = "⚠ Tesseract.js non chargé (vérifie ta connexion).";
       return;
     }
+    status.textContent = "Pré-traitement de l'image…";
+    const processed = await preprocessForOCR(blob);
     const worker = await Tesseract.createWorker('eng', 1, {
       logger: m => {
         if (m.status === 'recognizing text') {
@@ -773,9 +817,10 @@ async function runOCR(blob) {
       }
     });
     await worker.setParameters({
-      tessedit_char_whitelist: '0123456789.,'
+      tessedit_char_whitelist: '0123456789.,',
+      tessedit_pageseg_mode: '6'
     });
-    const { data: { text } } = await worker.recognize(blob);
+    const { data: { text } } = await worker.recognize(processed);
     await worker.terminate();
 
     const odds = parseOddsFromText(text);
@@ -939,7 +984,20 @@ $('copyBtn').addEventListener('click', async () => {
   // ========== OCR Tab 2 : extrait paires "nom + cote" ==========
   let bCurrentBlob = null;
 
-  function parsePlayerOddsFromText(text) {
+  function cleanName(s) {
+    return s
+      .replace(/[^A-Za-zÀ-ÿ\s\-'\.]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function isOdds(str) {
+    const n = parseFloat(String(str).replace(',', '.'));
+    return n >= 1.01 && n <= 999;
+  }
+
+  // Stratégie 1 : "Nom de joueur 1,67" sur la même ligne
+  function parseSameLine(text) {
     const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
     const results = [];
     for (const line of lines) {
@@ -948,16 +1006,48 @@ $('copyBtn').addEventListener('click', async () => {
       while ((m = oddsRegex.exec(line)) !== null) lastMatch = m;
       if (!lastMatch) continue;
       const oddsStr = lastMatch[1].replace('.', ',');
-      const n = parseFloat(oddsStr.replace(',', '.'));
-      if (n < 1.01 || n > 999) continue;
+      if (!isOdds(oddsStr)) continue;
       const before = line.substring(0, lastMatch.index).trim();
-      const name = before
-        .replace(/[^A-Za-zÀ-ÿ\s\-'\.]/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim();
+      const name = cleanName(before);
       results.push({ name: name.length >= 2 ? name : '', odds: oddsStr });
     }
     return results;
+  }
+
+  // Stratégie 2 : noms et cotes en blocs séparés (Tesseract sort 2 colonnes)
+  function parseTwoColumns(text) {
+    const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+    const names = [];
+    const odds = [];
+    for (const line of lines) {
+      const tokens = line.match(/\d{1,3}[.,]\d{2}/g) || [];
+      // ligne quasi-numérique (cotes principalement)
+      const stripped = line.replace(/[\d.,\s]/g, '');
+      if (tokens.length > 0 && stripped.length <= 2) {
+        tokens.forEach(t => {
+          const o = t.replace('.', ',');
+          if (isOdds(o)) odds.push(o);
+        });
+      } else {
+        const n = cleanName(line);
+        if (n.length >= 3) names.push(n);
+      }
+    }
+    const out = [];
+    for (let i = 0; i < Math.max(names.length, odds.length); i++) {
+      out.push({ name: names[i] || '', odds: odds[i] || '' });
+    }
+    return out.filter(r => r.name || r.odds);
+  }
+
+  function parsePlayerOddsFromText(text) {
+    const a = parseSameLine(text);
+    if (a.length >= 3 && a.slice(0,3).every(r => r.odds)) return a;
+    const b = parseTwoColumns(text);
+    // On garde le résultat le plus riche (le plus de paires complètes)
+    const scoreA = a.filter(r => r.odds).length + a.filter(r => r.name).length * 0.5;
+    const scoreB = b.filter(r => r.odds).length + b.filter(r => r.name).length * 0.5;
+    return scoreB > scoreA ? b : a;
   }
 
   async function runOCRButeurs(blob) {
@@ -968,6 +1058,8 @@ $('copyBtn').addEventListener('click', async () => {
         status.textContent = "⚠ Tesseract.js non chargé (vérifie ta connexion).";
         return;
       }
+      status.textContent = "Pré-traitement de l'image…";
+      const processed = await preprocessForOCR(blob);
       const worker = await Tesseract.createWorker('eng', 1, {
         logger: m => {
           if (m.status === 'recognizing text') status.textContent = `Analyse en cours… ${Math.round(m.progress * 100)}%`;
@@ -975,8 +1067,10 @@ $('copyBtn').addEventListener('click', async () => {
           else if (m.status === 'loading language traineddata') status.textContent = "Chargement du modèle…";
         }
       });
-      // Pas de whitelist : on veut aussi les noms
-      const { data: { text } } = await worker.recognize(blob);
+      await worker.setParameters({
+        tessedit_pageseg_mode: '6'
+      });
+      const { data: { text } } = await worker.recognize(processed);
       await worker.terminate();
 
       const pairs = parsePlayerOddsFromText(text);
