@@ -88,6 +88,43 @@
   .copy-row { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
   .status { font-size: 13px; color: var(--muted); }
 
+  .tabs {
+    display: flex;
+    gap: 2px;
+    border-bottom: 1px solid var(--border);
+    margin: 0 0 28px;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+  .tab-btn {
+    background: transparent;
+    color: var(--muted);
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+    border-radius: 0;
+    margin-bottom: -1px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .tab-btn:hover { color: var(--text); background: transparent; }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .tab-placeholder {
+    padding: 80px 24px;
+    text-align: center;
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .tab-placeholder strong { display: block; font-size: 16px; color: var(--text); margin-bottom: 6px; }
+
   .ocr-zone { margin-bottom: 16px; }
   .ocr-drop {
     display: flex;
@@ -220,7 +257,16 @@
 <body>
 <div class="container">
 
-  <h1>Générateur de widget Betting</h1>
+  <h1>Générateur de widgets Betting</h1>
+
+  <nav class="tabs" role="tablist">
+    <button type="button" class="tab-btn active" data-tab="tab-1n2-tm" role="tab">1N2 Topmercato</button>
+    <button type="button" class="tab-btn" data-tab="tab-buteurs-tm" role="tab">Buteurs Topmercato</button>
+    <button type="button" class="tab-btn" data-tab="tab-1n2-af" role="tab">1N2 Afrik-Foot FR</button>
+    <button type="button" class="tab-btn" data-tab="tab-buteurs-af" role="tab">Buteurs Afrik-Foot FR</button>
+  </nav>
+
+  <div class="tab-panel active" id="tab-1n2-tm" role="tabpanel">
   <p class="subtitle">Colle une URL Betclic pour extraire les clubs, renseigne les 3 cotes, récupère le HTML. Les liens du widget pointent automatiquement vers le lien affilié Topmercato.</p>
 
   <div class="panel">
@@ -295,6 +341,28 @@
     <div class="copy-row">
       <button type="button" id="copyBtn">Copier le HTML</button>
       <span class="status" id="copyStatus"></span>
+    </div>
+  </div>
+  </div><!-- /tab-1n2-tm -->
+
+  <div class="tab-panel" id="tab-buteurs-tm" role="tabpanel">
+    <div class="tab-placeholder">
+      <strong>Buteurs Topmercato</strong>
+      Widget à venir — fournis les détails (champs, sources, style) et je l'ajoute ici.
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-1n2-af" role="tabpanel">
+    <div class="tab-placeholder">
+      <strong>1N2 Afrik-Foot FR</strong>
+      Widget à venir — fournis les détails (lien affilié, logo, source des cotes) et je l'ajoute ici.
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-buteurs-af" role="tabpanel">
+    <div class="tab-placeholder">
+      <strong>Buteurs Afrik-Foot FR</strong>
+      Widget à venir — fournis les détails (champs, sources, style) et je l'ajoute ici.
     </div>
   </div>
 
@@ -562,6 +630,17 @@ function render() {
 
 ['url','club1','club2','cote1','coteN','cote2'].forEach(id => {
   $(id).addEventListener('input', render);
+});
+
+// ========== Tabs ==========
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const panel = document.getElementById(btn.dataset.tab);
+    if (panel) panel.classList.add('active');
+  });
 });
 
 // ========== OCR : capture d'écran → cotes ==========
