@@ -289,6 +289,7 @@
   .afw__bookmaker strong { font-weight: 700; color: #6d8e3f; margin-left: 4px; }
   .afw__match { font-size: 17px; font-weight: 700; margin-bottom: 14px; text-align: center; }
   .afw__match span { color: #6b7280; font-weight: 400; margin: 0 6px; }
+  .afw__subtitle { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7280; text-align: center; margin-bottom: 12px; }
   .afw__odds { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
   .afw__odd {
     display: flex;
@@ -578,9 +579,97 @@
   </div>
 
   <div class="tab-panel" id="tab-buteurs-af" role="tabpanel">
-    <div class="tab-placeholder">
-      <strong>Buteurs Afrik-Foot FR</strong>
-      Widget à venir — fournis les détails (champs, sources, style) et je l'ajoute ici.
+    <p class="subtitle">Colle l'URL Betclic du match (pour le contexte clubs), renseigne le top 3 buteurs avec leurs cotes, récupère le HTML. Widget branding Afrik-Foot FR (vert). Lien affilié à renseigner.</p>
+
+    <div class="panel">
+      <h2>1. URL du match Betclic (optionnel)</h2>
+      <label for="ab-url">URL</label>
+      <input type="text" id="ab-url" placeholder="https://www.betclic.fr/football-s1/.../paris-saint-germain-olympique-de-marseille-m..." />
+      <div class="hint">Sert uniquement à pré-remplir les noms des clubs affichés en en-tête du widget.</div>
+      <div style="margin-top: 12px;">
+        <button type="button" id="ab-parseBtn">Extraire les clubs</button>
+        <span class="status" id="ab-parseStatus" style="margin-left: 10px;"></span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>2. Équipes (en-tête du widget)</h2>
+      <div class="row">
+        <div>
+          <label for="ab-club1">Club 1 (domicile)</label>
+          <input type="text" id="ab-club1" placeholder="Paris Saint-Germain" />
+        </div>
+        <div>
+          <label for="ab-club2">Club 2 (extérieur)</label>
+          <input type="text" id="ab-club2" placeholder="Olympique de Marseille" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Top 3 — Meilleures cotes Buteur</h2>
+
+      <div class="ocr-zone">
+        <label for="ab-ocrFile" class="ocr-drop">
+          <input type="file" id="ab-ocrFile" accept="image/*" hidden />
+          <span class="ocr-drop__icon">📷</span>
+          <span class="ocr-drop__text">Importer une capture des buteurs — auto-fill par OCR</span>
+          <span class="ocr-drop__hint">PNG/JPG. Idéal : capture rognée sur les 3 buteurs (nom + cote sur une ligne).</span>
+        </label>
+        <div id="ab-ocrPreview" class="ocr-preview" hidden>
+          <img id="ab-ocrImg" alt="Aperçu" />
+          <div class="ocr-side">
+            <div class="status" id="ab-ocrStatus">En attente…</div>
+            <button type="button" class="secondary" id="ab-ocrRetry" hidden>Relancer l'OCR</button>
+            <button type="button" class="secondary" id="ab-ocrClear">Retirer l'image</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="grid-template-columns: 2fr 1fr;">
+        <div>
+          <label for="ab-p1">#1 — Buteur</label>
+          <input type="text" id="ab-p1" placeholder="Mbappé" />
+        </div>
+        <div>
+          <label for="ab-c1">Cote</label>
+          <input type="text" id="ab-c1" placeholder="1,80" inputmode="decimal" />
+        </div>
+      </div>
+      <div class="row" style="grid-template-columns: 2fr 1fr;">
+        <div>
+          <label for="ab-p2">#2 — Buteur</label>
+          <input type="text" id="ab-p2" placeholder="Dembélé" />
+        </div>
+        <div>
+          <label for="ab-c2">Cote</label>
+          <input type="text" id="ab-c2" placeholder="2,30" inputmode="decimal" />
+        </div>
+      </div>
+      <div class="row" style="grid-template-columns: 2fr 1fr;">
+        <div>
+          <label for="ab-p3">#3 — Buteur</label>
+          <input type="text" id="ab-p3" placeholder="Vitinha" />
+        </div>
+        <div>
+          <label for="ab-c3">Cote</label>
+          <input type="text" id="ab-c3" placeholder="3,10" inputmode="decimal" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Aperçu</h2>
+      <div class="preview-wrap" id="ab-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML à copier</h2>
+      <textarea id="ab-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="ab-copyBtn">Copier le HTML</button>
+        <span class="status" id="ab-copyStatus"></span>
+      </div>
     </div>
   </div>
 
@@ -1007,6 +1096,71 @@ $('copyBtn').addEventListener('click', async () => {
   }
 });
 
+// ========== Helpers parsing Buteurs (partagés tabs 2 & 4) ==========
+function cleanName(s) {
+  return s
+    .replace(/[^A-Za-zÀ-ÿ\s\-'\.]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function isOdds(str) {
+  const n = parseFloat(String(str).replace(',', '.'));
+  return n >= 1.01 && n <= 999;
+}
+
+// Stratégie 1 : "Nom de joueur 1,67" sur la même ligne
+function parseSameLine(text) {
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  const results = [];
+  for (const line of lines) {
+    const oddsRegex = /(\d{1,3}[.,]\d{2})/g;
+    let lastMatch = null, m;
+    while ((m = oddsRegex.exec(line)) !== null) lastMatch = m;
+    if (!lastMatch) continue;
+    const oddsStr = lastMatch[1].replace('.', ',');
+    if (!isOdds(oddsStr)) continue;
+    const before = line.substring(0, lastMatch.index).trim();
+    const name = cleanName(before);
+    results.push({ name: name.length >= 2 ? name : '', odds: oddsStr });
+  }
+  return results;
+}
+
+// Stratégie 2 : noms et cotes en blocs séparés (Tesseract sort 2 colonnes)
+function parseTwoColumns(text) {
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  const names = [];
+  const odds = [];
+  for (const line of lines) {
+    const tokens = line.match(/\d{1,3}[.,]\d{2}/g) || [];
+    const stripped = line.replace(/[\d.,\s]/g, '');
+    if (tokens.length > 0 && stripped.length <= 2) {
+      tokens.forEach(t => {
+        const o = t.replace('.', ',');
+        if (isOdds(o)) odds.push(o);
+      });
+    } else {
+      const n = cleanName(line);
+      if (n.length >= 3) names.push(n);
+    }
+  }
+  const out = [];
+  for (let i = 0; i < Math.max(names.length, odds.length); i++) {
+    out.push({ name: names[i] || '', odds: odds[i] || '' });
+  }
+  return out.filter(r => r.name || r.odds);
+}
+
+function parsePlayerOddsFromText(text) {
+  const a = parseSameLine(text);
+  if (a.length >= 3 && a.slice(0,3).every(r => r.odds)) return a;
+  const b = parseTwoColumns(text);
+  const scoreA = a.filter(r => r.odds).length + a.filter(r => r.name).length * 0.5;
+  const scoreB = b.filter(r => r.odds).length + b.filter(r => r.name).length * 0.5;
+  return scoreB > scoreA ? b : a;
+}
+
 // ========== TAB 2 : Buteurs Topmercato ==========
 (function() {
   const AFFILIATE_URL_B = "https://www.topmercato.com/go-betclic-arena-live-fr";
@@ -1105,72 +1259,6 @@ $('copyBtn').addEventListener('click', async () => {
 
   // ========== OCR Tab 2 : extrait paires "nom + cote" ==========
   let bCurrentBlob = null;
-
-  function cleanName(s) {
-    return s
-      .replace(/[^A-Za-zÀ-ÿ\s\-'\.]/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim();
-  }
-
-  function isOdds(str) {
-    const n = parseFloat(String(str).replace(',', '.'));
-    return n >= 1.01 && n <= 999;
-  }
-
-  // Stratégie 1 : "Nom de joueur 1,67" sur la même ligne
-  function parseSameLine(text) {
-    const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
-    const results = [];
-    for (const line of lines) {
-      const oddsRegex = /(\d{1,3}[.,]\d{2})/g;
-      let lastMatch = null, m;
-      while ((m = oddsRegex.exec(line)) !== null) lastMatch = m;
-      if (!lastMatch) continue;
-      const oddsStr = lastMatch[1].replace('.', ',');
-      if (!isOdds(oddsStr)) continue;
-      const before = line.substring(0, lastMatch.index).trim();
-      const name = cleanName(before);
-      results.push({ name: name.length >= 2 ? name : '', odds: oddsStr });
-    }
-    return results;
-  }
-
-  // Stratégie 2 : noms et cotes en blocs séparés (Tesseract sort 2 colonnes)
-  function parseTwoColumns(text) {
-    const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
-    const names = [];
-    const odds = [];
-    for (const line of lines) {
-      const tokens = line.match(/\d{1,3}[.,]\d{2}/g) || [];
-      // ligne quasi-numérique (cotes principalement)
-      const stripped = line.replace(/[\d.,\s]/g, '');
-      if (tokens.length > 0 && stripped.length <= 2) {
-        tokens.forEach(t => {
-          const o = t.replace('.', ',');
-          if (isOdds(o)) odds.push(o);
-        });
-      } else {
-        const n = cleanName(line);
-        if (n.length >= 3) names.push(n);
-      }
-    }
-    const out = [];
-    for (let i = 0; i < Math.max(names.length, odds.length); i++) {
-      out.push({ name: names[i] || '', odds: odds[i] || '' });
-    }
-    return out.filter(r => r.name || r.odds);
-  }
-
-  function parsePlayerOddsFromText(text) {
-    const a = parseSameLine(text);
-    if (a.length >= 3 && a.slice(0,3).every(r => r.odds)) return a;
-    const b = parseTwoColumns(text);
-    // On garde le résultat le plus riche (le plus de paires complètes)
-    const scoreA = a.filter(r => r.odds).length + a.filter(r => r.name).length * 0.5;
-    const scoreB = b.filter(r => r.odds).length + b.filter(r => r.name).length * 0.5;
-    return scoreB > scoreA ? b : a;
-  }
 
   async function runOCRButeurs(blob) {
     const status = $('b-ocrStatus');
@@ -1436,6 +1524,187 @@ $('copyBtn').addEventListener('click', async () => {
   });
 
   afRender();
+})();
+
+// ========== TAB 4 : Buteurs Afrik-Foot FR (vert) ==========
+(function() {
+  const AFFILIATE_URL_AB = "#"; // TODO: remplacer par l'URL affilié Afrik-Foot FR quand fournie
+  const LOGO_SRC_AB = "https://media.afrik-foot.com/main/2026/05/afrikfoot.png";
+
+  function buildAfButeursHtml({ club1, club2, p1, c1, p2, c2, p3, c3 }) {
+    const safeUrl = AFFILIATE_URL_AB;
+    const cl1 = escapeHtml(club1 || 'Club 1');
+    const cl2 = escapeHtml(club2 || 'Club 2');
+    const matchLine = (club1 || club2)
+      ? `<div class="afw__match">${cl1} <span>vs</span> ${cl2}</div>`
+      : '';
+    const slots = [
+      { rank: '#1', name: p1, odds: c1 },
+      { rank: '#2', name: p2, odds: c2 },
+      { rank: '#3', name: p3, odds: c3 },
+    ];
+    const oddsHtml = slots.map(s => `
+    <a class="afw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
+      <span class="afw__odd-label">${s.rank}</span>
+      <span class="afw__odd-team">${escapeHtml(s.name || 'Joueur')}</span>
+      <span class="afw__odd-value">${escapeHtml(s.odds || '-')}</span>
+    </a>`).join('');
+
+    return `<div class="afw">
+  <div class="afw__head">
+    <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener"><img class="afw__logo" src="${LOGO_SRC_AB}" alt="Afrik-Foot" style="height:22px;width:auto;max-width:140px;display:block;"></a>
+    <span class="afw__bookmaker">Cotes Buteur <strong>Betclic</strong></span>
+  </div>
+  ${matchLine}
+  <div class="afw__subtitle">Top 3 — Meilleures cotes buteur</div>
+  <div class="afw__odds">${oddsHtml}
+  </div>
+  <a class="afw__cta" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">Parier sur Betclic →</a>
+  <div class="afw__legal">Cotes indicatives susceptibles de varier. Les jeux d'argent sont interdits aux moins de 18 ans. Jouer comporte des risques : endettement, dépendance… Appelez le 09 74 75 13 13 (appel non surtaxé).</div>
+</div>`;
+  }
+
+  const EMBED_CSS_AB = `<style>
+.afw{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;border:1px solid #e3e6eb;border-radius:10px;background:#fff;padding:18px 20px;max-width:560px;color:#1a1d23;margin:16px auto}
+.afw__head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #eef0f3}
+.afw__logo{height:22px !important;width:auto !important;max-width:140px !important;display:block !important}
+.afw__bookmaker{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#6b7280}
+.afw__bookmaker strong{font-weight:700;color:#6d8e3f;margin-left:4px}
+.afw__match{font-size:17px;font-weight:700;margin-bottom:6px;text-align:center}
+.afw__match span{color:#6b7280;font-weight:400;margin:0 6px}
+.afw__subtitle{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;text-align:center;margin-bottom:12px}
+.afw__odds{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.afw__odd{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;border:1px solid #e3e6eb;border-radius:8px;background:#fafbfc;text-decoration:none;color:#1a1d23;transition:all .15s}
+.afw__odd:hover{border-color:#6d8e3f;background:#f1f5ec}
+.afw__odd-label{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.afw__odd-team{font-size:13px;font-weight:600;text-align:center;margin-bottom:6px;min-height:32px;display:flex;align-items:center}
+.afw__odd-value{font-size:20px;font-weight:700;color:#6d8e3f}
+.afw__cta{display:block;text-align:center;margin-top:12px;font-size:12px;color:#6b7280;text-decoration:none}
+.afw__cta:hover{color:#6d8e3f}
+.afw__legal{font-size:10px;color:#9ca3af;text-align:center;margin-top:10px;line-height:1.4}
+</style>
+`;
+
+  function abRender() {
+    const data = {
+      club1: $('ab-club1').value.trim(),
+      club2: $('ab-club2').value.trim(),
+      p1: $('ab-p1').value.trim(),
+      c1: $('ab-c1').value.trim(),
+      p2: $('ab-p2').value.trim(),
+      c2: $('ab-c2').value.trim(),
+      p3: $('ab-p3').value.trim(),
+      c3: $('ab-c3').value.trim(),
+    };
+    const html = buildAfButeursHtml(data);
+    $('ab-preview').innerHTML = html;
+    $('ab-output').value = EMBED_CSS_AB + html;
+  }
+
+  $('ab-parseBtn').addEventListener('click', () => {
+    const url = $('ab-url').value.trim();
+    const status = $('ab-parseStatus');
+    if (!url) { status.textContent = "Colle une URL d'abord."; return; }
+    const slug = extractBetclicSlug(url);
+    if (!slug) { status.textContent = "URL non reconnue (Betclic attendu)."; return; }
+    const parsed = parseMatchSlug(slug);
+    $('ab-club1').value = parsed.club1;
+    $('ab-club2').value = parsed.club2;
+    if (parsed.method === "dictionary") status.textContent = "✓ Clubs reconnus.";
+    else if (parsed.method === "midpoint-fallback") status.textContent = "⚠ Clubs inconnus, split approximatif — vérifie.";
+    else status.textContent = "⚠ Impossible de séparer — corrige à la main.";
+    abRender();
+  });
+
+  ['ab-club1','ab-club2','ab-p1','ab-c1','ab-p2','ab-c2','ab-p3','ab-c3'].forEach(id => {
+    $(id).addEventListener('input', abRender);
+  });
+
+  let abCurrentBlob = null;
+
+  async function runOCRAbButeurs(blob) {
+    const status = $('ab-ocrStatus');
+    status.textContent = "Chargement du moteur OCR…";
+    try {
+      if (!window.Tesseract) {
+        status.textContent = "⚠ Tesseract.js non chargé (vérifie ta connexion).";
+        return;
+      }
+      status.textContent = "Pré-traitement de l'image…";
+      const processed = await preprocessForOCR(blob);
+      const worker = await Tesseract.createWorker('eng', 1, {
+        logger: m => {
+          if (m.status === 'recognizing text') status.textContent = `Analyse en cours… ${Math.round(m.progress * 100)}%`;
+          else if (m.status === 'loading tesseract core' || m.status === 'initializing tesseract') status.textContent = "Initialisation du moteur OCR…";
+          else if (m.status === 'loading language traineddata') status.textContent = "Chargement du modèle…";
+        }
+      });
+      await worker.setParameters({
+        tessedit_pageseg_mode: '6'
+      });
+      const { data: { text } } = await worker.recognize(processed);
+      await worker.terminate();
+
+      const pairs = parsePlayerOddsFromText(text);
+      const slots = [['ab-p1','ab-c1'], ['ab-p2','ab-c2'], ['ab-p3','ab-c3']];
+      const filled = Math.min(pairs.length, 3);
+      for (let i = 0; i < filled; i++) {
+        if (pairs[i].name) $(slots[i][0]).value = pairs[i].name;
+        $(slots[i][1]).value = pairs[i].odds;
+      }
+      abRender();
+
+      if (filled === 3) {
+        const names = pairs.slice(0,3).map(p => p.name || '?').join(' / ');
+        const odds = pairs.slice(0,3).map(p => p.odds).join(' / ');
+        status.innerHTML = `✓ 3 buteurs détectés : <strong>${escapeHtml(names)}</strong> — ${odds}. Vérifie les noms.`;
+      } else if (filled > 0) {
+        status.innerHTML = `⚠ Seulement ${filled} buteur(s) détecté(s). Complète à la main.`;
+      } else {
+        status.innerHTML = "⚠ Aucun buteur détecté. Essaie une capture plus nette (nom + cote par ligne).";
+      }
+      $('ab-ocrRetry').hidden = false;
+    } catch (err) {
+      status.textContent = "⚠ Erreur OCR : " + (err.message || err);
+      $('ab-ocrRetry').hidden = false;
+    }
+  }
+
+  $('ab-ocrFile').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    abCurrentBlob = file;
+    $('ab-ocrImg').src = URL.createObjectURL(file);
+    $('ab-ocrPreview').hidden = false;
+    runOCRAbButeurs(file);
+  });
+
+  $('ab-ocrRetry').addEventListener('click', () => {
+    if (abCurrentBlob) runOCRAbButeurs(abCurrentBlob);
+  });
+
+  $('ab-ocrClear').addEventListener('click', () => {
+    abCurrentBlob = null;
+    $('ab-ocrFile').value = '';
+    $('ab-ocrImg').src = '';
+    $('ab-ocrPreview').hidden = true;
+    $('ab-ocrRetry').hidden = true;
+  });
+
+  $('ab-copyBtn').addEventListener('click', async () => {
+    const ta = $('ab-output');
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('ab-copyStatus').textContent = "✓ Copié.";
+      setTimeout(() => $('ab-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('ab-copyStatus').textContent = "✓ Copié.";
+    }
+  });
+
+  abRender();
 })();
 
 // Premier rendu vide
