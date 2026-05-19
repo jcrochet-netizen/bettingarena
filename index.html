@@ -260,6 +260,56 @@
     margin-top: 10px;
     line-height: 1.4;
   }
+
+  /* ===== Afrik-Foot FR widget (vert) ===== */
+  .afw {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    border: 1px solid #e3e6eb;
+    border-radius: 10px;
+    background: #fff;
+    padding: 18px 20px;
+    max-width: 560px;
+    color: #1a1d23;
+  }
+  .afw__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eef0f3;
+  }
+  .afw__logo { height: 22px !important; width: auto !important; max-width: 140px !important; display: block !important; }
+  .afw__bookmaker {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #6b7280;
+  }
+  .afw__bookmaker strong { font-weight: 700; color: #6d8e3f; margin-left: 4px; }
+  .afw__match { font-size: 17px; font-weight: 700; margin-bottom: 14px; text-align: center; }
+  .afw__match span { color: #6b7280; font-weight: 400; margin: 0 6px; }
+  .afw__odds { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .afw__odd {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 8px;
+    border: 1px solid #e3e6eb;
+    border-radius: 8px;
+    background: #fafbfc;
+    text-decoration: none;
+    color: #1a1d23;
+    transition: all 0.15s;
+  }
+  .afw__odd:hover { border-color: #6d8e3f; background: #f1f5ec; }
+  .afw__odd-label { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .afw__odd-team { font-size: 13px; font-weight: 600; text-align: center; margin-bottom: 6px; min-height: 32px; display: flex; align-items: center; }
+  .afw__odd-value { font-size: 20px; font-weight: 700; color: #6d8e3f; }
+  .afw__cta { display: block; text-align: center; margin-top: 12px; font-size: 12px; color: #6b7280; text-decoration: none; }
+  .afw__cta:hover { color: #6d8e3f; }
+  .afw__legal { font-size: 10px; color: #9ca3af; text-align: center; margin-top: 10px; line-height: 1.4; }
 </style>
 </head>
 <body>
@@ -449,9 +499,81 @@
   </div>
 
   <div class="tab-panel" id="tab-1n2-af" role="tabpanel">
-    <div class="tab-placeholder">
-      <strong>1N2 Afrik-Foot FR</strong>
-      Widget à venir — fournis les détails (lien affilié, logo, source des cotes) et je l'ajoute ici.
+    <p class="subtitle">Colle une URL Betclic pour extraire les clubs, renseigne les 3 cotes, récupère le HTML. Widget branding Afrik-Foot FR (vert). Lien affilié à renseigner.</p>
+
+    <div class="panel">
+      <h2>1. URL du match Betclic</h2>
+      <label for="af-url">URL</label>
+      <input type="text" id="af-url" placeholder="https://www.betclic.fr/football-s1/.../paris-saint-germain-olympique-de-marseille-m..." />
+      <div class="hint">Exemple : <code>https://www.betclic.fr/football-s1/ligue-1-mcdonalds-c4/paris-saint-germain-olympique-de-marseille-m12345</code></div>
+      <div style="margin-top: 12px;">
+        <button type="button" id="af-parseBtn">Extraire les clubs</button>
+        <span class="status" id="af-parseStatus" style="margin-left: 10px;"></span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>2. Équipes (corrige si besoin)</h2>
+      <div class="row">
+        <div>
+          <label for="af-club1">Club 1 (domicile)</label>
+          <input type="text" id="af-club1" placeholder="Paris Saint-Germain" />
+        </div>
+        <div>
+          <label for="af-club2">Club 2 (extérieur)</label>
+          <input type="text" id="af-club2" placeholder="Olympique de Marseille" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Cotes 1 N 2</h2>
+
+      <div class="ocr-zone">
+        <label for="af-ocrFile" class="ocr-drop">
+          <input type="file" id="af-ocrFile" accept="image/*" hidden />
+          <span class="ocr-drop__icon">📷</span>
+          <span class="ocr-drop__text">Importer une capture des cotes — auto-fill par OCR</span>
+          <span class="ocr-drop__hint">PNG/JPG. Idéal : capture rognée sur les 3 cotes 1/N/2.</span>
+        </label>
+        <div id="af-ocrPreview" class="ocr-preview" hidden>
+          <img id="af-ocrImg" alt="Aperçu" />
+          <div class="ocr-side">
+            <div class="status" id="af-ocrStatus">En attente…</div>
+            <button type="button" class="secondary" id="af-ocrRetry" hidden>Relancer l'OCR</button>
+            <button type="button" class="secondary" id="af-ocrClear">Retirer l'image</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row-3">
+        <div>
+          <label for="af-cote1">Cote 1 (victoire Club 1)</label>
+          <input type="text" id="af-cote1" placeholder="2,50" inputmode="decimal" />
+        </div>
+        <div>
+          <label for="af-coteN">Cote N (match nul)</label>
+          <input type="text" id="af-coteN" placeholder="4,10" inputmode="decimal" />
+        </div>
+        <div>
+          <label for="af-cote2">Cote 2 (victoire Club 2)</label>
+          <input type="text" id="af-cote2" placeholder="7,80" inputmode="decimal" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Aperçu</h2>
+      <div class="preview-wrap" id="af-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML à copier</h2>
+      <textarea id="af-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="af-copyBtn">Copier le HTML</button>
+        <span class="status" id="af-copyStatus"></span>
+      </div>
     </div>
   </div>
 
@@ -1133,6 +1255,187 @@ $('copyBtn').addEventListener('click', async () => {
   });
 
   bRender();
+})();
+
+// ========== TAB 3 : 1N2 Afrik-Foot FR (vert) ==========
+(function() {
+  const AFFILIATE_URL_AF = "#"; // TODO: remplacer par l'URL affilié Afrik-Foot FR quand fournie
+  const LOGO_SRC_AF = "https://media.afrik-foot.com/main/2026/05/afrikfoot.png";
+
+  function buildAfHtml({ club1, club2, cote1, coteN, cote2 }) {
+    const safeUrl = AFFILIATE_URL_AF;
+    const c1 = escapeHtml(club1 || 'Club 1');
+    const c2 = escapeHtml(club2 || 'Club 2');
+    const o1 = escapeHtml(cote1 || '-');
+    const oN = escapeHtml(coteN || '-');
+    const o2 = escapeHtml(cote2 || '-');
+    return `<div class="afw">
+  <div class="afw__head">
+    <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener"><img class="afw__logo" src="${LOGO_SRC_AF}" alt="Afrik-Foot" style="height:22px;width:auto;max-width:140px;display:block;"></a>
+    <span class="afw__bookmaker">Cotes <strong>Betclic</strong></span>
+  </div>
+  <div class="afw__match">${c1} <span>vs</span> ${c2}</div>
+  <div class="afw__odds">
+    <a class="afw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
+      <span class="afw__odd-label">1</span>
+      <span class="afw__odd-team">${c1}</span>
+      <span class="afw__odd-value">${o1}</span>
+    </a>
+    <a class="afw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
+      <span class="afw__odd-label">N</span>
+      <span class="afw__odd-team">Match nul</span>
+      <span class="afw__odd-value">${oN}</span>
+    </a>
+    <a class="afw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
+      <span class="afw__odd-label">2</span>
+      <span class="afw__odd-team">${c2}</span>
+      <span class="afw__odd-value">${o2}</span>
+    </a>
+  </div>
+  <a class="afw__cta" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">Parier sur Betclic →</a>
+  <div class="afw__legal">Cotes indicatives susceptibles de varier. Les jeux d'argent sont interdits aux moins de 18 ans. Jouer comporte des risques : endettement, dépendance… Appelez le 09 74 75 13 13 (appel non surtaxé).</div>
+</div>`;
+  }
+
+  const EMBED_CSS_AF = `<style>
+.afw{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;border:1px solid #e3e6eb;border-radius:10px;background:#fff;padding:18px 20px;max-width:560px;color:#1a1d23;margin:16px auto}
+.afw__head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #eef0f3}
+.afw__logo{height:22px !important;width:auto !important;max-width:140px !important;display:block !important}
+.afw__bookmaker{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#6b7280}
+.afw__bookmaker strong{font-weight:700;color:#6d8e3f;margin-left:4px}
+.afw__match{font-size:17px;font-weight:700;margin-bottom:14px;text-align:center}
+.afw__match span{color:#6b7280;font-weight:400;margin:0 6px}
+.afw__odds{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.afw__odd{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;border:1px solid #e3e6eb;border-radius:8px;background:#fafbfc;text-decoration:none;color:#1a1d23;transition:all .15s}
+.afw__odd:hover{border-color:#6d8e3f;background:#f1f5ec}
+.afw__odd-label{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.afw__odd-team{font-size:13px;font-weight:600;text-align:center;margin-bottom:6px;min-height:32px;display:flex;align-items:center}
+.afw__odd-value{font-size:20px;font-weight:700;color:#6d8e3f}
+.afw__cta{display:block;text-align:center;margin-top:12px;font-size:12px;color:#6b7280;text-decoration:none}
+.afw__cta:hover{color:#6d8e3f}
+.afw__legal{font-size:10px;color:#9ca3af;text-align:center;margin-top:10px;line-height:1.4}
+</style>
+`;
+
+  function afRender() {
+    const data = {
+      club1: $('af-club1').value.trim(),
+      club2: $('af-club2').value.trim(),
+      cote1: $('af-cote1').value.trim(),
+      coteN: $('af-coteN').value.trim(),
+      cote2: $('af-cote2').value.trim(),
+    };
+    const html = buildAfHtml(data);
+    $('af-preview').innerHTML = html;
+    $('af-output').value = EMBED_CSS_AF + html;
+  }
+
+  $('af-parseBtn').addEventListener('click', () => {
+    const url = $('af-url').value.trim();
+    const status = $('af-parseStatus');
+    if (!url) { status.textContent = "Colle une URL d'abord."; return; }
+    const slug = extractBetclicSlug(url);
+    if (!slug) { status.textContent = "URL non reconnue (Betclic attendu)."; return; }
+    const parsed = parseMatchSlug(slug);
+    $('af-club1').value = parsed.club1;
+    $('af-club2').value = parsed.club2;
+    if (parsed.method === "dictionary") status.textContent = "✓ Clubs reconnus.";
+    else if (parsed.method === "midpoint-fallback") status.textContent = "⚠ Clubs inconnus, split approximatif — vérifie.";
+    else status.textContent = "⚠ Impossible de séparer — corrige à la main.";
+    afRender();
+  });
+
+  ['af-club1','af-club2','af-cote1','af-coteN','af-cote2'].forEach(id => {
+    $(id).addEventListener('input', afRender);
+  });
+
+  // OCR : digit-only whitelist + preprocessing + PSM 6
+  let afCurrentBlob = null;
+
+  async function runOCRAf(blob) {
+    const status = $('af-ocrStatus');
+    status.textContent = "Chargement du moteur OCR…";
+    try {
+      if (!window.Tesseract) {
+        status.textContent = "⚠ Tesseract.js non chargé (vérifie ta connexion).";
+        return;
+      }
+      status.textContent = "Pré-traitement de l'image…";
+      const processed = await preprocessForOCR(blob);
+      const worker = await Tesseract.createWorker('eng', 1, {
+        logger: m => {
+          if (m.status === 'recognizing text') status.textContent = `Analyse en cours… ${Math.round(m.progress * 100)}%`;
+          else if (m.status === 'loading tesseract core' || m.status === 'initializing tesseract') status.textContent = "Initialisation du moteur OCR…";
+          else if (m.status === 'loading language traineddata') status.textContent = "Chargement du modèle…";
+        }
+      });
+      await worker.setParameters({
+        tessedit_char_whitelist: '0123456789.,',
+        tessedit_pageseg_mode: '6'
+      });
+      const { data: { text } } = await worker.recognize(processed);
+      await worker.terminate();
+
+      const odds = parseOddsFromText(text);
+      if (odds.length >= 3) {
+        $('af-cote1').value = odds[0];
+        $('af-coteN').value = odds[1];
+        $('af-cote2').value = odds[2];
+        afRender();
+        status.innerHTML = `✓ 3 cotes détectées : <strong>${odds[0]} / ${odds[1]} / ${odds[2]}</strong>. Vérifie l'ordre.`;
+        if (odds.length > 3) status.innerHTML += ` <br><span style="font-size:11px">(${odds.length} valeurs trouvées, les 3 premières ont été utilisées.)</span>`;
+      } else if (odds.length > 0) {
+        odds.forEach((v, i) => {
+          if (i === 0) $('af-cote1').value = v;
+          if (i === 1) $('af-coteN').value = v;
+        });
+        afRender();
+        status.innerHTML = `⚠ Seulement ${odds.length} cote(s) détectée(s) : ${odds.join(' / ')}. Complète à la main.`;
+      } else {
+        status.innerHTML = "⚠ Aucune cote détectée. Essaie une capture plus nette et rognée sur les chiffres.";
+      }
+      $('af-ocrRetry').hidden = false;
+    } catch (err) {
+      status.textContent = "⚠ Erreur OCR : " + (err.message || err);
+      $('af-ocrRetry').hidden = false;
+    }
+  }
+
+  $('af-ocrFile').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    afCurrentBlob = file;
+    $('af-ocrImg').src = URL.createObjectURL(file);
+    $('af-ocrPreview').hidden = false;
+    runOCRAf(file);
+  });
+
+  $('af-ocrRetry').addEventListener('click', () => {
+    if (afCurrentBlob) runOCRAf(afCurrentBlob);
+  });
+
+  $('af-ocrClear').addEventListener('click', () => {
+    afCurrentBlob = null;
+    $('af-ocrFile').value = '';
+    $('af-ocrImg').src = '';
+    $('af-ocrPreview').hidden = true;
+    $('af-ocrRetry').hidden = true;
+  });
+
+  $('af-copyBtn').addEventListener('click', async () => {
+    const ta = $('af-output');
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('af-copyStatus').textContent = "✓ Copié.";
+      setTimeout(() => $('af-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('af-copyStatus').textContent = "✓ Copié.";
+    }
+  });
+
+  afRender();
 })();
 
 // Premier rendu vide
