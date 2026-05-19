@@ -193,6 +193,14 @@
     text-align: center;
   }
   .bt-widget__match span { color: #6b7280; font-weight: 400; margin: 0 6px; }
+  .bt-widget__subtitle {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #6b7280;
+    text-align: center;
+    margin-bottom: 12px;
+  }
   .bt-widget__odds {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -346,9 +354,97 @@
   </div><!-- /tab-1n2-tm -->
 
   <div class="tab-panel" id="tab-buteurs-tm" role="tabpanel">
-    <div class="tab-placeholder">
-      <strong>Buteurs Topmercato</strong>
-      Widget à venir — fournis les détails (champs, sources, style) et je l'ajoute ici.
+    <p class="subtitle">Colle l'URL Betclic du match (pour le contexte clubs), renseigne le top 3 buteurs avec leurs cotes, récupère le HTML. Liens vers le lien affilié Topmercato.</p>
+
+    <div class="panel">
+      <h2>1. URL du match Betclic (optionnel)</h2>
+      <label for="b-url">URL</label>
+      <input type="text" id="b-url" placeholder="https://www.betclic.fr/football-s1/.../paris-saint-germain-olympique-de-marseille-m..." />
+      <div class="hint">Sert uniquement à pré-remplir les noms des clubs affichés en en-tête du widget.</div>
+      <div style="margin-top: 12px;">
+        <button type="button" id="b-parseBtn">Extraire les clubs</button>
+        <span class="status" id="b-parseStatus" style="margin-left: 10px;"></span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>2. Équipes (en-tête du widget)</h2>
+      <div class="row">
+        <div>
+          <label for="b-club1">Club 1 (domicile)</label>
+          <input type="text" id="b-club1" placeholder="Paris Saint-Germain" />
+        </div>
+        <div>
+          <label for="b-club2">Club 2 (extérieur)</label>
+          <input type="text" id="b-club2" placeholder="Olympique de Marseille" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Top 3 — Meilleures cotes Buteur</h2>
+
+      <div class="ocr-zone">
+        <label for="b-ocrFile" class="ocr-drop">
+          <input type="file" id="b-ocrFile" accept="image/*" hidden />
+          <span class="ocr-drop__icon">📷</span>
+          <span class="ocr-drop__text">Importer une capture des buteurs — auto-fill par OCR</span>
+          <span class="ocr-drop__hint">PNG/JPG. Idéal : capture rognée sur les 3 buteurs (nom + cote sur une ligne).</span>
+        </label>
+        <div id="b-ocrPreview" class="ocr-preview" hidden>
+          <img id="b-ocrImg" alt="Aperçu" />
+          <div class="ocr-side">
+            <div class="status" id="b-ocrStatus">En attente…</div>
+            <button type="button" class="secondary" id="b-ocrRetry" hidden>Relancer l'OCR</button>
+            <button type="button" class="secondary" id="b-ocrClear">Retirer l'image</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="grid-template-columns: 2fr 1fr;">
+        <div>
+          <label for="b-p1">#1 — Buteur</label>
+          <input type="text" id="b-p1" placeholder="Mbappé" />
+        </div>
+        <div>
+          <label for="b-c1">Cote</label>
+          <input type="text" id="b-c1" placeholder="1,80" inputmode="decimal" />
+        </div>
+      </div>
+      <div class="row" style="grid-template-columns: 2fr 1fr;">
+        <div>
+          <label for="b-p2">#2 — Buteur</label>
+          <input type="text" id="b-p2" placeholder="Dembélé" />
+        </div>
+        <div>
+          <label for="b-c2">Cote</label>
+          <input type="text" id="b-c2" placeholder="2,30" inputmode="decimal" />
+        </div>
+      </div>
+      <div class="row" style="grid-template-columns: 2fr 1fr;">
+        <div>
+          <label for="b-p3">#3 — Buteur</label>
+          <input type="text" id="b-p3" placeholder="Vitinha" />
+        </div>
+        <div>
+          <label for="b-c3">Cote</label>
+          <input type="text" id="b-c3" placeholder="3,10" inputmode="decimal" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Aperçu</h2>
+      <div class="preview-wrap" id="b-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML à copier</h2>
+      <textarea id="b-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="b-copyBtn">Copier le HTML</button>
+        <span class="status" id="b-copyStatus"></span>
+      </div>
     </div>
   </div>
 
@@ -743,6 +839,207 @@ $('copyBtn').addEventListener('click', async () => {
     $('copyStatus').textContent = "✓ Copié.";
   }
 });
+
+// ========== TAB 2 : Buteurs Topmercato ==========
+(function() {
+  const AFFILIATE_URL_B = "https://www.topmercato.com/go-betclic-arena-live-fr";
+  const LOGO_SRC_B = "https://media.topmercato.com/main/2026/03/TM_1200px_red.png";
+
+  function buildButeursHtml({ club1, club2, p1, c1, p2, c2, p3, c3 }) {
+    const safeUrl = AFFILIATE_URL_B;
+    const cl1 = escapeHtml(club1 || 'Club 1');
+    const cl2 = escapeHtml(club2 || 'Club 2');
+    const matchLine = (club1 || club2)
+      ? `<div class="bt-widget__match">${cl1} <span>vs</span> ${cl2}</div>`
+      : '';
+    const slots = [
+      { rank: '#1', name: p1, odds: c1 },
+      { rank: '#2', name: p2, odds: c2 },
+      { rank: '#3', name: p3, odds: c3 },
+    ];
+    const oddsHtml = slots.map(s => `
+    <a class="bt-widget__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
+      <span class="bt-widget__odd-label">${s.rank}</span>
+      <span class="bt-widget__odd-team">${escapeHtml(s.name || 'Joueur')}</span>
+      <span class="bt-widget__odd-value">${escapeHtml(s.odds || '-')}</span>
+    </a>`).join('');
+
+    return `<div class="bt-widget">
+  <div class="bt-widget__head">
+    <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener"><img class="bt-widget__logo" src="${LOGO_SRC_B}" alt="Topmercato" style="height:22px;width:auto;max-width:140px;display:block;"></a>
+    <span class="bt-widget__bookmaker">Cotes Buteur <strong>Betclic</strong></span>
+  </div>
+  ${matchLine}
+  <div class="bt-widget__subtitle">Top 3 — Meilleures cotes buteur</div>
+  <div class="bt-widget__odds">${oddsHtml}
+  </div>
+  <a class="bt-widget__cta" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">Parier sur Betclic →</a>
+  <div class="bt-widget__legal">Cotes indicatives susceptibles de varier. Les jeux d'argent sont interdits aux moins de 18 ans. Jouer comporte des risques : endettement, dépendance… Appelez le 09 74 75 13 13 (appel non surtaxé).</div>
+</div>`;
+  }
+
+  const EMBED_CSS_B = `<style>
+.bt-widget{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;border:1px solid #e3e6eb;border-radius:10px;background:#fff;padding:18px 20px;max-width:560px;color:#1a1d23;margin:16px auto}
+.bt-widget__head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #eef0f3}
+.bt-widget__logo{height:22px !important;width:auto !important;max-width:140px !important;display:block !important}
+.bt-widget__bookmaker{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#6b7280}
+.bt-widget__bookmaker strong{font-weight:700;color:#e30613;margin-left:4px}
+.bt-widget__match{font-size:17px;font-weight:700;margin-bottom:6px;text-align:center}
+.bt-widget__match span{color:#6b7280;font-weight:400;margin:0 6px}
+.bt-widget__subtitle{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;text-align:center;margin-bottom:12px}
+.bt-widget__odds{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.bt-widget__odd{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;border:1px solid #e3e6eb;border-radius:8px;background:#fafbfc;text-decoration:none;color:#1a1d23;transition:all .15s}
+.bt-widget__odd:hover{border-color:#e30613;background:#fdecee}
+.bt-widget__odd-label{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.bt-widget__odd-team{font-size:13px;font-weight:600;text-align:center;margin-bottom:6px;min-height:32px;display:flex;align-items:center}
+.bt-widget__odd-value{font-size:20px;font-weight:700;color:#e30613}
+.bt-widget__cta{display:block;text-align:center;margin-top:12px;font-size:12px;color:#6b7280;text-decoration:none}
+.bt-widget__cta:hover{color:#e30613}
+.bt-widget__legal{font-size:10px;color:#9ca3af;text-align:center;margin-top:10px;line-height:1.4}
+</style>
+`;
+
+  function bRender() {
+    const data = {
+      club1: $('b-club1').value.trim(),
+      club2: $('b-club2').value.trim(),
+      p1: $('b-p1').value.trim(),
+      c1: $('b-c1').value.trim(),
+      p2: $('b-p2').value.trim(),
+      c2: $('b-c2').value.trim(),
+      p3: $('b-p3').value.trim(),
+      c3: $('b-c3').value.trim(),
+    };
+    const html = buildButeursHtml(data);
+    $('b-preview').innerHTML = html;
+    $('b-output').value = EMBED_CSS_B + html;
+  }
+
+  // URL parsing (réutilise les helpers globaux)
+  $('b-parseBtn').addEventListener('click', () => {
+    const url = $('b-url').value.trim();
+    const status = $('b-parseStatus');
+    if (!url) { status.textContent = "Colle une URL d'abord."; return; }
+    const slug = extractBetclicSlug(url);
+    if (!slug) { status.textContent = "URL non reconnue (Betclic attendu)."; return; }
+    const parsed = parseMatchSlug(slug);
+    $('b-club1').value = parsed.club1;
+    $('b-club2').value = parsed.club2;
+    if (parsed.method === "dictionary") status.textContent = "✓ Clubs reconnus.";
+    else if (parsed.method === "midpoint-fallback") status.textContent = "⚠ Clubs inconnus, split approximatif — vérifie.";
+    else status.textContent = "⚠ Impossible de séparer — corrige à la main.";
+    bRender();
+  });
+
+  // Sync inputs ↔ aperçu
+  ['b-club1','b-club2','b-p1','b-c1','b-p2','b-c2','b-p3','b-c3'].forEach(id => {
+    $(id).addEventListener('input', bRender);
+  });
+
+  // ========== OCR Tab 2 : extrait paires "nom + cote" ==========
+  let bCurrentBlob = null;
+
+  function parsePlayerOddsFromText(text) {
+    const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+    const results = [];
+    for (const line of lines) {
+      const oddsRegex = /(\d{1,3}[.,]\d{2})/g;
+      let lastMatch = null, m;
+      while ((m = oddsRegex.exec(line)) !== null) lastMatch = m;
+      if (!lastMatch) continue;
+      const oddsStr = lastMatch[1].replace('.', ',');
+      const n = parseFloat(oddsStr.replace(',', '.'));
+      if (n < 1.01 || n > 999) continue;
+      const before = line.substring(0, lastMatch.index).trim();
+      const name = before
+        .replace(/[^A-Za-zÀ-ÿ\s\-'\.]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      results.push({ name: name.length >= 2 ? name : '', odds: oddsStr });
+    }
+    return results;
+  }
+
+  async function runOCRButeurs(blob) {
+    const status = $('b-ocrStatus');
+    status.textContent = "Chargement du moteur OCR…";
+    try {
+      if (!window.Tesseract) {
+        status.textContent = "⚠ Tesseract.js non chargé (vérifie ta connexion).";
+        return;
+      }
+      const worker = await Tesseract.createWorker('eng', 1, {
+        logger: m => {
+          if (m.status === 'recognizing text') status.textContent = `Analyse en cours… ${Math.round(m.progress * 100)}%`;
+          else if (m.status === 'loading tesseract core' || m.status === 'initializing tesseract') status.textContent = "Initialisation du moteur OCR…";
+          else if (m.status === 'loading language traineddata') status.textContent = "Chargement du modèle…";
+        }
+      });
+      // Pas de whitelist : on veut aussi les noms
+      const { data: { text } } = await worker.recognize(blob);
+      await worker.terminate();
+
+      const pairs = parsePlayerOddsFromText(text);
+      const slots = [['b-p1','b-c1'], ['b-p2','b-c2'], ['b-p3','b-c3']];
+      const filled = Math.min(pairs.length, 3);
+      for (let i = 0; i < filled; i++) {
+        if (pairs[i].name) $(slots[i][0]).value = pairs[i].name;
+        $(slots[i][1]).value = pairs[i].odds;
+      }
+      bRender();
+
+      if (filled === 3) {
+        const names = pairs.slice(0,3).map(p => p.name || '?').join(' / ');
+        const odds = pairs.slice(0,3).map(p => p.odds).join(' / ');
+        status.innerHTML = `✓ 3 buteurs détectés : <strong>${escapeHtml(names)}</strong> — ${odds}. Vérifie les noms.`;
+      } else if (filled > 0) {
+        status.innerHTML = `⚠ Seulement ${filled} buteur(s) détecté(s). Complète à la main.`;
+      } else {
+        status.innerHTML = "⚠ Aucun buteur détecté. Essaie une capture plus nette (nom + cote par ligne).";
+      }
+      $('b-ocrRetry').hidden = false;
+    } catch (err) {
+      status.textContent = "⚠ Erreur OCR : " + (err.message || err);
+      $('b-ocrRetry').hidden = false;
+    }
+  }
+
+  $('b-ocrFile').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    bCurrentBlob = file;
+    $('b-ocrImg').src = URL.createObjectURL(file);
+    $('b-ocrPreview').hidden = false;
+    runOCRButeurs(file);
+  });
+
+  $('b-ocrRetry').addEventListener('click', () => {
+    if (bCurrentBlob) runOCRButeurs(bCurrentBlob);
+  });
+
+  $('b-ocrClear').addEventListener('click', () => {
+    bCurrentBlob = null;
+    $('b-ocrFile').value = '';
+    $('b-ocrImg').src = '';
+    $('b-ocrPreview').hidden = true;
+    $('b-ocrRetry').hidden = true;
+  });
+
+  $('b-copyBtn').addEventListener('click', async () => {
+    const ta = $('b-output');
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('b-copyStatus').textContent = "✓ Copié.";
+      setTimeout(() => $('b-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('b-copyStatus').textContent = "✓ Copié.";
+    }
+  });
+
+  bRender();
+})();
 
 // Premier rendu vide
 render();
