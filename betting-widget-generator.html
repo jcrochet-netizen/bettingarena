@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Générateur de widget Betting — Betclic</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --card: #ffffff;
+    --border: #e3e6eb;
+    --text: #1a1d23;
+    --muted: #6b7280;
+    --accent: #e30613;
+    --accent-dark: #b30410;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 40px 20px;
+    line-height: 1.5;
+  }
+  .container { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 22px; margin: 0 0 8px; }
+  .subtitle { color: var(--muted); margin: 0 0 32px; font-size: 14px; }
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .panel h2 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin: 0 0 16px;
+    font-weight: 600;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #fff;
+  }
+  input:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: var(--accent); }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  button {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  button:hover { background: var(--accent-dark); }
+  button.secondary { background: #fff; color: var(--text); border: 1px solid var(--border); }
+  button.secondary:hover { background: #f3f4f6; }
+  .preview-wrap { padding: 24px; background: #fafbfc; border: 1px dashed var(--border); border-radius: 10px; }
+  textarea {
+    width: 100%;
+    min-height: 220px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 12px;
+    background: #fafbfc;
+    resize: vertical;
+  }
+  .copy-row { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
+  .status { font-size: 13px; color: var(--muted); }
+
+  .ocr-zone { margin-bottom: 16px; }
+  .ocr-drop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 18px;
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    background: #fafbfc;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    text-align: center;
+  }
+  .ocr-drop:hover { border-color: var(--accent); background: #fdecee; }
+  .ocr-drop__icon { font-size: 22px; }
+  .ocr-drop__text { font-size: 14px; font-weight: 600; color: var(--text); }
+  .ocr-drop__hint { font-size: 12px; color: var(--muted); }
+  .ocr-preview {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 14px;
+    align-items: start;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fafbfc;
+  }
+  .ocr-preview img { width: 100%; height: auto; border-radius: 4px; border: 1px solid var(--border); }
+  .ocr-side { display: flex; flex-direction: column; gap: 8px; }
+  .ocr-side .status { min-height: 20px; }
+  .ocr-side button { width: fit-content; padding: 6px 12px; font-size: 13px; }
+
+  /* ===== Widget styles (also embedded in copied HTML) ===== */
+  .bt-widget {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    border: 1px solid #e3e6eb;
+    border-radius: 10px;
+    background: #fff;
+    padding: 18px 20px;
+    max-width: 560px;
+    color: #1a1d23;
+  }
+  .bt-widget__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eef0f3;
+  }
+  .bt-widget__logo { height: 22px !important; width: auto !important; max-width: 140px !important; display: block !important; }
+  .bt-widget__bookmaker {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #6b7280;
+  }
+  .bt-widget__bookmaker strong { font-weight: 700; color: #e30613; margin-left: 4px; }
+  .bt-widget__match {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+  .bt-widget__match span { color: #6b7280; font-weight: 400; margin: 0 6px; }
+  .bt-widget__odds {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+  .bt-widget__odd {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 8px;
+    border: 1px solid #e3e6eb;
+    border-radius: 8px;
+    background: #fafbfc;
+    text-decoration: none;
+    color: #1a1d23;
+    transition: all 0.15s;
+  }
+  .bt-widget__odd:hover {
+    border-color: #e30613;
+    background: #fdecee;
+  }
+  .bt-widget__odd-label {
+    font-size: 11px;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+  .bt-widget__odd-team {
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 6px;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+  }
+  .bt-widget__odd-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #e30613;
+  }
+  .bt-widget__cta {
+    display: block;
+    text-align: center;
+    margin-top: 12px;
+    font-size: 12px;
+    color: #6b7280;
+    text-decoration: none;
+  }
+  .bt-widget__cta:hover { color: #e30613; }
+  .bt-widget__legal {
+    font-size: 10px;
+    color: #9ca3af;
+    text-align: center;
+    margin-top: 10px;
+    line-height: 1.4;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>Générateur de widget Betting</h1>
+  <p class="subtitle">Colle une URL Betclic pour extraire les clubs, renseigne les 3 cotes, récupère le HTML. Les liens du widget pointent automatiquement vers le lien affilié Topmercato.</p>
+
+  <div class="panel">
+    <h2>1. URL du match Betclic</h2>
+    <label for="url">URL</label>
+    <input type="text" id="url" placeholder="https://www.betclic.fr/football-s1/ligue-1-mcdonalds-c4/paris-saint-germain-olympique-de-marseille-m..." />
+    <div class="hint">Exemple : <code>https://www.betclic.fr/football-s1/ligue-1-mcdonalds-c4/paris-saint-germain-olympique-de-marseille-m12345</code></div>
+    <div style="margin-top: 12px;">
+      <button type="button" id="parseBtn">Extraire les clubs</button>
+      <span class="status" id="parseStatus" style="margin-left: 10px;"></span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>2. Équipes (corrige si besoin)</h2>
+    <div class="row">
+      <div>
+        <label for="club1">Club 1 (domicile)</label>
+        <input type="text" id="club1" placeholder="Paris Saint-Germain" />
+      </div>
+      <div>
+        <label for="club2">Club 2 (extérieur)</label>
+        <input type="text" id="club2" placeholder="Olympique de Marseille" />
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>3. Cotes 1 N 2</h2>
+
+    <div class="ocr-zone">
+      <label for="ocrFile" class="ocr-drop">
+        <input type="file" id="ocrFile" accept="image/*" hidden />
+        <span class="ocr-drop__icon">📷</span>
+        <span class="ocr-drop__text">Importer une capture des cotes — auto-fill par OCR</span>
+        <span class="ocr-drop__hint">PNG/JPG. Idéal : capture rognée sur les 3 cotes 1/N/2.</span>
+      </label>
+      <div id="ocrPreview" class="ocr-preview" hidden>
+        <img id="ocrImg" alt="Aperçu" />
+        <div class="ocr-side">
+          <div class="status" id="ocrStatus">En attente…</div>
+          <button type="button" class="secondary" id="ocrRetry" hidden>Relancer l'OCR</button>
+          <button type="button" class="secondary" id="ocrClear">Retirer l'image</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row-3">
+      <div>
+        <label for="cote1">Cote 1 (victoire Club 1)</label>
+        <input type="text" id="cote1" placeholder="2,50" inputmode="decimal" />
+      </div>
+      <div>
+        <label for="coteN">Cote N (match nul)</label>
+        <input type="text" id="coteN" placeholder="4,10" inputmode="decimal" />
+      </div>
+      <div>
+        <label for="cote2">Cote 2 (victoire Club 2)</label>
+        <input type="text" id="cote2" placeholder="7,80" inputmode="decimal" />
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Aperçu</h2>
+    <div class="preview-wrap" id="preview"></div>
+  </div>
+
+  <div class="panel">
+    <h2>HTML à copier</h2>
+    <textarea id="output" readonly></textarea>
+    <div class="copy-row">
+      <button type="button" id="copyBtn">Copier le HTML</button>
+      <span class="status" id="copyStatus"></span>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://unpkg.com/tesseract.js@5/dist/tesseract.min.js"></script>
+<script>
+/* ============================================================
+   Dictionnaire de clubs (pour split intelligent du slug Betclic).
+   Ajoute-en au besoin — l'ordre n'importe pas, on matche en greedy.
+   ============================================================ */
+const CLUBS = [
+  // Ligue 1
+  "paris-saint-germain", "olympique-de-marseille", "olympique-lyonnais",
+  "as-monaco", "monaco", "lille-osc", "lille", "stade-rennais", "rennes",
+  "rc-lens", "lens", "ogc-nice", "nice", "rc-strasbourg-alsace", "strasbourg",
+  "stade-brestois-29", "brest", "fc-nantes", "nantes", "montpellier-hsc", "montpellier",
+  "toulouse-fc", "toulouse", "stade-de-reims", "reims", "le-havre-ac", "le-havre",
+  "as-saint-etienne", "saint-etienne", "angers-sco", "angers", "auxerre", "aj-auxerre",
+  // Ligue 2 + autres FR
+  "bordeaux", "girondins-de-bordeaux", "ac-ajaccio", "fc-metz", "metz",
+  "amiens-sc", "amiens", "guingamp", "ea-guingamp", "caen", "sm-caen",
+  "paris-fc", "pau-fc", "pau", "rodez", "grenoble", "troyes", "valenciennes",
+  // Premier League
+  "manchester-city", "manchester-united", "liverpool", "chelsea", "arsenal",
+  "tottenham", "tottenham-hotspur", "newcastle-united", "newcastle",
+  "aston-villa", "west-ham-united", "west-ham", "brighton", "brighton-and-hove-albion",
+  "everton", "fulham", "crystal-palace", "wolverhampton", "wolves",
+  "brentford", "nottingham-forest", "bournemouth", "leicester-city", "leicester",
+  "southampton", "ipswich-town", "ipswich",
+  // Liga
+  "real-madrid", "fc-barcelone", "barcelone", "atletico-de-madrid", "atletico-madrid",
+  "athletic-bilbao", "athletic-club", "real-sociedad", "real-betis", "betis",
+  "villarreal", "valence", "valencia", "seville", "fc-seville", "girona", "celta-vigo",
+  "osasuna", "rayo-vallecano", "getafe", "mallorca", "alaves", "espanyol", "leganes",
+  // Serie A
+  "inter-milan", "inter", "ac-milan", "milan", "juventus-turin", "juventus",
+  "as-roma", "rome", "ssc-napoli", "naples", "lazio-rome", "lazio",
+  "atalanta-bergame", "atalanta", "fiorentina", "bologne", "torino", "udinese",
+  "genoa", "cagliari", "empoli", "lecce", "monza", "venezia", "parme", "verone",
+  // Bundesliga
+  "bayern-munich", "borussia-dortmund", "dortmund", "rb-leipzig", "leipzig",
+  "bayer-leverkusen", "leverkusen", "vfb-stuttgart", "stuttgart", "eintracht-francfort",
+  "francfort", "borussia-monchengladbach", "monchengladbach", "vfl-wolfsburg", "wolfsburg",
+  "werder-breme", "breme", "fc-augsbourg", "augsbourg", "fc-cologne", "cologne",
+  "mayence", "fsv-mayence-05", "hoffenheim", "tsg-hoffenheim",
+  "union-berlin", "fc-union-berlin", "saint-pauli", "fc-saint-pauli", "heidenheim",
+  "holstein-kiel", "vfl-bochum", "bochum",
+  // Compétitions européennes — clubs additionnels fréquents
+  "ajax-amsterdam", "ajax", "psv-eindhoven", "psv", "feyenoord", "feyenoord-rotterdam",
+  "benfica", "sl-benfica", "fc-porto", "porto", "sporting-portugal", "sporting-cp",
+  "celtic-glasgow", "celtic", "rangers-fc", "rangers",
+  "galatasaray", "fenerbahce", "besiktas", "trabzonspor",
+  "shakhtar-donetsk", "shakhtar", "dynamo-kiev",
+  "rb-salzburg", "salzbourg", "young-boys", "fc-bale", "bale",
+  // Sélections (Coupe du monde, Euro)
+  "france", "espagne", "allemagne", "italie", "angleterre", "portugal", "pays-bas",
+  "belgique", "croatie", "argentine", "bresil", "uruguay", "mexique", "etats-unis",
+  "maroc", "senegal", "tunisie", "algerie", "cote-d-ivoire", "cameroun", "ghana",
+  "japon", "coree-du-sud", "australie", "canada"
+];
+
+// Nettoie un slug en nom lisible : "paris-saint-germain" -> "Paris Saint-Germain"
+function slugToName(slug) {
+  return slug
+    .split('-')
+    .map(w => {
+      if (w.length <= 2 && w !== "rc" && w !== "ac" && w !== "fc" && w !== "sc") return w; // garder les petits mots
+      return w.charAt(0).toUpperCase() + w.slice(1);
+    })
+    .join(' ')
+    .replace(/\bAc\b/g, 'AC')
+    .replace(/\bAs\b/g, 'AS')
+    .replace(/\bFc\b/g, 'FC')
+    .replace(/\bRc\b/g, 'RC')
+    .replace(/\bSc\b/g, 'SC')
+    .replace(/\bOgc\b/g, 'OGC')
+    .replace(/\bPsg\b/g, 'PSG')
+    .replace(/\bOm\b/g, 'OM')
+    .replace(/\bOl\b/g, 'OL')
+    .replace(/\bRb\b/g, 'RB')
+    .replace(/\bSsc\b/g, 'SSC')
+    .replace(/\bAj\b/g, 'AJ')
+    .replace(/\bSm\b/g, 'SM')
+    .replace(/\bEa\b/g, 'EA')
+    .replace(/\bSl\b/g, 'SL')
+    .replace(/\bSco\b/g, 'SCO')
+    .replace(/\bHsc\b/g, 'HSC')
+    .replace(/\bTsg\b/g, 'TSG')
+    .replace(/\bFsv\b/g, 'FSV')
+    .replace(/\bVfb\b/g, 'VfB')
+    .replace(/\bVfl\b/g, 'VfL')
+    .replace(/\bD\b/g, 'd')
+    .replace(/\bDe\b/g, 'de')
+    .replace(/\bDu\b/g, 'du')
+    .replace(/\bLe\b/g, 'le')
+    .replace(/\bLa\b/g, 'la');
+}
+
+// Tente d'extraire 2 clubs depuis le slug du match
+function parseMatchSlug(slug) {
+  // Retirer le suffixe -m12345 (ID Betclic)
+  slug = slug.replace(/-m\d+\/?$/i, '').replace(/\/$/, '');
+
+  // Stratégie 1 : matcher un club connu en début ET en fin de slug
+  let club1 = null, club2 = null;
+  // Trier par longueur décroissante pour matcher les noms les plus longs en priorité
+  const sorted = [...CLUBS].sort((a, b) => b.length - a.length);
+
+  for (const c of sorted) {
+    if (slug.startsWith(c + '-')) {
+      const rest = slug.slice(c.length + 1);
+      // Le reste doit lui-même être un club connu (greedy match)
+      for (const c2 of sorted) {
+        if (rest === c2) {
+          club1 = c;
+          club2 = c2;
+          break;
+        }
+      }
+      if (club1) break;
+    }
+  }
+
+  if (club1 && club2) {
+    return { club1: slugToName(club1), club2: slugToName(club2), method: "dictionary" };
+  }
+
+  // Stratégie 2 : essayer de couper au milieu (heuristique faible)
+  const parts = slug.split('-');
+  if (parts.length >= 2) {
+    const mid = Math.floor(parts.length / 2);
+    return {
+      club1: slugToName(parts.slice(0, mid).join('-')),
+      club2: slugToName(parts.slice(mid).join('-')),
+      method: "midpoint-fallback"
+    };
+  }
+
+  return { club1: slugToName(slug), club2: '', method: "raw" };
+}
+
+// Extrait le slug du match depuis une URL Betclic
+function extractBetclicSlug(url) {
+  try {
+    const u = new URL(url);
+    if (!u.hostname.includes('betclic')) return null;
+    // La structure type : /sport-sX/competition-cY/match-slug-mZZZZ
+    const segments = u.pathname.split('/').filter(Boolean);
+    const last = segments[segments.length - 1];
+    if (!last) return null;
+    return last;
+  } catch (e) {
+    return null;
+  }
+}
+
+// ========== UI wiring ==========
+const $ = id => document.getElementById(id);
+
+$('parseBtn').addEventListener('click', () => {
+  const url = $('url').value.trim();
+  const status = $('parseStatus');
+  if (!url) { status.textContent = "Colle une URL d'abord."; return; }
+
+  const slug = extractBetclicSlug(url);
+  if (!slug) {
+    status.textContent = "URL non reconnue (Betclic attendu).";
+    return;
+  }
+  const parsed = parseMatchSlug(slug);
+  $('club1').value = parsed.club1;
+  $('club2').value = parsed.club2;
+
+  if (parsed.method === "dictionary") {
+    status.textContent = "✓ Clubs reconnus.";
+  } else if (parsed.method === "midpoint-fallback") {
+    status.textContent = "⚠ Clubs inconnus, split approximatif — vérifie.";
+  } else {
+    status.textContent = "⚠ Impossible de séparer — corrige à la main.";
+  }
+  render();
+});
+
+function escapeHtml(s) {
+  return (s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+const AFFILIATE_URL = "https://www.topmercato.com/go-betclic-arena-live-fr";
+const LOGO_SRC = "https://media.topmercato.com/main/2026/03/TM_1200px_red.png";
+
+function buildWidgetHtml({ club1, club2, cote1, coteN, cote2 }) {
+  const safeUrl = AFFILIATE_URL;
+  const c1 = escapeHtml(club1 || 'Club 1');
+  const c2 = escapeHtml(club2 || 'Club 2');
+  const o1 = escapeHtml(cote1 || '-');
+  const oN = escapeHtml(coteN || '-');
+  const o2 = escapeHtml(cote2 || '-');
+
+  return `<div class="bt-widget">
+  <div class="bt-widget__head">
+    <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener"><img class="bt-widget__logo" src="${LOGO_SRC}" alt="Topmercato" style="height:22px;width:auto;max-width:140px;display:block;"></a>
+    <span class="bt-widget__bookmaker">Cotes <strong>Betclic</strong></span>
+  </div>
+  <div class="bt-widget__match">${c1} <span>vs</span> ${c2}</div>
+  <div class="bt-widget__odds">
+    <a class="bt-widget__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
+      <span class="bt-widget__odd-label">1</span>
+      <span class="bt-widget__odd-team">${c1}</span>
+      <span class="bt-widget__odd-value">${o1}</span>
+    </a>
+    <a class="bt-widget__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
+      <span class="bt-widget__odd-label">N</span>
+      <span class="bt-widget__odd-team">Match nul</span>
+      <span class="bt-widget__odd-value">${oN}</span>
+    </a>
+    <a class="bt-widget__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
+      <span class="bt-widget__odd-label">2</span>
+      <span class="bt-widget__odd-team">${c2}</span>
+      <span class="bt-widget__odd-value">${o2}</span>
+    </a>
+  </div>
+  <a class="bt-widget__cta" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">Parier sur Betclic →</a>
+  <div class="bt-widget__legal">Cotes indicatives susceptibles de varier. Les jeux d'argent sont interdits aux moins de 18 ans. Jouer comporte des risques : endettement, dépendance… Appelez le 09 74 75 13 13 (appel non surtaxé).</div>
+</div>`;
+}
+
+// CSS embarqué (auto-suffisant pour bloc HTML)
+const EMBED_CSS = `<style>
+.bt-widget{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;border:1px solid #e3e6eb;border-radius:10px;background:#fff;padding:18px 20px;max-width:560px;color:#1a1d23;margin:16px auto}
+.bt-widget__head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #eef0f3}
+.bt-widget__logo{height:22px !important;width:auto !important;max-width:140px !important;display:block !important}
+.bt-widget__bookmaker{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#6b7280}
+.bt-widget__bookmaker strong{font-weight:700;color:#e30613;margin-left:4px}
+.bt-widget__match{font-size:17px;font-weight:700;margin-bottom:14px;text-align:center}
+.bt-widget__match span{color:#6b7280;font-weight:400;margin:0 6px}
+.bt-widget__odds{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.bt-widget__odd{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;border:1px solid #e3e6eb;border-radius:8px;background:#fafbfc;text-decoration:none;color:#1a1d23;transition:all .15s}
+.bt-widget__odd:hover{border-color:#e30613;background:#fdecee}
+.bt-widget__odd-label{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.bt-widget__odd-team{font-size:13px;font-weight:600;text-align:center;margin-bottom:6px;min-height:32px;display:flex;align-items:center}
+.bt-widget__odd-value{font-size:20px;font-weight:700;color:#e30613}
+.bt-widget__cta{display:block;text-align:center;margin-top:12px;font-size:12px;color:#6b7280;text-decoration:none}
+.bt-widget__cta:hover{color:#e30613}
+.bt-widget__legal{font-size:10px;color:#9ca3af;text-align:center;margin-top:10px;line-height:1.4}
+</style>
+`;
+
+function render() {
+  const data = {
+    club1: $('club1').value.trim(),
+    club2: $('club2').value.trim(),
+    cote1: $('cote1').value.trim(),
+    coteN: $('coteN').value.trim(),
+    cote2: $('cote2').value.trim(),
+  };
+  const widgetHtml = buildWidgetHtml(data);
+  $('preview').innerHTML = widgetHtml;
+  $('output').value = EMBED_CSS + widgetHtml;
+}
+
+['url','club1','club2','cote1','coteN','cote2'].forEach(id => {
+  $(id).addEventListener('input', render);
+});
+
+// ========== OCR : capture d'écran → cotes ==========
+let currentImageBlob = null;
+
+function parseOddsFromText(text) {
+  // Cotes typiques : 1.01 à 999.00, format "X.XX" ou "X,XX" ou "XX.XX"
+  const matches = text.match(/\b\d{1,3}[.,]\d{2}\b/g) || [];
+  return matches
+    .map(s => s.replace('.', ','))
+    .filter(s => {
+      const n = parseFloat(s.replace(',', '.'));
+      return n >= 1.01 && n <= 999;
+    });
+}
+
+async function runOCR(blob) {
+  const status = $('ocrStatus');
+  status.textContent = "Chargement du moteur OCR…";
+  try {
+    if (!window.Tesseract) {
+      status.textContent = "⚠ Tesseract.js non chargé (vérifie ta connexion).";
+      return;
+    }
+    const worker = await Tesseract.createWorker('eng', 1, {
+      logger: m => {
+        if (m.status === 'recognizing text') {
+          status.textContent = `Analyse en cours… ${Math.round(m.progress * 100)}%`;
+        } else if (m.status === 'loading tesseract core' || m.status === 'initializing tesseract') {
+          status.textContent = "Initialisation du moteur OCR…";
+        } else if (m.status === 'loading language traineddata') {
+          status.textContent = "Chargement du modèle…";
+        }
+      }
+    });
+    await worker.setParameters({
+      tessedit_char_whitelist: '0123456789.,'
+    });
+    const { data: { text } } = await worker.recognize(blob);
+    await worker.terminate();
+
+    const odds = parseOddsFromText(text);
+    if (odds.length >= 3) {
+      $('cote1').value = odds[0];
+      $('coteN').value = odds[1];
+      $('cote2').value = odds[2];
+      render();
+      status.innerHTML = `✓ 3 cotes détectées : <strong>${odds[0]} / ${odds[1]} / ${odds[2]}</strong>. Vérifie l'ordre.`;
+      if (odds.length > 3) {
+        status.innerHTML += ` <br><span style="font-size:11px">(${odds.length} valeurs trouvées au total, les 3 premières ont été utilisées.)</span>`;
+      }
+    } else if (odds.length > 0) {
+      odds.forEach((v, i) => {
+        if (i === 0) $('cote1').value = v;
+        if (i === 1) $('coteN').value = v;
+      });
+      render();
+      status.innerHTML = `⚠ Seulement ${odds.length} cote(s) détectée(s) : ${odds.join(' / ')}. Complète à la main.`;
+    } else {
+      status.innerHTML = "⚠ Aucune cote détectée. Essaie une capture plus nette et rognée sur les chiffres.";
+    }
+    $('ocrRetry').hidden = false;
+  } catch (err) {
+    status.textContent = "⚠ Erreur OCR : " + (err.message || err);
+    $('ocrRetry').hidden = false;
+  }
+}
+
+$('ocrFile').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  currentImageBlob = file;
+  const url = URL.createObjectURL(file);
+  $('ocrImg').src = url;
+  $('ocrPreview').hidden = false;
+  runOCR(file);
+});
+
+$('ocrRetry').addEventListener('click', () => {
+  if (currentImageBlob) runOCR(currentImageBlob);
+});
+
+$('ocrClear').addEventListener('click', () => {
+  currentImageBlob = null;
+  $('ocrFile').value = '';
+  $('ocrImg').src = '';
+  $('ocrPreview').hidden = true;
+  $('ocrRetry').hidden = true;
+});
+
+$('copyBtn').addEventListener('click', async () => {
+  const ta = $('output');
+  ta.select();
+  try {
+    await navigator.clipboard.writeText(ta.value);
+    $('copyStatus').textContent = "✓ Copié.";
+    setTimeout(() => $('copyStatus').textContent = '', 2000);
+  } catch (e) {
+    document.execCommand('copy');
+    $('copyStatus').textContent = "✓ Copié.";
+  }
+});
+
+// Premier rendu vide
+render();
+</script>
+</body>
+</html>
