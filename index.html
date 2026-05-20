@@ -206,6 +206,23 @@
     border-left-color: var(--accent);
     background: #fdecee;
   }
+  .drawer__cat {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #9ca3af;
+    font-weight: 700;
+    padding: 16px 20px 8px;
+  }
+  .drawer__cat--sep {
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+  }
+  .drawer__empty {
+    padding: 4px 20px 16px;
+    font-size: 13px;
+    color: #9ca3af;
+  }
 
   .ocr-zone { margin-bottom: 16px; }
   .ocr-drop {
@@ -412,10 +429,13 @@
       <span>Widgets</span>
       <button type="button" class="drawer__close" id="drawerClose" aria-label="Fermer le menu">&times;</button>
     </div>
+    <div class="drawer__cat">Betting</div>
     <button type="button" class="drawer__item active" data-tab="tab-1n2-tm">1N2 Topmercato</button>
     <button type="button" class="drawer__item" data-tab="tab-buteurs-tm">Buteurs Topmercato</button>
     <button type="button" class="drawer__item" data-tab="tab-1n2-af">1N2 Afrik-Foot FR</button>
     <button type="button" class="drawer__item" data-tab="tab-buteurs-af">Buteurs Afrik-Foot FR</button>
+    <div class="drawer__cat drawer__cat--sep">Autres</div>
+    <div class="drawer__empty">Aucun widget pour le moment.</div>
   </nav>
 
   <div class="tab-panel active" id="tab-1n2-tm" role="tabpanel">
