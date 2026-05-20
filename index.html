@@ -88,42 +88,124 @@
   .copy-row { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
   .status { font-size: 13px; color: var(--muted); }
 
-  .tabs {
-    display: flex;
-    gap: 2px;
-    border-bottom: 1px solid var(--border);
-    margin: 0 0 28px;
-    overflow-x: auto;
-    scrollbar-width: thin;
-  }
-  .tab-btn {
-    background: transparent;
-    color: var(--muted);
-    border: none;
-    border-bottom: 2px solid transparent;
-    padding: 12px 16px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: inherit;
-    white-space: nowrap;
-    border-radius: 0;
-    margin-bottom: -1px;
-    transition: color 0.15s, border-color 0.15s;
-  }
-  .tab-btn:hover { color: var(--text); background: transparent; }
-  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
-  .tab-placeholder {
-    padding: 80px 24px;
-    text-align: center;
-    border: 2px dashed var(--border);
-    border-radius: 10px;
-    color: var(--muted);
-    font-size: 14px;
+
+  /* ===== Menu hamburger + drawer ===== */
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0 0 8px;
   }
-  .tab-placeholder strong { display: block; font-size: 16px; color: var(--text); margin-bottom: 6px; }
+  .burger {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .burger:hover { background: #f3f4f6; }
+  .burger span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform 0.25s, opacity 0.2s;
+  }
+  .burger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .burger.open span:nth-child(2) { opacity: 0; }
+  .burger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+  .topbar h1 { margin: 0; }
+  .current-section {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 0 0 28px 56px;
+  }
+
+  .drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.42);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+    z-index: 90;
+  }
+  .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+  .drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 290px;
+    max-width: 82vw;
+    background: #fff;
+    box-shadow: 2px 0 22px rgba(0, 0, 0, 0.14);
+    transform: translateX(-100%);
+    transition: transform 0.28s ease;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    font-weight: 700;
+  }
+  .drawer__close {
+    background: transparent;
+    border: none;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+  }
+  .drawer__close:hover { color: var(--text); background: #f3f4f6; }
+  .drawer__item {
+    background: transparent;
+    border: none;
+    border-left: 3px solid transparent;
+    text-align: left;
+    padding: 15px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    font-family: inherit;
+    border-radius: 0;
+    width: 100%;
+    transition: background 0.12s;
+  }
+  .drawer__item:hover { background: #f3f4f6; }
+  .drawer__item.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: #fdecee;
+  }
 
   .ocr-zone { margin-bottom: 16px; }
   .ocr-drop {
@@ -316,13 +398,24 @@
 <body>
 <div class="container">
 
-  <h1>Générateur de widgets Betting</h1>
+  <div class="topbar">
+    <button type="button" class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <h1>Générateur de widgets Betting</h1>
+  </div>
+  <div class="current-section" id="currentSection">1N2 Topmercato</div>
 
-  <nav class="tabs" role="tablist">
-    <button type="button" class="tab-btn active" data-tab="tab-1n2-tm" role="tab">1N2 Topmercato</button>
-    <button type="button" class="tab-btn" data-tab="tab-buteurs-tm" role="tab">Buteurs Topmercato</button>
-    <button type="button" class="tab-btn" data-tab="tab-1n2-af" role="tab">1N2 Afrik-Foot FR</button>
-    <button type="button" class="tab-btn" data-tab="tab-buteurs-af" role="tab">Buteurs Afrik-Foot FR</button>
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <nav class="drawer" id="drawer" aria-label="Menu des widgets">
+    <div class="drawer__head">
+      <span>Widgets</span>
+      <button type="button" class="drawer__close" id="drawerClose" aria-label="Fermer le menu">&times;</button>
+    </div>
+    <button type="button" class="drawer__item active" data-tab="tab-1n2-tm">1N2 Topmercato</button>
+    <button type="button" class="drawer__item" data-tab="tab-buteurs-tm">Buteurs Topmercato</button>
+    <button type="button" class="drawer__item" data-tab="tab-1n2-af">1N2 Afrik-Foot FR</button>
+    <button type="button" class="drawer__item" data-tab="tab-buteurs-af">Buteurs Afrik-Foot FR</button>
   </nav>
 
   <div class="tab-panel active" id="tab-1n2-tm" role="tabpanel">
@@ -939,16 +1032,48 @@ function render() {
   $(id).addEventListener('input', render);
 });
 
-// ========== Tabs ==========
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    const panel = document.getElementById(btn.dataset.tab);
-    if (panel) panel.classList.add('active');
+// ========== Menu hamburger + drawer ==========
+(function() {
+  const burger = $('burger');
+  const drawer = $('drawer');
+  const overlay = $('drawerOverlay');
+  const closeBtn = $('drawerClose');
+
+  function openDrawer() {
+    drawer.classList.add('open');
+    overlay.classList.add('open');
+    burger.classList.add('open');
+    burger.setAttribute('aria-expanded', 'true');
+  }
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+    burger.classList.remove('open');
+    burger.setAttribute('aria-expanded', 'false');
+  }
+
+  burger.addEventListener('click', () => {
+    drawer.classList.contains('open') ? closeDrawer() : openDrawer();
   });
-});
+  overlay.addEventListener('click', closeDrawer);
+  closeBtn.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeDrawer();
+  });
+
+  document.querySelectorAll('.drawer__item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.drawer__item').forEach(i => i.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      item.classList.add('active');
+      const panel = document.getElementById(item.dataset.tab);
+      if (panel) panel.classList.add('active');
+      $('currentSection').textContent = item.textContent;
+      closeDrawer();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+})();
 
 // ========== OCR : helpers partagés (preprocessing + parsing) ==========
 
