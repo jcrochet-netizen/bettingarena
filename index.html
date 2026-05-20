@@ -41,6 +41,25 @@
     margin: 0 0 16px;
     font-weight: 600;
   }
+  details.panel--collapsible { padding: 0; }
+  details.panel--collapsible > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  details.panel--collapsible > summary::-webkit-details-marker { display: none; }
+  details.panel--collapsible > summary h2 { margin: 0; }
+  details.panel--collapsible[open] > summary { padding-bottom: 16px; }
+  .panel__arrow {
+    font-size: 11px;
+    color: var(--muted);
+    transition: transform 0.2s;
+  }
+  details.panel--collapsible[open] .panel__arrow { transform: rotate(90deg); }
+  .panel__body { padding: 0 24px 24px; }
   label {
     display: block;
     font-size: 13px;
@@ -832,14 +851,19 @@
       </div>
     </div>
 
-    <div class="panel">
-      <h2>2. Gabarit HTML</h2>
-      <label for="es-template">Modèle (modifiable). Les placeholders <code>[INTITULE1]</code>, <code>[VOTRE TEXTE 1]</code>… seront remplacés à la génération.</label>
-      <textarea id="es-template" spellcheck="false"></textarea>
-      <div style="margin-top: 8px;">
-        <button type="button" class="secondary" id="es-resetBtn">Réinitialiser le gabarit</button>
+    <details class="panel panel--collapsible">
+      <summary>
+        <h2>2. Gabarit HTML</h2>
+        <span class="panel__arrow" aria-hidden="true">▸</span>
+      </summary>
+      <div class="panel__body">
+        <label for="es-template">Modèle (modifiable). Les placeholders <code>[INTITULE1]</code>, <code>[VOTRE TEXTE 1]</code>… seront remplacés à la génération.</label>
+        <textarea id="es-template" spellcheck="false"></textarea>
+        <div style="margin-top: 8px;">
+          <button type="button" class="secondary" id="es-resetBtn">Réinitialiser le gabarit</button>
+        </div>
       </div>
-    </div>
+    </details>
 
     <div style="margin-bottom: 20px;">
       <button type="button" id="es-genBtn">Générer le code HTML</button>
@@ -899,14 +923,19 @@
       </div>
     </div>
 
-    <div class="panel">
-      <h2>2. Gabarit HTML</h2>
-      <label for="ea-template">Modèle (modifiable). Les placeholders <code>[INTITULE1]</code>, <code>[VOTRE TEXTE 1]</code>… seront remplacés à la génération.</label>
-      <textarea id="ea-template" spellcheck="false"></textarea>
-      <div style="margin-top: 8px;">
-        <button type="button" class="secondary" id="ea-resetBtn">Réinitialiser le gabarit</button>
+    <details class="panel panel--collapsible">
+      <summary>
+        <h2>2. Gabarit HTML</h2>
+        <span class="panel__arrow" aria-hidden="true">▸</span>
+      </summary>
+      <div class="panel__body">
+        <label for="ea-template">Modèle (modifiable). Les placeholders <code>[INTITULE1]</code>, <code>[VOTRE TEXTE 1]</code>… seront remplacés à la génération.</label>
+        <textarea id="ea-template" spellcheck="false"></textarea>
+        <div style="margin-top: 8px;">
+          <button type="button" class="secondary" id="ea-resetBtn">Réinitialiser le gabarit</button>
+        </div>
       </div>
-    </div>
+    </details>
 
     <div style="margin-bottom: 20px;">
       <button type="button" id="ea-genBtn">Générer le code HTML</button>
