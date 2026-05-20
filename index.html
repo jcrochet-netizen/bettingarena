@@ -60,6 +60,8 @@
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
   .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
   .hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .charcount { float: right; font-weight: 400; color: var(--muted); font-size: 12px; }
+  .charcount.full { color: var(--accent); }
   button {
     background: var(--accent);
     color: #fff;
@@ -436,7 +438,7 @@
     <button type="button" class="drawer__item" data-tab="tab-1n2-af">1N2 Afrik-Foot FR</button>
     <button type="button" class="drawer__item" data-tab="tab-buteurs-af">Buteurs Afrik-Foot FR</button>
     <div class="drawer__cat drawer__cat--sep">Autres</div>
-    <div class="drawer__empty">Aucun widget pour le moment.</div>
+    <button type="button" class="drawer__item" data-tab="tab-essentiel">L'essentiel</button>
   </nav>
 
   <div class="tab-panel active" id="tab-1n2-tm" role="tabpanel">
@@ -787,6 +789,73 @@
       <div class="copy-row">
         <button type="button" id="ab-copyBtn">Copier le HTML</button>
         <span class="status" id="ab-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-essentiel" role="tabpanel">
+    <h2 class="widget-title">L'essentiel</h2>
+    <p class="subtitle">Renseigne 3 paires libellé / détail, génère le bloc encadré « L'essentiel » prêt à coller dans ton CMS.</p>
+
+    <div class="panel">
+      <h2>1. Contenu (3 lignes)</h2>
+      <div class="row" style="grid-template-columns: 1fr 2fr;">
+        <div>
+          <label for="es-lib1">Libellé 1 <span class="charcount" id="es-lib1-count">0/150</span></label>
+          <input type="text" id="es-lib1" maxlength="150" placeholder="Ex : Date du match" />
+        </div>
+        <div>
+          <label for="es-det1">Détail 1 <span class="charcount" id="es-det1-count">0/150</span></label>
+          <input type="text" id="es-det1" maxlength="150" placeholder="Ex : Samedi 24 mai à 21h00" />
+        </div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 2fr;">
+        <div>
+          <label for="es-lib2">Libellé 2 <span class="charcount" id="es-lib2-count">0/150</span></label>
+          <input type="text" id="es-lib2" maxlength="150" placeholder="Ex : Diffusion" />
+        </div>
+        <div>
+          <label for="es-det2">Détail 2 <span class="charcount" id="es-det2-count">0/150</span></label>
+          <input type="text" id="es-det2" maxlength="150" placeholder="Ex : En direct sur beIN Sports 1" />
+        </div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 2fr;">
+        <div>
+          <label for="es-lib3">Libellé 3 <span class="charcount" id="es-lib3-count">0/150</span></label>
+          <input type="text" id="es-lib3" maxlength="150" placeholder="Ex : Favori" />
+        </div>
+        <div>
+          <label for="es-det3">Détail 3 <span class="charcount" id="es-det3-count">0/150</span></label>
+          <input type="text" id="es-det3" maxlength="150" placeholder="Ex : Le PSG, coté à 1,50" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>2. Gabarit HTML</h2>
+      <label for="es-template">Modèle (modifiable). Les placeholders <code>[INTITULE1]</code>, <code>[VOTRE TEXTE 1]</code>… seront remplacés à la génération.</label>
+      <textarea id="es-template" spellcheck="false"></textarea>
+      <div style="margin-top: 8px;">
+        <button type="button" class="secondary" id="es-resetBtn">Réinitialiser le gabarit</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <button type="button" id="es-genBtn">Générer le code HTML</button>
+      <span class="status" id="es-genStatus" style="margin-left: 10px;"></span>
+    </div>
+
+    <div class="panel">
+      <h2>Aperçu</h2>
+      <div class="preview-wrap" id="es-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Code HTML généré</h2>
+      <textarea id="es-output" readonly placeholder="Clique sur « Générer le code HTML » pour produire le code."></textarea>
+      <div class="copy-row">
+        <button type="button" id="es-copyBtn">Copier le code</button>
+        <span class="status" id="es-copyStatus"></span>
       </div>
     </div>
   </div>
@@ -1855,6 +1924,77 @@ function parsePlayerOddsFromText(text) {
   });
 
   abRender();
+})();
+
+// ========== WIDGET : L'essentiel (catégorie Autres) ==========
+(function() {
+  const ESSENTIEL_TEMPLATE = `<aside aria-label="L'essentiel" id="quick-summary" lang="fr" style="background:#ffeaea;border-left:4px solid #EE0000;padding:16px 20px;margin:0 0 24px;border-radius:0 6px 6px 0;font-family:sans-serif;box-sizing:border-box;">
+<h2 style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#b00000;margin:0 0 10px;padding:0;">L'essentiel</h2>
+<dl style="margin:0;padding:0;font-size:14px;line-height:1.9;color:#222;">
+<div style="display:flex;flex-wrap:wrap;gap:0 6px;margin-bottom:2px;"><dt style="font-weight:700;flex-shrink:0;">[INTITULE1] :</dt><dd style="margin:0;">[VOTRE TEXTE 1]</dd></div>
+<div style="display:flex;flex-wrap:wrap;gap:0 6px;margin-bottom:2px;"><dt style="font-weight:700;flex-shrink:0;">[INTITULE2] :</dt><dd style="margin:0;">[VOTRE TEXTE 2]</dd></div>
+<div style="display:flex;flex-wrap:wrap;gap:0 6px;"><dt style="font-weight:700;flex-shrink:0;">[INTITULE3] :</dt><dd style="margin:0;">[VOTRE TEXTE 3]</dd></div>
+</dl></aside>`;
+
+  // Pré-remplit le gabarit
+  $('es-template').value = ESSENTIEL_TEMPLATE;
+
+  // Compteurs de caractères
+  const fields = ['es-lib1','es-det1','es-lib2','es-det2','es-lib3','es-det3'];
+  fields.forEach(id => {
+    const input = $(id);
+    const counter = $(id + '-count');
+    const update = () => {
+      const len = input.value.length;
+      counter.textContent = len + '/150';
+      counter.classList.toggle('full', len >= 150);
+    };
+    input.addEventListener('input', update);
+    update();
+  });
+
+  $('es-resetBtn').addEventListener('click', () => {
+    $('es-template').value = ESSENTIEL_TEMPLATE;
+    $('es-genStatus').textContent = "Gabarit réinitialisé.";
+  });
+
+  $('es-genBtn').addEventListener('click', () => {
+    const status = $('es-genStatus');
+    let html = $('es-template').value;
+    const repl = [
+      ['[INTITULE1]', $('es-lib1').value.trim()],
+      ['[VOTRE TEXTE 1]', $('es-det1').value.trim()],
+      ['[INTITULE2]', $('es-lib2').value.trim()],
+      ['[VOTRE TEXTE 2]', $('es-det2').value.trim()],
+      ['[INTITULE3]', $('es-lib3').value.trim()],
+      ['[VOTRE TEXTE 3]', $('es-det3').value.trim()],
+    ];
+    const emptyCount = repl.filter(([, v]) => !v).length;
+    for (const [ph, val] of repl) {
+      html = html.split(ph).join(escapeHtml(val));
+    }
+    $('es-output').value = html;
+    $('es-preview').innerHTML = html;
+    if (emptyCount > 0) {
+      status.textContent = `⚠ Code généré, mais ${emptyCount} champ(s) vide(s).`;
+    } else {
+      status.textContent = "✓ Code généré.";
+    }
+  });
+
+  $('es-copyBtn').addEventListener('click', async () => {
+    const ta = $('es-output');
+    if (!ta.value) { $('es-copyStatus').textContent = "Génère le code d'abord."; return; }
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('es-copyStatus').textContent = "✓ Copié.";
+      setTimeout(() => $('es-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('es-copyStatus').textContent = "✓ Copié.";
+    }
+  });
 })();
 
 // Premier rendu vide
