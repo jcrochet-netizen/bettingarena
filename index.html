@@ -2989,24 +2989,26 @@ function parsePlayerOddsFromText(text) {
 
   // ===== Helper : casse les noms longs sur un retour ligne (avant échappement) =====
   function wrapAndEscapeName(name) {
-    if (name.length <= 15 || (name.indexOf('-') === -1 && name.indexOf(' ') === -1)) {
-      return escapeHtml(name);
-    }
-    let breakIdx, removeSpace = false;
+    if (name.length <= 15) return escapeHtml(name);
+    // Long name → on tente de couper
+    // 1) Sur un trait d'union (priorité : Saint-Maximin → Saint- / Maximin)
     if (name.indexOf('-') > -1) {
-      breakIdx = name.indexOf('-') + 1;
-    } else {
+      const idx = name.indexOf('-') + 1;
+      return escapeHtml(name.slice(0, idx)) + '<br>' + escapeHtml(name.slice(idx));
+    }
+    // 2) Sur l'espace le plus proche du milieu (Mac Allister → Mac / Allister)
+    if (name.indexOf(' ') > -1) {
       const mid = Math.floor(name.length / 2);
       let best = 0, bestDist = Infinity;
       for (let i = 0; i < name.length; i++) {
         if (name[i] === ' ' && Math.abs(i - mid) < bestDist) { bestDist = Math.abs(i - mid); best = i; }
       }
-      breakIdx = best;
-      removeSpace = true;
+      return escapeHtml(name.slice(0, best)) + '<br>' + escapeHtml(name.slice(best + 1));
     }
-    const left = name.slice(0, breakIdx);
-    const right = name.slice(breakIdx + (removeSpace ? 1 : 0));
-    return escapeHtml(left) + '<br>' + escapeHtml(right);
+    // 3) Mot unique très long sans séparateur (ex: Kvaratskheliapoulos)
+    //    → coupe forcée au milieu pour que le label tienne dans la dot.
+    const mid = Math.floor(name.length / 2);
+    return escapeHtml(name.slice(0, mid)) + '<br>' + escapeHtml(name.slice(mid));
   }
 
   const CF2_STYLE = '<style>' +
