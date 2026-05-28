@@ -2872,86 +2872,87 @@ function parsePlayerOddsFromText(text) {
 
 // ========== WIDGET : Choose Formation 2 (catégorie Autres) — multi-formations ==========
 (function() {
-  // Formations : chaque rangée correspond à une ligne du terrain (haut → bas).
+  // Formations : ordre = bas → haut du terrain (GK d'abord, attaquants en dernier).
   // Ordre des joueurs dans la rangée = gauche → droite.
-  // x/y = pourcentages dans le terrain (origine haut-gauche).
+  // x/y = pourcentages dans le terrain (origine haut-gauche, donc GK reste en y:90).
+  // Libellés en anglais (UK English).
   const FORMATIONS = {
     "4-4-2": [
-      [{ code: "ST", label: "Attaquant G",     x: 37, y: 13 }, { code: "ST", label: "Attaquant D",     x: 63, y: 13 }],
-      [{ code: "LM", label: "Milieu G",        x: 18, y: 38 }, { code: "CM", label: "Milieu central G", x: 38, y: 45 }, { code: "CM", label: "Milieu central D", x: 62, y: 45 }, { code: "RM", label: "Milieu D",        x: 82, y: 38 }],
-      [{ code: "LB", label: "Latéral G",       x: 18, y: 70 }, { code: "CB", label: "Déf. central G",   x: 37, y: 74 }, { code: "CB", label: "Déf. central D",   x: 63, y: 74 }, { code: "RB", label: "Latéral D",       x: 82, y: 70 }],
-      [{ code: "GK", label: "Gardien",         x: 50, y: 90 }]
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "LB", label: "Left-back",             x: 18, y: 70 }, { code: "CB", label: "Left centre-back",      x: 37, y: 74 }, { code: "CB", label: "Right centre-back",      x: 63, y: 74 }, { code: "RB", label: "Right-back",            x: 82, y: 70 }],
+      [{ code: "LM", label: "Left midfielder",       x: 18, y: 38 }, { code: "CM", label: "Left central midfielder", x: 38, y: 45 }, { code: "CM", label: "Right central midfielder", x: 62, y: 45 }, { code: "RM", label: "Right midfielder",      x: 82, y: 38 }],
+      [{ code: "ST", label: "Left striker",          x: 37, y: 13 }, { code: "ST", label: "Right striker",         x: 63, y: 13 }]
     ],
     "4-3-3": [
-      [{ code: "LW", label: "Ailier G",        x: 18, y: 15 }, { code: "ST", label: "Attaquant axial", x: 50, y: 12 }, { code: "RW", label: "Ailier D",         x: 82, y: 15 }],
-      [{ code: "CM", label: "Milieu G",        x: 32, y: 42 }, { code: "CM", label: "Milieu central",  x: 50, y: 46 }, { code: "CM", label: "Milieu D",         x: 68, y: 42 }],
-      [{ code: "LB", label: "Latéral G",       x: 18, y: 70 }, { code: "CB", label: "Déf. central G",  x: 37, y: 74 }, { code: "CB", label: "Déf. central D",   x: 63, y: 74 }, { code: "RB", label: "Latéral D",       x: 82, y: 70 }],
-      [{ code: "GK", label: "Gardien",         x: 50, y: 90 }]
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "LB", label: "Left-back",             x: 18, y: 70 }, { code: "CB", label: "Left centre-back",      x: 37, y: 74 }, { code: "CB", label: "Right centre-back",      x: 63, y: 74 }, { code: "RB", label: "Right-back",            x: 82, y: 70 }],
+      [{ code: "CM", label: "Left central midfielder", x: 32, y: 42 }, { code: "CM", label: "Central midfielder", x: 50, y: 46 }, { code: "CM", label: "Right central midfielder", x: 68, y: 42 }],
+      [{ code: "LW", label: "Left winger",           x: 18, y: 15 }, { code: "ST", label: "Striker",              x: 50, y: 12 }, { code: "RW", label: "Right winger",          x: 82, y: 15 }]
     ],
     "4-2-3-1": [
-      [{ code: "ST", label: "Attaquant axial", x: 50, y: 12 }],
-      [{ code: "LM", label: "Ailier G off.",   x: 20, y: 28 }, { code: "CAM", label: "Milieu off.",     x: 50, y: 30 }, { code: "RM", label: "Ailier D off.",    x: 80, y: 28 }],
-      [{ code: "DM", label: "Sentinelle G",    x: 37, y: 50 }, { code: "DM", label: "Sentinelle D",     x: 63, y: 50 }],
-      [{ code: "LB", label: "Latéral G",       x: 18, y: 70 }, { code: "CB", label: "Déf. central G",   x: 37, y: 74 }, { code: "CB", label: "Déf. central D",   x: 63, y: 74 }, { code: "RB", label: "Latéral D",       x: 82, y: 70 }],
-      [{ code: "GK", label: "Gardien",         x: 50, y: 90 }]
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "LB", label: "Left-back",             x: 18, y: 70 }, { code: "CB", label: "Left centre-back",      x: 37, y: 74 }, { code: "CB", label: "Right centre-back",      x: 63, y: 74 }, { code: "RB", label: "Right-back",            x: 82, y: 70 }],
+      [{ code: "DM", label: "Left defensive midfielder", x: 37, y: 50 }, { code: "DM", label: "Right defensive midfielder", x: 63, y: 50 }],
+      [{ code: "LM", label: "Left attacking midfielder", x: 20, y: 28 }, { code: "CAM", label: "Attacking midfielder", x: 50, y: 30 }, { code: "RM", label: "Right attacking midfielder", x: 80, y: 28 }],
+      [{ code: "ST", label: "Striker",               x: 50, y: 12 }]
     ],
     "3-5-2": [
-      [{ code: "ST", label: "Attaquant G",     x: 37, y: 13 }, { code: "ST", label: "Attaquant D",     x: 63, y: 13 }],
-      [{ code: "LWB", label: "Piston G",       x: 12, y: 40 }, { code: "CM", label: "Milieu G",         x: 33, y: 45 }, { code: "CM", label: "Milieu central",   x: 50, y: 42 }, { code: "CM", label: "Milieu D",         x: 67, y: 45 }, { code: "RWB", label: "Piston D",       x: 88, y: 40 }],
-      [{ code: "CB", label: "Déf. central G",  x: 25, y: 73 }, { code: "CB", label: "Déf. central axe", x: 50, y: 75 }, { code: "CB", label: "Déf. central D",   x: 75, y: 73 }],
-      [{ code: "GK", label: "Gardien",         x: 50, y: 90 }]
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "CB", label: "Left centre-back",      x: 25, y: 73 }, { code: "CB", label: "Central centre-back",   x: 50, y: 75 }, { code: "CB", label: "Right centre-back",     x: 75, y: 73 }],
+      [{ code: "LWB", label: "Left wing-back",       x: 12, y: 40 }, { code: "CM", label: "Left central midfielder", x: 33, y: 45 }, { code: "CM", label: "Central midfielder", x: 50, y: 42 }, { code: "CM", label: "Right central midfielder", x: 67, y: 45 }, { code: "RWB", label: "Right wing-back",     x: 88, y: 40 }],
+      [{ code: "ST", label: "Left striker",          x: 37, y: 13 }, { code: "ST", label: "Right striker",         x: 63, y: 13 }]
     ],
     "3-4-3": [
-      [{ code: "LW", label: "Ailier G",        x: 18, y: 15 }, { code: "ST", label: "Attaquant axial", x: 50, y: 12 }, { code: "RW", label: "Ailier D",         x: 82, y: 15 }],
-      [{ code: "LM", label: "Milieu G",        x: 15, y: 42 }, { code: "CM", label: "Milieu central G", x: 37, y: 45 }, { code: "CM", label: "Milieu central D", x: 63, y: 45 }, { code: "RM", label: "Milieu D",         x: 85, y: 42 }],
-      [{ code: "CB", label: "Déf. central G",  x: 25, y: 73 }, { code: "CB", label: "Déf. central axe", x: 50, y: 75 }, { code: "CB", label: "Déf. central D",   x: 75, y: 73 }],
-      [{ code: "GK", label: "Gardien",         x: 50, y: 90 }]
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "CB", label: "Left centre-back",      x: 25, y: 73 }, { code: "CB", label: "Central centre-back",   x: 50, y: 75 }, { code: "CB", label: "Right centre-back",     x: 75, y: 73 }],
+      [{ code: "LM", label: "Left midfielder",       x: 15, y: 42 }, { code: "CM", label: "Left central midfielder", x: 37, y: 45 }, { code: "CM", label: "Right central midfielder", x: 63, y: 45 }, { code: "RM", label: "Right midfielder",     x: 85, y: 42 }],
+      [{ code: "LW", label: "Left winger",           x: 18, y: 15 }, { code: "ST", label: "Striker",              x: 50, y: 12 }, { code: "RW", label: "Right winger",          x: 82, y: 15 }]
     ],
     "4-5-1": [
-      [{ code: "ST", label: "Attaquant axial", x: 50, y: 12 }],
-      [{ code: "LM", label: "Milieu G",        x: 15, y: 35 }, { code: "CM", label: "Milieu central G", x: 35, y: 42 }, { code: "CM", label: "Milieu central", x: 50, y: 38 }, { code: "CM", label: "Milieu central D", x: 65, y: 42 }, { code: "RM", label: "Milieu D",         x: 85, y: 35 }],
-      [{ code: "LB", label: "Latéral G",       x: 18, y: 70 }, { code: "CB", label: "Déf. central G",   x: 37, y: 74 }, { code: "CB", label: "Déf. central D",   x: 63, y: 74 }, { code: "RB", label: "Latéral D",       x: 82, y: 70 }],
-      [{ code: "GK", label: "Gardien",         x: 50, y: 90 }]
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "LB", label: "Left-back",             x: 18, y: 70 }, { code: "CB", label: "Left centre-back",      x: 37, y: 74 }, { code: "CB", label: "Right centre-back",      x: 63, y: 74 }, { code: "RB", label: "Right-back",            x: 82, y: 70 }],
+      [{ code: "LM", label: "Left midfielder",       x: 15, y: 35 }, { code: "CM", label: "Left central midfielder", x: 35, y: 42 }, { code: "CM", label: "Central midfielder", x: 50, y: 38 }, { code: "CM", label: "Right central midfielder", x: 65, y: 42 }, { code: "RM", label: "Right midfielder",     x: 85, y: 35 }],
+      [{ code: "ST", label: "Striker",               x: 50, y: 12 }]
     ],
     "5-3-2": [
-      [{ code: "ST", label: "Attaquant G",     x: 37, y: 13 }, { code: "ST", label: "Attaquant D",     x: 63, y: 13 }],
-      [{ code: "CM", label: "Milieu G",        x: 30, y: 42 }, { code: "CM", label: "Milieu central",  x: 50, y: 40 }, { code: "CM", label: "Milieu D",         x: 70, y: 42 }],
-      [{ code: "LWB", label: "Piston G",       x: 12, y: 65 }, { code: "CB", label: "Déf. central G",  x: 32, y: 75 }, { code: "CB", label: "Déf. central axe", x: 50, y: 73 }, { code: "CB", label: "Déf. central D",   x: 68, y: 75 }, { code: "RWB", label: "Piston D",       x: 88, y: 65 }],
-      [{ code: "GK", label: "Gardien",         x: 50, y: 90 }]
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "LWB", label: "Left wing-back",       x: 12, y: 65 }, { code: "CB", label: "Left centre-back",      x: 32, y: 75 }, { code: "CB", label: "Central centre-back", x: 50, y: 73 }, { code: "CB", label: "Right centre-back",      x: 68, y: 75 }, { code: "RWB", label: "Right wing-back",      x: 88, y: 65 }],
+      [{ code: "CM", label: "Left central midfielder", x: 30, y: 42 }, { code: "CM", label: "Central midfielder", x: 50, y: 40 }, { code: "CM", label: "Right central midfielder", x: 70, y: 42 }],
+      [{ code: "ST", label: "Left striker",          x: 37, y: 13 }, { code: "ST", label: "Right striker",         x: 63, y: 13 }]
     ],
     "5-4-1": [
-      [{ code: "ST", label: "Attaquant axial", x: 50, y: 12 }],
-      [{ code: "LM", label: "Milieu G",        x: 15, y: 38 }, { code: "CM", label: "Milieu central G", x: 38, y: 42 }, { code: "CM", label: "Milieu central D", x: 62, y: 42 }, { code: "RM", label: "Milieu D",         x: 85, y: 38 }],
-      [{ code: "LWB", label: "Piston G",       x: 12, y: 65 }, { code: "CB", label: "Déf. central G",  x: 32, y: 75 }, { code: "CB", label: "Déf. central axe", x: 50, y: 73 }, { code: "CB", label: "Déf. central D",   x: 68, y: 75 }, { code: "RWB", label: "Piston D",       x: 88, y: 65 }],
-      [{ code: "GK", label: "Gardien",         x: 50, y: 90 }]
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "LWB", label: "Left wing-back",       x: 12, y: 65 }, { code: "CB", label: "Left centre-back",      x: 32, y: 75 }, { code: "CB", label: "Central centre-back", x: 50, y: 73 }, { code: "CB", label: "Right centre-back",      x: 68, y: 75 }, { code: "RWB", label: "Right wing-back",      x: 88, y: 65 }],
+      [{ code: "LM", label: "Left midfielder",       x: 15, y: 38 }, { code: "CM", label: "Left central midfielder", x: 38, y: 42 }, { code: "CM", label: "Right central midfielder", x: 62, y: 42 }, { code: "RM", label: "Right midfielder",     x: 85, y: 38 }],
+      [{ code: "ST", label: "Striker",               x: 50, y: 12 }]
     ],
     "4-3-2-1": [
-      [{ code: "ST", label: "Attaquant axial", x: 50, y: 11 }],
-      [{ code: "CAM", label: "Milieu off. G",  x: 35, y: 28 }, { code: "CAM", label: "Milieu off. D",   x: 65, y: 28 }],
-      [{ code: "CM", label: "Milieu central G", x: 28, y: 48 }, { code: "CM", label: "Milieu central", x: 50, y: 46 }, { code: "CM", label: "Milieu central D", x: 72, y: 48 }],
-      [{ code: "LB", label: "Latéral G",       x: 18, y: 72 }, { code: "CB", label: "Déf. central G",  x: 37, y: 76 }, { code: "CB", label: "Déf. central D",   x: 63, y: 76 }, { code: "RB", label: "Latéral D",       x: 82, y: 72 }],
-      [{ code: "GK", label: "Gardien",         x: 50, y: 90 }]
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "LB", label: "Left-back",             x: 18, y: 72 }, { code: "CB", label: "Left centre-back",      x: 37, y: 76 }, { code: "CB", label: "Right centre-back",      x: 63, y: 76 }, { code: "RB", label: "Right-back",            x: 82, y: 72 }],
+      [{ code: "CM", label: "Left central midfielder", x: 28, y: 48 }, { code: "CM", label: "Central midfielder", x: 50, y: 46 }, { code: "CM", label: "Right central midfielder", x: 72, y: 48 }],
+      [{ code: "CAM", label: "Left attacking midfielder", x: 35, y: 28 }, { code: "CAM", label: "Right attacking midfielder", x: 65, y: 28 }],
+      [{ code: "ST", label: "Striker",               x: 50, y: 11 }]
     ],
     "4-1-2-1-2": [
-      [{ code: "ST", label: "Attaquant G",     x: 40, y: 12 }, { code: "ST", label: "Attaquant D",     x: 60, y: 12 }],
-      [{ code: "CAM", label: "Milieu offensif", x: 50, y: 28 }],
-      [{ code: "CM", label: "Milieu G",        x: 22, y: 46 }, { code: "CM", label: "Milieu D",         x: 78, y: 46 }],
-      [{ code: "DM", label: "Sentinelle",      x: 50, y: 58 }],
-      [{ code: "LB", label: "Latéral G",       x: 18, y: 73 }, { code: "CB", label: "Déf. central G",  x: 37, y: 76 }, { code: "CB", label: "Déf. central D",   x: 63, y: 76 }, { code: "RB", label: "Latéral D",       x: 82, y: 73 }],
-      [{ code: "GK", label: "Gardien",         x: 50, y: 90 }]
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "LB", label: "Left-back",             x: 18, y: 73 }, { code: "CB", label: "Left centre-back",      x: 37, y: 76 }, { code: "CB", label: "Right centre-back",      x: 63, y: 76 }, { code: "RB", label: "Right-back",            x: 82, y: 73 }],
+      [{ code: "DM", label: "Defensive midfielder",  x: 50, y: 58 }],
+      [{ code: "CM", label: "Left central midfielder", x: 22, y: 46 }, { code: "CM", label: "Right central midfielder", x: 78, y: 46 }],
+      [{ code: "CAM", label: "Attacking midfielder", x: 50, y: 28 }],
+      [{ code: "ST", label: "Left striker",          x: 40, y: 12 }, { code: "ST", label: "Right striker",         x: 60, y: 12 }]
     ],
     "4-2-4": [
-      [{ code: "LW", label: "Ailier G",        x: 15, y: 14 }, { code: "ST", label: "Attaquant G",     x: 38, y: 12 }, { code: "ST", label: "Attaquant D",     x: 62, y: 12 }, { code: "RW", label: "Ailier D",         x: 85, y: 14 }],
-      [{ code: "CM", label: "Milieu G",        x: 37, y: 45 }, { code: "CM", label: "Milieu D",         x: 63, y: 45 }],
-      [{ code: "LB", label: "Latéral G",       x: 18, y: 70 }, { code: "CB", label: "Déf. central G",  x: 37, y: 74 }, { code: "CB", label: "Déf. central D",   x: 63, y: 74 }, { code: "RB", label: "Latéral D",       x: 82, y: 70 }],
-      [{ code: "GK", label: "Gardien",         x: 50, y: 90 }]
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "LB", label: "Left-back",             x: 18, y: 70 }, { code: "CB", label: "Left centre-back",      x: 37, y: 74 }, { code: "CB", label: "Right centre-back",      x: 63, y: 74 }, { code: "RB", label: "Right-back",            x: 82, y: 70 }],
+      [{ code: "CM", label: "Left central midfielder", x: 37, y: 45 }, { code: "CM", label: "Right central midfielder", x: 63, y: 45 }],
+      [{ code: "LW", label: "Left winger",           x: 15, y: 14 }, { code: "ST", label: "Left striker",          x: 38, y: 12 }, { code: "ST", label: "Right striker",         x: 62, y: 12 }, { code: "RW", label: "Right winger",          x: 85, y: 14 }]
     ],
     "3-4-2-1": [
-      [{ code: "ST", label: "Attaquant axial", x: 50, y: 11 }],
-      [{ code: "CAM", label: "Soutien G",      x: 35, y: 28 }, { code: "CAM", label: "Soutien D",       x: 65, y: 28 }],
-      [{ code: "LM", label: "Milieu G",        x: 15, y: 47 }, { code: "CM", label: "Milieu central G", x: 37, y: 50 }, { code: "CM", label: "Milieu central D", x: 63, y: 50 }, { code: "RM", label: "Milieu D",         x: 85, y: 47 }],
-      [{ code: "CB", label: "Déf. central G",  x: 25, y: 73 }, { code: "CB", label: "Déf. central axe", x: 50, y: 75 }, { code: "CB", label: "Déf. central D",   x: 75, y: 73 }],
-      [{ code: "GK", label: "Gardien",         x: 50, y: 90 }]
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "CB", label: "Left centre-back",      x: 25, y: 73 }, { code: "CB", label: "Central centre-back",   x: 50, y: 75 }, { code: "CB", label: "Right centre-back",     x: 75, y: 73 }],
+      [{ code: "LM", label: "Left midfielder",       x: 15, y: 47 }, { code: "CM", label: "Left central midfielder", x: 37, y: 50 }, { code: "CM", label: "Right central midfielder", x: 63, y: 50 }, { code: "RM", label: "Right midfielder",     x: 85, y: 47 }],
+      [{ code: "CAM", label: "Left attacking midfielder", x: 35, y: 28 }, { code: "CAM", label: "Right attacking midfielder", x: 65, y: 28 }],
+      [{ code: "ST", label: "Striker",               x: 50, y: 11 }]
     ]
   };
 
