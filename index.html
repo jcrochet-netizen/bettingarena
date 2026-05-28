@@ -1551,18 +1551,52 @@ function render() {
     if (e.key === 'Escape') closeDrawer();
   });
 
+  // Hash-based routing : chaque widget a son URL #slug
+  // (slug = data-tab du bouton, sans le préfixe "tab-")
+  const BASE_TITLE = "Générateur de widgets Betting";
+
+  function slugFor(item) {
+    return item.dataset.tab.replace(/^tab-/, '');
+  }
+
+  function activateTab(item) {
+    document.querySelectorAll('.drawer__item').forEach(i => i.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    item.classList.add('active');
+    const panel = document.getElementById(item.dataset.tab);
+    if (panel) panel.classList.add('active');
+    const label = item.textContent.trim();
+    $('currentSection').textContent = label;
+    document.title = label + " — " + BASE_TITLE;
+  }
+
+  function activateFromHash() {
+    const slug = location.hash.slice(1);
+    let target = null;
+    if (slug) {
+      target = document.querySelector('.drawer__item[data-tab="tab-' + slug + '"]');
+    }
+    if (!target) target = document.querySelector('.drawer__item');
+    if (target) activateTab(target);
+  }
+
   document.querySelectorAll('.drawer__item').forEach(item => {
     item.addEventListener('click', () => {
-      document.querySelectorAll('.drawer__item').forEach(i => i.classList.remove('active'));
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      item.classList.add('active');
-      const panel = document.getElementById(item.dataset.tab);
-      if (panel) panel.classList.add('active');
-      $('currentSection').textContent = item.textContent;
+      const slug = slugFor(item);
+      // Si on est déjà sur ce hash, hashchange ne sera pas déclenché → activer manuellement
+      if (location.hash === '#' + slug) {
+        activateTab(item);
+      } else {
+        location.hash = slug;
+      }
       closeDrawer();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   });
+
+  window.addEventListener('hashchange', activateFromHash);
+  // Activation initiale (au chargement de la page)
+  activateFromHash();
 })();
 
 // ========== OCR : helpers partagés (preprocessing + parsing) ==========
