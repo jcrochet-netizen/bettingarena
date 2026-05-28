@@ -507,6 +507,7 @@
     <button type="button" class="drawer__item" data-tab="tab-essentiel">L'Essentiel TM</button>
     <button type="button" class="drawer__item" data-tab="tab-essentiel-af">L'Essentiel AF</button>
     <button type="button" class="drawer__item" data-tab="tab-choose-formation">Choose Formation</button>
+    <button type="button" class="drawer__item" data-tab="tab-choose-formation-2">Choose Formation 2</button>
   </nav>
 
   <div class="tab-panel" id="tab-1n2-tm" role="tabpanel">
@@ -1185,6 +1186,57 @@
       <div class="copy-row">
         <button type="button" id="cf-copyBtn">Copier le code</button>
         <span class="status" id="cf-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-choose-formation-2" role="tabpanel">
+    <h2 class="widget-title">Choose Formation 2</h2>
+    <p class="subtitle">Choisis une formation, renseigne les 11 joueurs (les libellés s'adaptent à la disposition sélectionnée), génère le bloc HTML. Le terrain visuel, le JSON-LD et la liste SEO sont calés sur la formation choisie — pas de gabarit éditable, tout est construit à la volée.</p>
+
+    <div class="panel">
+      <h2>1. Équipe &amp; formation</h2>
+      <div class="row">
+        <div>
+          <label for="cf2-team">Nom de l'équipe</label>
+          <input type="text" id="cf2-team" maxlength="80" />
+        </div>
+        <div>
+          <label for="cf2-formation">Formation</label>
+          <select id="cf2-formation" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
+            <option value="4-4-2">4-4-2</option>
+            <option value="4-3-3">4-3-3</option>
+            <option value="4-2-3-1">4-2-3-1</option>
+            <option value="3-5-2">3-5-2</option>
+            <option value="3-4-3">3-4-3</option>
+            <option value="4-5-1">4-5-1</option>
+            <option value="5-3-2">5-3-2</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>2. Onze probable</h2>
+      <div id="cf2-players-container"></div>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <button type="button" id="cf2-genBtn">Générer le code HTML</button>
+      <span class="status" id="cf2-genStatus" style="margin-left: 10px;"></span>
+    </div>
+
+    <div class="panel">
+      <h2>Aperçu</h2>
+      <div class="preview-wrap" id="cf2-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Code HTML généré</h2>
+      <textarea id="cf2-output" readonly placeholder="Clique sur « Générer le code HTML » pour produire le code." style="min-height: 320px;"></textarea>
+      <div class="copy-row">
+        <button type="button" id="cf2-copyBtn">Copier le code</button>
+        <span class="status" id="cf2-copyStatus"></span>
       </div>
     </div>
   </div>
@@ -2809,6 +2861,254 @@ function parsePlayerOddsFromText(text) {
     } catch (e) {
       document.execCommand('copy');
       $('cf-copyStatus').textContent = "✓ Copié.";
+    }
+  });
+})();
+
+// ========== WIDGET : Choose Formation 2 (catégorie Autres) — multi-formations ==========
+(function() {
+  // Formations : chaque rangée correspond à une ligne du terrain (haut → bas).
+  // Ordre des joueurs dans la rangée = gauche → droite.
+  // x/y = pourcentages dans le terrain (origine haut-gauche).
+  const FORMATIONS = {
+    "4-4-2": [
+      [{ code: "ST", label: "Attaquant G",     x: 37, y: 13 }, { code: "ST", label: "Attaquant D",     x: 63, y: 13 }],
+      [{ code: "LM", label: "Milieu G",        x: 18, y: 38 }, { code: "CM", label: "Milieu central G", x: 38, y: 45 }, { code: "CM", label: "Milieu central D", x: 62, y: 45 }, { code: "RM", label: "Milieu D",        x: 82, y: 38 }],
+      [{ code: "LB", label: "Latéral G",       x: 18, y: 70 }, { code: "CB", label: "Déf. central G",   x: 37, y: 74 }, { code: "CB", label: "Déf. central D",   x: 63, y: 74 }, { code: "RB", label: "Latéral D",       x: 82, y: 70 }],
+      [{ code: "GK", label: "Gardien",         x: 50, y: 90 }]
+    ],
+    "4-3-3": [
+      [{ code: "LW", label: "Ailier G",        x: 18, y: 15 }, { code: "ST", label: "Attaquant axial", x: 50, y: 12 }, { code: "RW", label: "Ailier D",         x: 82, y: 15 }],
+      [{ code: "CM", label: "Milieu G",        x: 32, y: 42 }, { code: "CM", label: "Milieu central",  x: 50, y: 46 }, { code: "CM", label: "Milieu D",         x: 68, y: 42 }],
+      [{ code: "LB", label: "Latéral G",       x: 18, y: 70 }, { code: "CB", label: "Déf. central G",  x: 37, y: 74 }, { code: "CB", label: "Déf. central D",   x: 63, y: 74 }, { code: "RB", label: "Latéral D",       x: 82, y: 70 }],
+      [{ code: "GK", label: "Gardien",         x: 50, y: 90 }]
+    ],
+    "4-2-3-1": [
+      [{ code: "ST", label: "Attaquant axial", x: 50, y: 12 }],
+      [{ code: "LM", label: "Ailier G off.",   x: 20, y: 28 }, { code: "CAM", label: "Milieu off.",     x: 50, y: 30 }, { code: "RM", label: "Ailier D off.",    x: 80, y: 28 }],
+      [{ code: "DM", label: "Sentinelle G",    x: 37, y: 50 }, { code: "DM", label: "Sentinelle D",     x: 63, y: 50 }],
+      [{ code: "LB", label: "Latéral G",       x: 18, y: 70 }, { code: "CB", label: "Déf. central G",   x: 37, y: 74 }, { code: "CB", label: "Déf. central D",   x: 63, y: 74 }, { code: "RB", label: "Latéral D",       x: 82, y: 70 }],
+      [{ code: "GK", label: "Gardien",         x: 50, y: 90 }]
+    ],
+    "3-5-2": [
+      [{ code: "ST", label: "Attaquant G",     x: 37, y: 13 }, { code: "ST", label: "Attaquant D",     x: 63, y: 13 }],
+      [{ code: "LWB", label: "Piston G",       x: 12, y: 40 }, { code: "CM", label: "Milieu G",         x: 33, y: 45 }, { code: "CM", label: "Milieu central",   x: 50, y: 42 }, { code: "CM", label: "Milieu D",         x: 67, y: 45 }, { code: "RWB", label: "Piston D",       x: 88, y: 40 }],
+      [{ code: "CB", label: "Déf. central G",  x: 25, y: 73 }, { code: "CB", label: "Déf. central axe", x: 50, y: 75 }, { code: "CB", label: "Déf. central D",   x: 75, y: 73 }],
+      [{ code: "GK", label: "Gardien",         x: 50, y: 90 }]
+    ],
+    "3-4-3": [
+      [{ code: "LW", label: "Ailier G",        x: 18, y: 15 }, { code: "ST", label: "Attaquant axial", x: 50, y: 12 }, { code: "RW", label: "Ailier D",         x: 82, y: 15 }],
+      [{ code: "LM", label: "Milieu G",        x: 15, y: 42 }, { code: "CM", label: "Milieu central G", x: 37, y: 45 }, { code: "CM", label: "Milieu central D", x: 63, y: 45 }, { code: "RM", label: "Milieu D",         x: 85, y: 42 }],
+      [{ code: "CB", label: "Déf. central G",  x: 25, y: 73 }, { code: "CB", label: "Déf. central axe", x: 50, y: 75 }, { code: "CB", label: "Déf. central D",   x: 75, y: 73 }],
+      [{ code: "GK", label: "Gardien",         x: 50, y: 90 }]
+    ],
+    "4-5-1": [
+      [{ code: "ST", label: "Attaquant axial", x: 50, y: 12 }],
+      [{ code: "LM", label: "Milieu G",        x: 15, y: 35 }, { code: "CM", label: "Milieu central G", x: 35, y: 42 }, { code: "CM", label: "Milieu central", x: 50, y: 38 }, { code: "CM", label: "Milieu central D", x: 65, y: 42 }, { code: "RM", label: "Milieu D",         x: 85, y: 35 }],
+      [{ code: "LB", label: "Latéral G",       x: 18, y: 70 }, { code: "CB", label: "Déf. central G",   x: 37, y: 74 }, { code: "CB", label: "Déf. central D",   x: 63, y: 74 }, { code: "RB", label: "Latéral D",       x: 82, y: 70 }],
+      [{ code: "GK", label: "Gardien",         x: 50, y: 90 }]
+    ],
+    "5-3-2": [
+      [{ code: "ST", label: "Attaquant G",     x: 37, y: 13 }, { code: "ST", label: "Attaquant D",     x: 63, y: 13 }],
+      [{ code: "CM", label: "Milieu G",        x: 30, y: 42 }, { code: "CM", label: "Milieu central",  x: 50, y: 40 }, { code: "CM", label: "Milieu D",         x: 70, y: 42 }],
+      [{ code: "LWB", label: "Piston G",       x: 12, y: 65 }, { code: "CB", label: "Déf. central G",  x: 32, y: 75 }, { code: "CB", label: "Déf. central axe", x: 50, y: 73 }, { code: "CB", label: "Déf. central D",   x: 68, y: 75 }, { code: "RWB", label: "Piston D",       x: 88, y: 65 }],
+      [{ code: "GK", label: "Gardien",         x: 50, y: 90 }]
+    ]
+  };
+
+  function flatPositions(name) {
+    return (FORMATIONS[name] || []).flat();
+  }
+
+  function buildPlayerFields(formationName) {
+    const container = $('cf2-players-container');
+    container.innerHTML = '';
+    const rows = FORMATIONS[formationName] || [];
+    let idx = 0;
+    rows.forEach((row) => {
+      const cols = row.length;
+      const rowDiv = document.createElement('div');
+      rowDiv.className = 'row';
+      rowDiv.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+      row.forEach((pos) => {
+        idx++;
+        const wrap = document.createElement('div');
+        wrap.innerHTML =
+          '<label for="cf2-p' + idx + '">' + idx + ' — ' + escapeHtml(pos.label) + ' <span style="color:#9ca3af;font-weight:400;font-size:11px">[' + pos.code + ']</span></label>' +
+          '<input type="text" id="cf2-p' + idx + '" maxlength="60" />';
+        rowDiv.appendChild(wrap);
+      });
+      container.appendChild(rowDiv);
+    });
+  }
+
+  // ===== Échappement par contexte =====
+  function jsonStringEscape(s) {
+    return JSON.stringify(String(s)).slice(1, -1);
+  }
+
+  // ===== Helper : casse les noms longs sur un retour ligne (avant échappement) =====
+  function wrapAndEscapeName(name) {
+    if (name.length <= 15 || (name.indexOf('-') === -1 && name.indexOf(' ') === -1)) {
+      return escapeHtml(name);
+    }
+    let breakIdx, removeSpace = false;
+    if (name.indexOf('-') > -1) {
+      breakIdx = name.indexOf('-') + 1;
+    } else {
+      const mid = Math.floor(name.length / 2);
+      let best = 0, bestDist = Infinity;
+      for (let i = 0; i < name.length; i++) {
+        if (name[i] === ' ' && Math.abs(i - mid) < bestDist) { bestDist = Math.abs(i - mid); best = i; }
+      }
+      breakIdx = best;
+      removeSpace = true;
+    }
+    const left = name.slice(0, breakIdx);
+    const right = name.slice(breakIdx + (removeSpace ? 1 : 0));
+    return escapeHtml(left) + '<br>' + escapeHtml(right);
+  }
+
+  const CF2_STYLE = '<style>' +
+    '.cf2-wrap{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}' +
+    '.cf2-article{max-width:420px;margin:24px auto;border-radius:10px;overflow:hidden;border:1px solid rgba(0,0,0,0.2);box-sizing:border-box}' +
+    '.cf2-header{background:linear-gradient(90deg,#1a3a5a,#0e2138);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px}' +
+    '.cf2-sublabel{color:rgba(255,255,255,0.55);font-size:10px;text-transform:uppercase;letter-spacing:2px;margin-bottom:2px}' +
+    '.cf2-team{color:#fff;font-size:18px;font-weight:700;margin:0;line-height:1.2}' +
+    '.cf2-badge{background:#f8c548;color:#1a3a5a;font-size:13px;font-weight:700;padding:5px 12px;border-radius:6px;letter-spacing:0.5px;flex-shrink:0}' +
+    '.cf2-pitch{position:relative;width:100%;aspect-ratio:6/7;overflow:hidden;background:repeating-linear-gradient(180deg,rgba(0,0,0,0.04) 0px,rgba(0,0,0,0.04) 34px,transparent 34px,transparent 68px) #1e7d3a}' +
+    '.cf2-line{position:absolute}' +
+    '.cf2-outline{inset:0;margin:5%;border:2px solid rgba(255,255,255,0.45);box-sizing:border-box}' +
+    '.cf2-halfway{left:5%;right:5%;top:50%;height:2px;background:rgba(255,255,255,0.45)}' +
+    '.cf2-ccircle{left:50%;top:50%;transform:translate(-50%,-50%);width:72px;height:72px;border-radius:50%;border:2px solid rgba(255,255,255,0.45)}' +
+    '.cf2-cspot{left:50%;top:50%;transform:translate(-50%,-50%);width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.55)}' +
+    '.cf2-box{left:50%;transform:translateX(-50%);border:2px solid rgba(255,255,255,0.45);box-sizing:border-box}' +
+    '.cf2-box-t{top:5%;width:52%;height:17%;border-top:none}' +
+    '.cf2-box-gt{top:5%;width:28%;height:7%;border-top:none}' +
+    '.cf2-box-b{bottom:5%;width:52%;height:17%;border-bottom:none}' +
+    '.cf2-box-gb{bottom:5%;width:28%;height:7%;border-bottom:none}' +
+    '.cf2-player{position:absolute;transform:translate(-50%,-50%);text-align:center}' +
+    '.cf2-dot{width:22px;height:22px;border-radius:50%;margin:0 auto;box-shadow:0 1px 5px rgba(0,0,0,0.5)}' +
+    '.cf2-dot-out{background:#1a3a5a;border:2px solid rgba(255,255,255,0.7)}' +
+    '.cf2-dot-gk{background:#f8c548;border:2px solid rgba(248,197,72,0.9)}' +
+    '.cf2-name{font-size:14px;font-weight:600;margin-top:4px;line-height:1.3;text-shadow:0 1px 3px rgba(0,0,0,0.9);white-space:nowrap}' +
+    '.cf2-name-out{color:#fff}' +
+    '.cf2-name-gk{color:#f8c548}' +
+    '.cf2-dl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}' +
+    '</style>';
+
+  function buildHtml(team, formationName, playerNames) {
+    const positions = flatPositions(formationName);
+    const safeTeam = escapeHtml(team || 'Équipe');
+    const safeForm = escapeHtml(formationName);
+    const teamJson = jsonStringEscape(team || '');
+    const formJson = jsonStringEscape(formationName);
+
+    const members = positions.map((pos, i) => {
+      const n = playerNames[i] || '';
+      return '      {"@type": "Person", "name": "' + jsonStringEscape(n) + '", "jobTitle": "' + pos.code + '"}';
+    }).join(',\n');
+
+    const playerDivs = positions.map((pos, i) => {
+      const isGK = pos.code === 'GK';
+      const dotClass = isGK ? 'cf2-dot-gk' : 'cf2-dot-out';
+      const nameClass = isGK ? 'cf2-name-gk' : 'cf2-name-out';
+      const name = playerNames[i] || '';
+      return '      <div class="cf2-player" style="left:' + pos.x + '%;top:' + pos.y + '%">' +
+        '<div class="cf2-dot ' + dotClass + '"></div>' +
+        '<div class="cf2-name ' + nameClass + '">' + wrapAndEscapeName(name) + '</div></div>';
+    }).join('\n');
+
+    const dlItems = positions.map((pos, i) => {
+      return '      <dt>' + pos.code + '</dt><dd>' + escapeHtml(playerNames[i] || '') + '</dd>';
+    }).join('\n');
+
+    return CF2_STYLE + '\n\n' +
+      '<div class="cf2-wrap">\n\n' +
+      '  <script type="application/ld+json">\n' +
+      '  {\n' +
+      '    "@context": "https://schema.org",\n' +
+      '    "@type": "SportsTeam",\n' +
+      '    "name": "' + teamJson + '",\n' +
+      '    "sport": "Football",\n' +
+      '    "description": "Composition probable — ' + formJson + '",\n' +
+      '    "member": [\n' +
+      members + '\n' +
+      '    ]\n' +
+      '  }\n' +
+      '  <\/script>\n\n' +
+      '  <article class="cf2-article" aria-label="Composition probable — ' + safeTeam + ' — ' + safeForm + '">\n' +
+      '    <header class="cf2-header">\n' +
+      '      <div>\n' +
+      '        <div class="cf2-sublabel">XI probable</div>\n' +
+      '        <h2 class="cf2-team">' + safeTeam + '</h2>\n' +
+      '      </div>\n' +
+      '      <div class="cf2-badge">' + safeForm + '</div>\n' +
+      '    </header>\n\n' +
+      '    <div class="cf2-pitch">\n' +
+      '      <div class="cf2-line cf2-outline"></div>\n' +
+      '      <div class="cf2-line cf2-halfway"></div>\n' +
+      '      <div class="cf2-line cf2-ccircle"></div>\n' +
+      '      <div class="cf2-line cf2-cspot"></div>\n' +
+      '      <div class="cf2-line cf2-box cf2-box-t"></div>\n' +
+      '      <div class="cf2-line cf2-box cf2-box-gt"></div>\n' +
+      '      <div class="cf2-line cf2-box cf2-box-b"></div>\n' +
+      '      <div class="cf2-line cf2-box cf2-box-gb"></div>\n\n' +
+      playerDivs + '\n' +
+      '    </div>\n\n' +
+      '    <dl class="cf2-dl" aria-label="' + safeTeam + ' — composition ' + safeForm + '">\n' +
+      dlItems + '\n' +
+      '    </dl>\n\n' +
+      '  </article>\n\n' +
+      '</div>';
+  }
+
+  function readPlayerNames(formationName) {
+    const positions = flatPositions(formationName);
+    const names = [];
+    for (let i = 0; i < positions.length; i++) {
+      const el = $('cf2-p' + (i + 1));
+      names.push(el ? el.value.trim() : '');
+    }
+    return names;
+  }
+
+  // Construction initiale des champs (4-4-2 par défaut)
+  buildPlayerFields($('cf2-formation').value);
+
+  // Quand on change de formation : reconstruire les champs (les valeurs précédentes
+  // sont perdues parce que le nombre/labels changent)
+  $('cf2-formation').addEventListener('change', () => {
+    buildPlayerFields($('cf2-formation').value);
+  });
+
+  $('cf2-genBtn').addEventListener('click', () => {
+    const status = $('cf2-genStatus');
+    const formationName = $('cf2-formation').value;
+    const team = $('cf2-team').value.trim();
+    const names = readPlayerNames(formationName);
+    const html = buildHtml(team, formationName, names);
+    $('cf2-output').value = html;
+    $('cf2-preview').innerHTML = html;
+    const empty = (team ? 0 : 1) + names.filter(n => !n).length;
+    if (empty > 0) {
+      status.innerHTML = `⚠ Code généré, mais ${empty} champ(s) vide(s).`;
+    } else {
+      status.innerHTML = "✓ Code généré.";
+    }
+  });
+
+  $('cf2-copyBtn').addEventListener('click', async () => {
+    const ta = $('cf2-output');
+    if (!ta.value) { $('cf2-copyStatus').textContent = "Génère le code d'abord."; return; }
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('cf2-copyStatus').textContent = "✓ Copié.";
+      setTimeout(() => $('cf2-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('cf2-copyStatus').textContent = "✓ Copié.";
     }
   });
 })();
