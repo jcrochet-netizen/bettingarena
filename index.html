@@ -3023,14 +3023,17 @@ function parsePlayerOddsFromText(text) {
 
   // ===== Helper : casse les noms longs sur un retour ligne (avant échappement) =====
   function wrapAndEscapeName(name) {
-    if (name.length <= 15) return escapeHtml(name);
-    // Long name → on tente de couper
-    // 1) Sur un trait d'union (priorité : Saint-Maximin → Saint- / Maximin)
-    if (name.indexOf('-') > -1) {
+    // 1) Noms composés (avec trait d'union) > 12 caractères
+    //    → coupe au 1er trait d'union, particule+ sur ligne 1, suite sur ligne 2.
+    //    (Saint-Maximin → Saint- / Maximin)
+    if (name.indexOf('-') > -1 && name.length > 12) {
       const idx = name.indexOf('-') + 1;
       return escapeHtml(name.slice(0, idx)) + '<br>' + escapeHtml(name.slice(idx));
     }
-    // 2) Sur l'espace le plus proche du milieu (Mac Allister → Mac / Allister)
+    // 2) Noms simples courts → 1 ligne
+    if (name.length <= 15) return escapeHtml(name);
+    // 3) Noms longs avec espace → coupe à l'espace le plus proche du milieu.
+    //    (Mac Allister → Mac / Allister)
     if (name.indexOf(' ') > -1) {
       const mid = Math.floor(name.length / 2);
       let best = 0, bestDist = Infinity;
@@ -3039,7 +3042,7 @@ function parsePlayerOddsFromText(text) {
       }
       return escapeHtml(name.slice(0, best)) + '<br>' + escapeHtml(name.slice(best + 1));
     }
-    // 3) Mot unique très long sans séparateur (ex: Kvaratskheliapoulos)
+    // 4) Mot unique très long sans séparateur (ex: Kvaratskheliapoulos)
     //    → coupe forcée au milieu pour que le label tienne dans la dot.
     const mid = Math.floor(name.length / 2);
     return escapeHtml(name.slice(0, mid)) + '<br>' + escapeHtml(name.slice(mid));
