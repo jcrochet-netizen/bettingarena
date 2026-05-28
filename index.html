@@ -506,6 +506,7 @@
     <div class="drawer__cat drawer__cat--sep">Autres</div>
     <button type="button" class="drawer__item" data-tab="tab-essentiel">L'Essentiel TM</button>
     <button type="button" class="drawer__item" data-tab="tab-essentiel-af">L'Essentiel AF</button>
+    <button type="button" class="drawer__item" data-tab="tab-choose-formation">Choose Formation</button>
   </nav>
 
   <div class="tab-panel" id="tab-1n2-tm" role="tabpanel">
@@ -1076,6 +1077,114 @@
       <div class="copy-row">
         <button type="button" id="ea-copyBtn">Copier le code</button>
         <span class="status" id="ea-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-choose-formation" role="tabpanel">
+    <h2 class="widget-title">Choose Formation</h2>
+    <p class="subtitle">Renseigne l'équipe, la formation et les 11 joueurs (XI). Le widget génère le bloc HTML complet — JSON-LD, terrain visuel, liste SEO et script de population — prêt à coller dans le CMS. <strong>Note&nbsp;:</strong> la disposition visuelle du terrain est figée en 4-4-2&nbsp;; le champ Formation ne modifie que le badge et l'aria-label.</p>
+
+    <div class="panel">
+      <h2>1. Équipe &amp; formation</h2>
+      <div class="row">
+        <div>
+          <label for="cf-team">Nom de l'équipe</label>
+          <input type="text" id="cf-team" maxlength="80" />
+        </div>
+        <div>
+          <label for="cf-formation">Formation (badge)</label>
+          <input type="text" id="cf-formation" maxlength="10" value="4-4-2" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>2. Onze probable (ordre = haut → bas, gauche → droite)</h2>
+      <div class="row">
+        <div>
+          <label for="cf-p1">Position 1 — ST (avant-centre gauche)</label>
+          <input type="text" id="cf-p1" maxlength="60" />
+        </div>
+        <div>
+          <label for="cf-p2">Position 2 — ST (avant-centre droit)</label>
+          <input type="text" id="cf-p2" maxlength="60" />
+        </div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
+        <div>
+          <label for="cf-p3">3 — LM (milieu G)</label>
+          <input type="text" id="cf-p3" maxlength="60" />
+        </div>
+        <div>
+          <label for="cf-p4">4 — CM (milieu G)</label>
+          <input type="text" id="cf-p4" maxlength="60" />
+        </div>
+        <div>
+          <label for="cf-p5">5 — CM (milieu D)</label>
+          <input type="text" id="cf-p5" maxlength="60" />
+        </div>
+        <div>
+          <label for="cf-p6">6 — RM (milieu D)</label>
+          <input type="text" id="cf-p6" maxlength="60" />
+        </div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
+        <div>
+          <label for="cf-p7">7 — LB (latéral G)</label>
+          <input type="text" id="cf-p7" maxlength="60" />
+        </div>
+        <div>
+          <label for="cf-p8">8 — CB (déf. G)</label>
+          <input type="text" id="cf-p8" maxlength="60" />
+        </div>
+        <div>
+          <label for="cf-p9">9 — CB (déf. D)</label>
+          <input type="text" id="cf-p9" maxlength="60" />
+        </div>
+        <div>
+          <label for="cf-p10">10 — RB (latéral D)</label>
+          <input type="text" id="cf-p10" maxlength="60" />
+        </div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr;">
+        <div>
+          <label for="cf-p11">Position 11 — GK (gardien)</label>
+          <input type="text" id="cf-p11" maxlength="60" />
+        </div>
+      </div>
+    </div>
+
+    <details class="panel panel--collapsible">
+      <summary>
+        <h2>3. Gabarit HTML</h2>
+        <span class="panel__arrow" aria-hidden="true">▸</span>
+      </summary>
+      <div class="panel__body">
+        <label for="cf-template">Modèle (modifiable). Les placeholders <code>[TEAM]</code>, <code>[FORMATION]</code>, <code>[P1]</code>…<code>[P11]</code> sont substitués avec l'échappement adapté au contexte (JSON-LD, HTML, JS).</label>
+        <textarea id="cf-template" spellcheck="false" style="min-height: 320px;"></textarea>
+        <div style="margin-top: 8px;">
+          <button type="button" class="secondary" id="cf-resetBtn">Réinitialiser le gabarit</button>
+        </div>
+      </div>
+    </details>
+
+    <div style="margin-bottom: 20px;">
+      <button type="button" id="cf-genBtn">Générer le code HTML</button>
+      <span class="status" id="cf-genStatus" style="margin-left: 10px;"></span>
+    </div>
+
+    <div class="panel">
+      <h2>Aperçu (statique — les scripts ne s'exécutent pas ici)</h2>
+      <div class="preview-wrap" id="cf-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Code HTML généré</h2>
+      <textarea id="cf-output" readonly placeholder="Clique sur « Générer le code HTML » pour produire le code." style="min-height: 320px;"></textarea>
+      <div class="copy-row">
+        <button type="button" id="cf-copyBtn">Copier le code</button>
+        <span class="status" id="cf-copyStatus"></span>
       </div>
     </div>
   </div>
@@ -2461,6 +2570,245 @@ function parsePlayerOddsFromText(text) {
     } catch (e) {
       document.execCommand('copy');
       $('ea-copyStatus').textContent = "✓ Copié.";
+    }
+  });
+})();
+
+// ========== WIDGET : Choose Formation (catégorie Autres) ==========
+(function() {
+  const CF_TEMPLATE = `<style>
+/* Sports Mole — Predicted XI widget — smxi
+   Include this style block once per page.
+   If multiple widgets appear in one article, only the first paste needs it. */
+.smxi-wrap{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}
+.smxi-article{max-width:420px;margin:24px auto;border-radius:10px;overflow:hidden;border:1px solid rgba(0,0,0,0.2);box-sizing:border-box}
+.smxi-header{background:linear-gradient(90deg,#003300,#001900);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.smxi-sublabel{color:rgba(255,255,255,0.55);font-size:10px;text-transform:uppercase;letter-spacing:2px;margin-bottom:2px}
+.smxi-team{color:#fff;font-size:18px;font-weight:700;margin:0;line-height:1.2}
+.smxi-badge{background:#FFCC00;color:#003300;font-size:13px;font-weight:700;padding:5px 12px;border-radius:6px;letter-spacing:0.5px;flex-shrink:0}
+.smxi-pitch{position:relative;width:100%;aspect-ratio:6/7;overflow:hidden;background:repeating-linear-gradient(180deg,rgba(0,0,0,0.04) 0px,rgba(0,0,0,0.04) 34px,transparent 34px,transparent 68px) #236918}
+.smxi-line{position:absolute}
+.smxi-outline{inset:0;margin:5%;border:2px solid rgba(255,255,255,0.45);box-sizing:border-box}
+.smxi-halfway{left:5%;right:5%;top:50%;height:2px;background:rgba(255,255,255,0.45)}
+.smxi-ccircle{left:50%;top:50%;transform:translate(-50%,-50%);width:72px;height:72px;border-radius:50%;border:2px solid rgba(255,255,255,0.45)}
+.smxi-cspot{left:50%;top:50%;transform:translate(-50%,-50%);width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.55)}
+.smxi-box{left:50%;transform:translateX(-50%);border:2px solid rgba(255,255,255,0.45);box-sizing:border-box}
+.smxi-box-t{top:5%;width:52%;height:17%;border-top:none}
+.smxi-box-gt{top:5%;width:28%;height:7%;border-top:none}
+.smxi-box-b{bottom:5%;width:52%;height:17%;border-bottom:none}
+.smxi-box-gb{bottom:5%;width:28%;height:7%;border-bottom:none}
+.smxi-player{position:absolute;transform:translate(-50%,-50%);text-align:center}
+.smxi-dot{width:22px;height:22px;border-radius:50%;margin:0 auto;box-shadow:0 1px 5px rgba(0,0,0,0.5)}
+.smxi-dot-out{background:#003300;border:2px solid rgba(255,255,255,0.7)}
+.smxi-dot-gk{background:#FFCC00;border:2px solid rgba(255,204,0,0.9)}
+.smxi-name{font-size:14px;font-weight:600;margin-top:4px;line-height:1.3;text-shadow:0 1px 3px rgba(0,0,0,0.9)}
+.smxi-name-out{color:#fff}
+.smxi-name-gk{color:#FFCC00}
+.smxi-dl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+<\/style>
+
+<div class="smxi-wrap">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SportsTeam",
+    "name": "[TEAM]",
+    "sport": "Football",
+    "description": "Predicted XI — [FORMATION]",
+    "member": [
+      {"@type": "Person", "name": "[P1]", "jobTitle": "ST"},
+      {"@type": "Person", "name": "[P2]", "jobTitle": "ST"},
+      {"@type": "Person", "name": "[P3]", "jobTitle": "LM"},
+      {"@type": "Person", "name": "[P4]", "jobTitle": "CM"},
+      {"@type": "Person", "name": "[P5]", "jobTitle": "CM"},
+      {"@type": "Person", "name": "[P6]", "jobTitle": "RM"},
+      {"@type": "Person", "name": "[P7]", "jobTitle": "LB"},
+      {"@type": "Person", "name": "[P8]", "jobTitle": "CB"},
+      {"@type": "Person", "name": "[P9]", "jobTitle": "CB"},
+      {"@type": "Person", "name": "[P10]", "jobTitle": "RB"},
+      {"@type": "Person", "name": "[P11]", "jobTitle": "GK"}
+    ]
+  }
+  <\/script>
+
+  <article class="smxi-article" aria-label="Predicted XI — [TEAM] — [FORMATION]">
+
+    <header class="smxi-header">
+      <div>
+        <div class="smxi-sublabel">Predicted XI</div>
+        <h2 class="smxi-team">[TEAM]</h2>
+      </div>
+      <div class="smxi-badge">[FORMATION]</div>
+    </header>
+
+    <div class="smxi-pitch">
+      <div class="smxi-line smxi-outline"></div>
+      <div class="smxi-line smxi-halfway"></div>
+      <div class="smxi-line smxi-ccircle"></div>
+      <div class="smxi-line smxi-cspot"></div>
+      <div class="smxi-line smxi-box smxi-box-t"></div>
+      <div class="smxi-line smxi-box smxi-box-gt"></div>
+      <div class="smxi-line smxi-box smxi-box-b"></div>
+      <div class="smxi-line smxi-box smxi-box-gb"></div>
+
+      <div class="smxi-player" style="left:37%;top:13%"><div class="smxi-dot smxi-dot-out"></div><div class="smxi-name smxi-name-out"></div></div>
+      <div class="smxi-player" style="left:63%;top:13%"><div class="smxi-dot smxi-dot-out"></div><div class="smxi-name smxi-name-out"></div></div>
+      <div class="smxi-player" style="left:18%;top:38%"><div class="smxi-dot smxi-dot-out"></div><div class="smxi-name smxi-name-out"></div></div>
+      <div class="smxi-player" style="left:38%;top:44%"><div class="smxi-dot smxi-dot-out"></div><div class="smxi-name smxi-name-out"></div></div>
+      <div class="smxi-player" style="left:62%;top:44%"><div class="smxi-dot smxi-dot-out"></div><div class="smxi-name smxi-name-out"></div></div>
+      <div class="smxi-player" style="left:82%;top:38%"><div class="smxi-dot smxi-dot-out"></div><div class="smxi-name smxi-name-out"></div></div>
+      <div class="smxi-player" style="left:18%;top:70%"><div class="smxi-dot smxi-dot-out"></div><div class="smxi-name smxi-name-out"></div></div>
+      <div class="smxi-player" style="left:37%;top:74%"><div class="smxi-dot smxi-dot-out"></div><div class="smxi-name smxi-name-out"></div></div>
+      <div class="smxi-player" style="left:63%;top:74%"><div class="smxi-dot smxi-dot-out"></div><div class="smxi-name smxi-name-out"></div></div>
+      <div class="smxi-player" style="left:82%;top:70%"><div class="smxi-dot smxi-dot-out"></div><div class="smxi-name smxi-name-out"></div></div>
+      <div class="smxi-player" style="left:50%;top:90%"><div class="smxi-dot smxi-dot-gk"></div><div class="smxi-name smxi-name-gk"></div></div>
+    </div>
+
+    <dl class="smxi-dl" aria-label="[TEAM] predicted XI — [FORMATION]">
+      <dt>ST</dt><dd></dd>
+      <dt>ST</dt><dd></dd>
+      <dt>LM</dt><dd></dd>
+      <dt>CM</dt><dd></dd>
+      <dt>CM</dt><dd></dd>
+      <dt>RM</dt><dd></dd>
+      <dt>LB</dt><dd></dd>
+      <dt>CB</dt><dd></dd>
+      <dt>CB</dt><dd></dd>
+      <dt>RB</dt><dd></dd>
+      <dt>GK</dt><dd></dd>
+    </dl>
+
+  </article>
+
+  <script>
+  (function(){
+    var w = document.currentScript.parentElement;
+    var d = JSON.parse(w.querySelector('script[type="application/ld+json"]').textContent);
+    var formation = '[FORMATION]';
+
+    // Name-wrapping rule: >15 chars with a space or hyphen → wrap at best break point
+    function fmt(name) {
+      if (name.length > 15 && (name.indexOf('-') > -1 || name.indexOf(' ') > -1)) {
+        if (name.indexOf('-') > -1) {
+          var i = name.indexOf('-') + 1;
+          return name.slice(0, i) + '<br>' + name.slice(i);
+        }
+        var mid = Math.floor(name.length / 2), best = 0, bestDist = Infinity;
+        for (var i = 0; i < name.length; i++) {
+          if (name[i] === ' ' && Math.abs(i - mid) < bestDist) { bestDist = Math.abs(i - mid); best = i; }
+        }
+        return name.slice(0, best) + '<br>' + name.slice(best + 1);
+      }
+      return name;
+    }
+
+    // Populate team name and aria-labels
+    w.querySelectorAll('.smxi-team').forEach(function(el) { el.textContent = d.name; });
+    w.querySelector('.smxi-article').setAttribute('aria-label', 'Predicted XI \\u2014 ' + d.name + ' \\u2014 ' + formation);
+    w.querySelector('.smxi-dl').setAttribute('aria-label', d.name + ' predicted XI \\u2014 ' + formation);
+
+    // Populate player names from JSON-LD member array (order matches pitch top→bottom, L→R)
+    w.querySelectorAll('.smxi-name').forEach(function(el, i) {
+      if (!d.member[i]) return;
+      var name = d.member[i].name;
+      el.innerHTML = fmt(name);
+      if (name.length <= 15 || (name.indexOf('-') === -1 && name.indexOf(' ') === -1)) {
+        el.style.whiteSpace = 'nowrap';
+      }
+    });
+
+    // Populate hidden dl for SEO
+    w.querySelectorAll('.smxi-dl dd').forEach(function(el, i) {
+      if (d.member[i]) el.textContent = d.member[i].name;
+    });
+  })();
+  <\/script>
+
+</div>`;
+
+  $('cf-template').value = CF_TEMPLATE;
+
+  // ===== Échappement par contexte =====
+  // JSON string : utilise JSON.stringify pour gérer ", \, contrôle, unicode
+  function jsonStringEscape(s) {
+    return JSON.stringify(String(s)).slice(1, -1);
+  }
+  // HTML text/attribute : escapeHtml global existe déjà
+  // JS string single-quoted : échappe \, ', retours ligne
+  function jsStringEscape(s) {
+    return String(s)
+      .replace(/\\/g, '\\\\')
+      .replace(/'/g, "\\'")
+      .replace(/\r/g, '\\r')
+      .replace(/\n/g, '\\n');
+  }
+
+  function fillTemplate(template, values) {
+    // 1. Substitution dans les blocs JSON-LD avec échappement JSON
+    template = template.replace(
+      /(<script type="application\/ld\+json">)([\s\S]*?)(<\/script>)/g,
+      function(_m, open, body, close) {
+        for (const ph in values) {
+          body = body.split(ph).join(jsonStringEscape(values[ph]));
+        }
+        return open + body + close;
+      }
+    );
+    // 2. Substitution dans les scripts JS (sans type) avec échappement JS
+    template = template.replace(
+      /(<script>)([\s\S]*?)(<\/script>)/g,
+      function(_m, open, body, close) {
+        for (const ph in values) {
+          body = body.split(ph).join(jsStringEscape(values[ph]));
+        }
+        return open + body + close;
+      }
+    );
+    // 3. Reste = HTML (texte + attributs) avec échappement HTML
+    for (const ph in values) {
+      template = template.split(ph).join(escapeHtml(values[ph]));
+    }
+    return template;
+  }
+
+  $('cf-resetBtn').addEventListener('click', () => {
+    $('cf-template').value = CF_TEMPLATE;
+    $('cf-genStatus').textContent = "Gabarit réinitialisé.";
+  });
+
+  $('cf-genBtn').addEventListener('click', () => {
+    const status = $('cf-genStatus');
+    const values = {
+      '[TEAM]': $('cf-team').value.trim(),
+      '[FORMATION]': $('cf-formation').value.trim() || '4-4-2',
+    };
+    const playerFields = ['cf-p1','cf-p2','cf-p3','cf-p4','cf-p5','cf-p6','cf-p7','cf-p8','cf-p9','cf-p10','cf-p11'];
+    playerFields.forEach((id, i) => { values['[P' + (i+1) + ']'] = $(id).value.trim(); });
+
+    const emptyCount = Object.values(values).filter(v => !v).length;
+    const html = fillTemplate($('cf-template').value, values);
+    $('cf-output').value = html;
+    $('cf-preview').innerHTML = html;
+
+    if (emptyCount > 0) {
+      status.innerHTML = `⚠ Code généré, mais ${emptyCount} champ(s) vide(s). <span style="font-size:11px">(L'aperçu n'exécute pas les scripts — c'est normal.)</span>`;
+    } else {
+      status.innerHTML = "✓ Code généré. <span style='font-size:11px'>(L'aperçu n'exécute pas les scripts — c'est normal, ça fonctionnera dans ton CMS.)</span>";
+    }
+  });
+
+  $('cf-copyBtn').addEventListener('click', async () => {
+    const ta = $('cf-output');
+    if (!ta.value) { $('cf-copyStatus').textContent = "Génère le code d'abord."; return; }
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('cf-copyStatus').textContent = "✓ Copié.";
+      setTimeout(() => $('cf-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('cf-copyStatus').textContent = "✓ Copié.";
     }
   });
 })();
