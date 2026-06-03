@@ -458,6 +458,8 @@
   .buw__match { font-size: 17px; font-weight: 700; margin-bottom: 14px; text-align: center; }
   .buw__match span { color: #6b7280; font-weight: 400; margin: 0 6px; }
   .buw__odds { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .buw__odds--3col { grid-template-columns: 1fr 1fr 1fr; }
+  .buw__subtitle { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7280; text-align: center; margin-bottom: 12px; }
   .buw__odd {
     display: flex;
     flex-direction: column;
@@ -499,6 +501,7 @@
     </div>
     <div class="drawer__cat">Betting</div>
     <button type="button" class="drawer__item active" data-tab="tab-1n2-bu">Betting BasketUSA</button>
+    <button type="button" class="drawer__item" data-tab="tab-top3-bu">TOP 3 BasketUSA</button>
     <button type="button" class="drawer__item" data-tab="tab-1n2-tm">1N2 Topmercato</button>
     <button type="button" class="drawer__item" data-tab="tab-buteurs-tm">Buteurs Topmercato</button>
     <button type="button" class="drawer__item" data-tab="tab-1n2-af">1N2 Afrik-Foot FR</button>
@@ -934,6 +937,102 @@
       <div class="copy-row">
         <button type="button" id="bu-copyBtn">Copier le HTML</button>
         <span class="status" id="bu-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-top3-bu" role="tabpanel">
+    <h2 class="widget-title">TOP 3 BasketUSA</h2>
+    <p class="subtitle">Même mécanique que Betting BasketUSA mais avec 3 cartes (joueur + cote) au lieu de 2. Colle une URL Betclic NBA pour le contexte équipes, renseigne le top 3 (ou utilise l'OCR), récupère le HTML. Liens affiliés BasketUSA.</p>
+
+    <div class="panel">
+      <h2>1. URL du match Betclic (optionnel)</h2>
+      <label for="t3bu-url">URL</label>
+      <input type="text" id="t3bu-url" placeholder="https://www.betclic.fr/basketball-s2/.../los-angeles-lakers-boston-celtics-m..." />
+      <div class="hint">Sert uniquement à pré-remplir les noms des équipes dans l'en-tête du widget.</div>
+      <div style="margin-top: 12px;">
+        <button type="button" id="t3bu-parseBtn">Extraire les équipes</button>
+        <span class="status" id="t3bu-parseStatus" style="margin-left: 10px;"></span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>2. Équipes (en-tête du widget)</h2>
+      <div class="row">
+        <div>
+          <label for="t3bu-team1">Équipe 1 (domicile)</label>
+          <input type="text" id="t3bu-team1" placeholder="Los Angeles Lakers" />
+        </div>
+        <div>
+          <label for="t3bu-team2">Équipe 2 (extérieur)</label>
+          <input type="text" id="t3bu-team2" placeholder="Boston Celtics" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Top 3 — Meilleures cotes</h2>
+
+      <div class="ocr-zone">
+        <label for="t3bu-ocrFile" class="ocr-drop">
+          <input type="file" id="t3bu-ocrFile" accept="image/*" hidden />
+          <span class="ocr-drop__icon">📷</span>
+          <span class="ocr-drop__text">Importer une capture — auto-fill par OCR</span>
+          <span class="ocr-drop__hint">PNG/JPG. Idéal : capture rognée sur les 3 lignes (nom + cote).</span>
+        </label>
+        <div id="t3bu-ocrPreview" class="ocr-preview" hidden>
+          <img id="t3bu-ocrImg" alt="Aperçu" />
+          <div class="ocr-side">
+            <div class="status" id="t3bu-ocrStatus">En attente…</div>
+            <button type="button" class="secondary" id="t3bu-ocrRetry" hidden>Relancer l'OCR</button>
+            <button type="button" class="secondary" id="t3bu-ocrClear">Retirer l'image</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="grid-template-columns: 2fr 1fr;">
+        <div>
+          <label for="t3bu-p1">#1 — Joueur</label>
+          <input type="text" id="t3bu-p1" placeholder="LeBron James" />
+        </div>
+        <div>
+          <label for="t3bu-c1">Cote</label>
+          <input type="text" id="t3bu-c1" placeholder="1,80" inputmode="decimal" />
+        </div>
+      </div>
+      <div class="row" style="grid-template-columns: 2fr 1fr;">
+        <div>
+          <label for="t3bu-p2">#2 — Joueur</label>
+          <input type="text" id="t3bu-p2" placeholder="Jayson Tatum" />
+        </div>
+        <div>
+          <label for="t3bu-c2">Cote</label>
+          <input type="text" id="t3bu-c2" placeholder="2,30" inputmode="decimal" />
+        </div>
+      </div>
+      <div class="row" style="grid-template-columns: 2fr 1fr;">
+        <div>
+          <label for="t3bu-p3">#3 — Joueur</label>
+          <input type="text" id="t3bu-p3" placeholder="Anthony Davis" />
+        </div>
+        <div>
+          <label for="t3bu-c3">Cote</label>
+          <input type="text" id="t3bu-c3" placeholder="3,10" inputmode="decimal" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Aperçu</h2>
+      <div class="preview-wrap" id="t3bu-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML à copier</h2>
+      <textarea id="t3bu-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="t3bu-copyBtn">Copier le HTML</button>
+        <span class="status" id="t3bu-copyStatus"></span>
       </div>
     </div>
   </div>
@@ -2523,6 +2622,188 @@ function parsePlayerOddsFromText(text) {
   });
 
   buRender();
+})();
+
+// ========== TAB 6 : TOP 3 BasketUSA (bleu) — 3 cartes joueur+cote ==========
+(function() {
+  const AFFILIATE_URL_T3BU = "https://www.basketusa.com/go-betclic-prono";
+  const LOGO_SRC_T3BU = "https://media.basketusa.com/main/2026/05/basketusa.png";
+
+  function buildT3buHtml({ team1, team2, p1, c1, p2, c2, p3, c3 }) {
+    const safeUrl = AFFILIATE_URL_T3BU;
+    const t1 = escapeHtml(team1 || 'Équipe 1');
+    const t2 = escapeHtml(team2 || 'Équipe 2');
+    const matchLine = (team1 || team2)
+      ? `<div class="buw__match">${t1} <span>vs</span> ${t2}</div>`
+      : '';
+    const slots = [
+      { rank: '#1', name: p1, odds: c1 },
+      { rank: '#2', name: p2, odds: c2 },
+      { rank: '#3', name: p3, odds: c3 },
+    ];
+    const oddsHtml = slots.map(s => `
+    <a class="buw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
+      <span class="buw__odd-label">${s.rank}</span>
+      <span class="buw__odd-team">${escapeHtml(s.name || 'Joueur')}</span>
+      <span class="buw__odd-value">${escapeHtml(s.odds || '-')}</span>
+    </a>`).join('');
+
+    return `<div class="buw">
+  <div class="buw__head">
+    <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener"><img class="buw__logo" src="${LOGO_SRC_T3BU}" alt="BasketUSA" style="height:22px;width:auto;max-width:160px;display:block;"></a>
+    <span class="buw__bookmaker">Top 3 <strong>Betclic</strong></span>
+  </div>
+  ${matchLine}
+  <div class="buw__subtitle">Top 3 — Meilleures cotes</div>
+  <div class="buw__odds buw__odds--3col">${oddsHtml}
+  </div>
+  <a class="buw__cta" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">Parier sur Betclic →</a>
+  <div class="buw__legal">Cotes indicatives susceptibles de varier. Les jeux d'argent sont interdits aux moins de 18 ans. Jouer comporte des risques : endettement, dépendance… Appelez le 09 74 75 13 13 (appel non surtaxé).</div>
+</div>`;
+  }
+
+  const EMBED_CSS_T3BU = `<style>
+.buw{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;border:1px solid #e3e6eb;border-radius:10px;background:#fff;padding:18px 20px;max-width:560px;color:#1a1d23;margin:16px auto}
+.buw__head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #eef0f3}
+.buw__logo{height:22px !important;width:auto !important;max-width:160px !important;display:block !important}
+.buw__bookmaker{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#6b7280}
+.buw__bookmaker strong{font-weight:700;color:#3d77b8;margin-left:4px}
+.buw__match{font-size:17px;font-weight:700;margin-bottom:6px;text-align:center}
+.buw__match span{color:#6b7280;font-weight:400;margin:0 6px}
+.buw__subtitle{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;text-align:center;margin-bottom:12px}
+.buw__odds{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.buw__odd{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;border:1px solid #e3e6eb;border-radius:8px;background:#fafbfc;text-decoration:none;color:#1a1d23;transition:all .15s}
+.buw__odd:hover{border-color:#3d77b8;background:#ecf3fa}
+.buw__odd-label{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.buw__odd-team{font-size:13px;font-weight:600;text-align:center;margin-bottom:6px;min-height:32px;display:flex;align-items:center}
+.buw__odd-value{font-size:20px;font-weight:700;color:#3d77b8}
+.buw__cta{display:block;text-align:center;margin-top:14px;font-size:15px;font-weight:600;color:#1f6fd6;text-decoration:none}
+.buw__cta:hover{color:#1854a8}
+.buw__legal{font-size:10px;color:#9ca3af;text-align:center;margin-top:10px;line-height:1.4}
+</style>
+`;
+
+  function t3buRender() {
+    const data = {
+      team1: $('t3bu-team1').value.trim(),
+      team2: $('t3bu-team2').value.trim(),
+      p1: $('t3bu-p1').value.trim(),
+      c1: $('t3bu-c1').value.trim(),
+      p2: $('t3bu-p2').value.trim(),
+      c2: $('t3bu-c2').value.trim(),
+      p3: $('t3bu-p3').value.trim(),
+      c3: $('t3bu-c3').value.trim(),
+    };
+    const html = buildT3buHtml(data);
+    $('t3bu-preview').innerHTML = html;
+    $('t3bu-output').value = EMBED_CSS_T3BU + html;
+  }
+
+  $('t3bu-parseBtn').addEventListener('click', () => {
+    const url = $('t3bu-url').value.trim();
+    const status = $('t3bu-parseStatus');
+    if (!url) { status.textContent = "Colle une URL d'abord."; return; }
+    const slug = extractBetclicSlug(url);
+    if (!slug) { status.textContent = "URL non reconnue (Betclic attendu)."; return; }
+    const parsed = parseMatchSlug(slug);
+    $('t3bu-team1').value = parsed.club1;
+    $('t3bu-team2').value = parsed.club2;
+    if (parsed.method === "dictionary") status.textContent = "✓ Équipes reconnues.";
+    else if (parsed.method === "midpoint-fallback") status.textContent = "⚠ Équipes inconnues, split approximatif — vérifie.";
+    else status.textContent = "⚠ Impossible de séparer — corrige à la main.";
+    t3buRender();
+  });
+
+  ['t3bu-team1','t3bu-team2','t3bu-p1','t3bu-c1','t3bu-p2','t3bu-c2','t3bu-p3','t3bu-c3'].forEach(id => {
+    $(id).addEventListener('input', t3buRender);
+  });
+
+  // OCR — réutilise les helpers globaux parsePlayerOddsFromText + preprocessForOCR
+  let t3buCurrentBlob = null;
+
+  async function runOCRT3bu(blob) {
+    const status = $('t3bu-ocrStatus');
+    status.textContent = "Chargement du moteur OCR…";
+    try {
+      if (!window.Tesseract) {
+        status.textContent = "⚠ Tesseract.js non chargé (vérifie ta connexion).";
+        return;
+      }
+      status.textContent = "Pré-traitement de l'image…";
+      const processed = await preprocessForOCR(blob);
+      const worker = await Tesseract.createWorker('eng', 1, {
+        logger: m => {
+          if (m.status === 'recognizing text') status.textContent = `Analyse en cours… ${Math.round(m.progress * 100)}%`;
+          else if (m.status === 'loading tesseract core' || m.status === 'initializing tesseract') status.textContent = "Initialisation du moteur OCR…";
+          else if (m.status === 'loading language traineddata') status.textContent = "Chargement du modèle…";
+        }
+      });
+      await worker.setParameters({
+        tessedit_pageseg_mode: '6'
+      });
+      const { data: { text } } = await worker.recognize(processed);
+      await worker.terminate();
+
+      const pairs = parsePlayerOddsFromText(text);
+      const slots = [['t3bu-p1','t3bu-c1'], ['t3bu-p2','t3bu-c2'], ['t3bu-p3','t3bu-c3']];
+      const filled = Math.min(pairs.length, 3);
+      for (let i = 0; i < filled; i++) {
+        if (pairs[i].name) $(slots[i][0]).value = pairs[i].name;
+        $(slots[i][1]).value = pairs[i].odds;
+      }
+      t3buRender();
+
+      if (filled === 3) {
+        const names = pairs.slice(0,3).map(p => p.name || '?').join(' / ');
+        const odds = pairs.slice(0,3).map(p => p.odds).join(' / ');
+        status.innerHTML = `✓ 3 joueurs détectés : <strong>${escapeHtml(names)}</strong> — ${odds}. Vérifie les noms.`;
+      } else if (filled > 0) {
+        status.innerHTML = `⚠ Seulement ${filled} joueur(s) détecté(s). Complète à la main.`;
+      } else {
+        status.innerHTML = "⚠ Aucun joueur détecté. Essaie une capture plus nette (nom + cote par ligne).";
+      }
+      $('t3bu-ocrRetry').hidden = false;
+    } catch (err) {
+      status.textContent = "⚠ Erreur OCR : " + (err.message || err);
+      $('t3bu-ocrRetry').hidden = false;
+    }
+  }
+
+  $('t3bu-ocrFile').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    t3buCurrentBlob = file;
+    $('t3bu-ocrImg').src = URL.createObjectURL(file);
+    $('t3bu-ocrPreview').hidden = false;
+    runOCRT3bu(file);
+  });
+
+  $('t3bu-ocrRetry').addEventListener('click', () => {
+    if (t3buCurrentBlob) runOCRT3bu(t3buCurrentBlob);
+  });
+
+  $('t3bu-ocrClear').addEventListener('click', () => {
+    t3buCurrentBlob = null;
+    $('t3bu-ocrFile').value = '';
+    $('t3bu-ocrImg').src = '';
+    $('t3bu-ocrPreview').hidden = true;
+    $('t3bu-ocrRetry').hidden = true;
+  });
+
+  $('t3bu-copyBtn').addEventListener('click', async () => {
+    const ta = $('t3bu-output');
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('t3bu-copyStatus').textContent = "✓ Copié.";
+      setTimeout(() => $('t3bu-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('t3bu-copyStatus').textContent = "✓ Copié.";
+    }
+  });
+
+  t3buRender();
 })();
 
 // ========== WIDGET : L'essentiel (catégorie Autres) ==========
