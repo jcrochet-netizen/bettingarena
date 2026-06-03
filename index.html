@@ -973,6 +973,12 @@
     <div class="panel">
       <h2>3. Top 3 — Meilleures cotes</h2>
 
+      <div style="margin-bottom: 18px;">
+        <label for="t3bu-label">Label du Top 3 (affiché en sous-titre du widget)</label>
+        <input type="text" id="t3bu-label" maxlength="60" value="Meilleures cotes" />
+        <div class="hint">S'affiche comme : <strong>Top 3 — [Label]</strong>. Ex&nbsp;: <em>Meilleurs scoreurs</em>, <em>Premiers paniers</em>, <em>Passeurs décisifs</em>…</div>
+      </div>
+
       <div class="ocr-zone">
         <label for="t3bu-ocrFile" class="ocr-drop">
           <input type="file" id="t3bu-ocrFile" accept="image/*" hidden />
@@ -2629,10 +2635,11 @@ function parsePlayerOddsFromText(text) {
   const AFFILIATE_URL_T3BU = "https://www.basketusa.com/go-betclic-prono";
   const LOGO_SRC_T3BU = "https://media.basketusa.com/main/2026/05/basketusa.png";
 
-  function buildT3buHtml({ team1, team2, p1, c1, p2, c2, p3, c3 }) {
+  function buildT3buHtml({ team1, team2, label, p1, c1, p2, c2, p3, c3 }) {
     const safeUrl = AFFILIATE_URL_T3BU;
     const t1 = escapeHtml(team1 || 'Équipe 1');
     const t2 = escapeHtml(team2 || 'Équipe 2');
+    const safeLabel = escapeHtml(label || 'Meilleures cotes');
     const matchLine = (team1 || team2)
       ? `<div class="buw__match">${t1} <span>vs</span> ${t2}</div>`
       : '';
@@ -2654,7 +2661,7 @@ function parsePlayerOddsFromText(text) {
     <span class="buw__bookmaker">Top 3 <strong>Betclic</strong></span>
   </div>
   ${matchLine}
-  <div class="buw__subtitle">Top 3 — Meilleures cotes</div>
+  <div class="buw__subtitle">Top 3 — ${safeLabel}</div>
   <div class="buw__odds buw__odds--3col">${oddsHtml}
   </div>
   <a class="buw__cta" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">Parier sur Betclic →</a>
@@ -2687,6 +2694,7 @@ function parsePlayerOddsFromText(text) {
     const data = {
       team1: $('t3bu-team1').value.trim(),
       team2: $('t3bu-team2').value.trim(),
+      label: $('t3bu-label').value.trim(),
       p1: $('t3bu-p1').value.trim(),
       c1: $('t3bu-c1').value.trim(),
       p2: $('t3bu-p2').value.trim(),
@@ -2714,7 +2722,7 @@ function parsePlayerOddsFromText(text) {
     t3buRender();
   });
 
-  ['t3bu-team1','t3bu-team2','t3bu-p1','t3bu-c1','t3bu-p2','t3bu-c2','t3bu-p3','t3bu-c3'].forEach(id => {
+  ['t3bu-team1','t3bu-team2','t3bu-label','t3bu-p1','t3bu-c1','t3bu-p2','t3bu-c2','t3bu-p3','t3bu-c3'].forEach(id => {
     $(id).addEventListener('input', t3buRender);
   });
 
