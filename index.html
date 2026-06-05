@@ -1297,13 +1297,13 @@
 
   <div class="tab-panel" id="tab-choose-formation-2" role="tabpanel">
     <h2 class="widget-title">Choose Formation 2</h2>
-    <p class="subtitle">Choisis une formation, renseigne les 11 joueurs (les libellés s'adaptent à la disposition sélectionnée), génère le bloc HTML. Le terrain visuel, le JSON-LD et la liste SEO sont calés sur la formation choisie — pas de gabarit éditable, tout est construit à la volée.</p>
+    <p class="subtitle">Pick a formation, fill in the 11 players (labels adapt to the selected layout), then generate the HTML block. The visual pitch, the JSON-LD and the SEO list all follow the chosen formation — no editable template, everything is built on the fly.</p>
 
     <div class="panel">
       <h2>1. Select your website</h2>
-      <label for="cf2-site">Site (palette appliquée au header, badge, dots et noms du widget)</label>
+      <label for="cf2-site">Site (palette applied to the widget header, badge, dots and names)</label>
       <select id="cf2-site" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
-        <option value="default">Générique (bleu marine + or)</option>
+        <option value="default">Generic (navy + gold)</option>
         <option value="sports-mole">Sports Mole</option>
         <option value="trivela">Trivela</option>
         <option value="afrik-foot">Afrik-Foot (FR / NG / ZA)</option>
@@ -1315,14 +1315,14 @@
         <option value="al-aire-libre">Al-Aire Libre</option>
         <option value="soccernet">Soccernet</option>
       </select>
-      <div class="hint">Lance et Placar ne sont pas listés (couleurs non fournies dans le doc). Demande-moi de les ajouter avec leurs hex et je les branche.</div>
+      <div class="hint">Lance and Placar are not listed (no colours provided in the doc). Send me the hex values and I'll wire them up.</div>
     </div>
 
     <div class="panel">
       <h2>2. Team &amp; formation</h2>
       <div class="row">
         <div>
-          <label for="cf2-team">Nom de l'équipe</label>
+          <label for="cf2-team">Team name</label>
           <input type="text" id="cf2-team" maxlength="80" />
         </div>
         <div>
@@ -3529,15 +3529,15 @@ function parsePlayerOddsFromText(text) {
 
   $('cf2-copyBtn').addEventListener('click', async () => {
     const ta = $('cf2-output');
-    if (!ta.value) { $('cf2-copyStatus').textContent = "Génère le code d'abord."; return; }
+    if (!ta.value) { $('cf2-copyStatus').textContent = "Generate the code first."; return; }
     ta.select();
     try {
       await navigator.clipboard.writeText(ta.value);
-      $('cf2-copyStatus').textContent = "✓ Copié.";
+      $('cf2-copyStatus').textContent = "✓ Copied.";
       setTimeout(() => $('cf2-copyStatus').textContent = '', 2000);
     } catch (e) {
       document.execCommand('copy');
-      $('cf2-copyStatus').textContent = "✓ Copié.";
+      $('cf2-copyStatus').textContent = "✓ Copied.";
     }
   });
 })();
