@@ -1300,7 +1300,7 @@
     <p class="subtitle">Choisis une formation, renseigne les 11 joueurs (les libellés s'adaptent à la disposition sélectionnée), génère le bloc HTML. Le terrain visuel, le JSON-LD et la liste SEO sont calés sur la formation choisie — pas de gabarit éditable, tout est construit à la volée.</p>
 
     <div class="panel">
-      <h2>1. Branding du site</h2>
+      <h2>1. Select your website</h2>
       <label for="cf2-site">Site (palette appliquée au header, badge, dots et noms du widget)</label>
       <select id="cf2-site" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
         <option value="default">Générique (bleu marine + or)</option>
@@ -1319,7 +1319,7 @@
     </div>
 
     <div class="panel">
-      <h2>2. Équipe &amp; formation</h2>
+      <h2>2. Team &amp; formation</h2>
       <div class="row">
         <div>
           <label for="cf2-team">Nom de l'équipe</label>
@@ -1346,25 +1346,25 @@
     </div>
 
     <div class="panel">
-      <h2>3. Onze probable</h2>
+      <h2>3. Probable XI</h2>
       <div id="cf2-players-container"></div>
     </div>
 
     <div style="margin-bottom: 20px;">
-      <button type="button" id="cf2-genBtn">Générer le code HTML</button>
+      <button type="button" id="cf2-genBtn">Generate HTML</button>
       <span class="status" id="cf2-genStatus" style="margin-left: 10px;"></span>
     </div>
 
     <div class="panel">
-      <h2>Aperçu</h2>
+      <h2>Preview</h2>
       <div class="preview-wrap" id="cf2-preview"></div>
     </div>
 
     <div class="panel">
-      <h2>Code HTML généré</h2>
-      <textarea id="cf2-output" readonly placeholder="Clique sur « Générer le code HTML » pour produire le code." style="min-height: 320px;"></textarea>
+      <h2>Code HTML generated</h2>
+      <textarea id="cf2-output" readonly placeholder="Click « Generate HTML » to produce the code." style="min-height: 320px;"></textarea>
       <div class="copy-row">
-        <button type="button" id="cf2-copyBtn">Copier le code</button>
+        <button type="button" id="cf2-copyBtn">Copy full code</button>
         <span class="status" id="cf2-copyStatus"></span>
       </div>
     </div>
@@ -3521,9 +3521,9 @@ function parsePlayerOddsFromText(text) {
     const { team, names } = regenerateCf2();
     const empty = (team ? 0 : 1) + names.filter(n => !n).length;
     if (empty > 0) {
-      status.innerHTML = `⚠ Code généré, mais ${empty} champ(s) vide(s).`;
+      status.innerHTML = `⚠ Code generated, but ${empty} field(s) empty.`;
     } else {
-      status.innerHTML = "✓ Code généré.";
+      status.innerHTML = "✓ Code generated.";
     }
   });
 
