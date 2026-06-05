@@ -3391,7 +3391,8 @@ function parsePlayerOddsFromText(text) {
       '.cf2-article{max-width:420px;margin:24px auto;border-radius:10px;overflow:hidden;border:1px solid rgba(0,0,0,0.2);box-sizing:border-box}' +
       '.cf2-header{background:linear-gradient(90deg,' + theme.headerStart + ',' + theme.headerEnd + ');padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px}' +
       '.cf2-sublabel{color:' + theme.headerSub + ';font-size:10px;text-transform:uppercase;letter-spacing:2px;margin-bottom:2px}' +
-      '.cf2-team{color:' + theme.headerTeam + ';font-size:18px;font-weight:700;margin:0;line-height:1.2}' +
+      // Sélecteur double-classe pour battre .panel h2 du générateur (color + text-transform + font-size).
+      '.cf2-article .cf2-team{color:' + theme.headerTeam + ';font-size:18px;font-weight:700;margin:0;line-height:1.2;text-transform:none;letter-spacing:normal}' +
       '.cf2-badge{background:' + theme.badgeBg + ';color:' + theme.badgeText + ';font-size:13px;font-weight:700;padding:5px 12px;border-radius:6px;letter-spacing:0.5px;flex-shrink:0}' +
       '.cf2-pitch{position:relative;width:100%;aspect-ratio:6/7;overflow:hidden;background:repeating-linear-gradient(180deg,rgba(0,0,0,0.04) 0px,rgba(0,0,0,0.04) 34px,transparent 34px,transparent 68px) ' + theme.pitch + '}' +
       '.cf2-line{position:absolute}' +
