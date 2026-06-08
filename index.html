@@ -399,11 +399,11 @@
 
   <div class="tab-panel" id="tab-1n2" role="tabpanel">
     <h2 class="widget-title">Odds 1N2</h2>
-    <p class="subtitle">Widget 1N2 unifié — choisis le site éditeur (Topmercato ou Afrik-Foot FR) puis renseigne le match Betclic et les 3 cotes. Les couleurs, le logo et le lien affilié s'adaptent automatiquement.</p>
+    <p class="subtitle">Unified 1X2 widget — pick the publisher site, fill in the Betclic match and the 3 odds. Colours, logo and affiliate link adapt automatically.</p>
 
     <div class="panel">
-      <h2>1. Site</h2>
-      <label for="b12-site">Site (palette appliquée au header, badge, dots et noms du widget)</label>
+      <h2>1. Select your website</h2>
+      <label for="b12-site">Site (palette applied to the widget header, badge, dots and names)</label>
       <select id="b12-site" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
         <option value="topmercato">Topmercato</option>
         <option value="afrik-foot-fr">Afrik-Foot FR</option>
@@ -420,76 +420,76 @@
     </div>
 
     <div class="panel">
-      <h2>2. URL du match Betclic</h2>
+      <h2>2. Betclic match URL</h2>
       <label for="b12-url">URL</label>
       <input type="text" id="b12-url" placeholder="https://www.betclic.fr/football-s1/.../paris-saint-germain-olympique-de-marseille-m..." />
-      <div class="hint">Exemple : <code>https://www.betclic.fr/football-s1/ligue-1-mcdonalds-c4/paris-saint-germain-olympique-de-marseille-m12345</code></div>
+      <div class="hint">Example: <code>https://www.betclic.fr/football-s1/ligue-1-mcdonalds-c4/paris-saint-germain-olympique-de-marseille-m12345</code></div>
       <div style="margin-top: 12px;">
-        <button type="button" id="b12-parseBtn">Extraire les clubs</button>
+        <button type="button" id="b12-parseBtn">Extract clubs</button>
         <span class="status" id="b12-parseStatus" style="margin-left: 10px;"></span>
       </div>
     </div>
 
     <div class="panel">
-      <h2>3. Équipes (corrige si besoin)</h2>
+      <h2>3. Teams (adjust if needed)</h2>
       <div class="row">
         <div>
-          <label for="b12-club1">Club 1 (domicile)</label>
+          <label for="b12-club1">Club 1 (home)</label>
           <input type="text" id="b12-club1" placeholder="Paris Saint-Germain" />
         </div>
         <div>
-          <label for="b12-club2">Club 2 (extérieur)</label>
+          <label for="b12-club2">Club 2 (away)</label>
           <input type="text" id="b12-club2" placeholder="Olympique de Marseille" />
         </div>
       </div>
     </div>
 
     <div class="panel">
-      <h2>4. Cotes 1 N 2</h2>
+      <h2>4. Odds 1 X 2</h2>
 
       <div class="ocr-zone">
         <label for="b12-ocrFile" class="ocr-drop">
           <input type="file" id="b12-ocrFile" accept="image/*" hidden />
           <span class="ocr-drop__icon">📷</span>
-          <span class="ocr-drop__text">Importer une capture des cotes — auto-fill par OCR</span>
-          <span class="ocr-drop__hint">PNG/JPG. Idéal : capture rognée sur les 3 cotes 1/N/2.</span>
+          <span class="ocr-drop__text">Import a screenshot of the odds — auto-fill via OCR</span>
+          <span class="ocr-drop__hint">PNG/JPG. Ideal: screenshot cropped to the 3 odds 1/X/2.</span>
         </label>
         <div id="b12-ocrPreview" class="ocr-preview" hidden>
-          <img id="b12-ocrImg" alt="Aperçu" />
+          <img id="b12-ocrImg" alt="Preview" />
           <div class="ocr-side">
-            <div class="status" id="b12-ocrStatus">En attente…</div>
-            <button type="button" class="secondary" id="b12-ocrRetry" hidden>Relancer l'OCR</button>
-            <button type="button" class="secondary" id="b12-ocrClear">Retirer l'image</button>
+            <div class="status" id="b12-ocrStatus">Waiting…</div>
+            <button type="button" class="secondary" id="b12-ocrRetry" hidden>Re-run OCR</button>
+            <button type="button" class="secondary" id="b12-ocrClear">Remove image</button>
           </div>
         </div>
       </div>
 
       <div class="row-3">
         <div>
-          <label for="b12-cote1">Cote 1 (victoire Club 1)</label>
-          <input type="text" id="b12-cote1" placeholder="2,50" inputmode="decimal" />
+          <label for="b12-cote1">Odds 1 (Club 1 win)</label>
+          <input type="text" id="b12-cote1" placeholder="2.50" inputmode="decimal" />
         </div>
         <div>
-          <label for="b12-coteN">Cote N (match nul)</label>
-          <input type="text" id="b12-coteN" placeholder="4,10" inputmode="decimal" />
+          <label for="b12-coteN">Odds X (draw)</label>
+          <input type="text" id="b12-coteN" placeholder="4.10" inputmode="decimal" />
         </div>
         <div>
-          <label for="b12-cote2">Cote 2 (victoire Club 2)</label>
-          <input type="text" id="b12-cote2" placeholder="7,80" inputmode="decimal" />
+          <label for="b12-cote2">Odds 2 (Club 2 win)</label>
+          <input type="text" id="b12-cote2" placeholder="7.80" inputmode="decimal" />
         </div>
       </div>
     </div>
 
     <div class="panel">
-      <h2>Aperçu</h2>
+      <h2>Preview</h2>
       <div class="preview-wrap" id="b12-preview"></div>
     </div>
 
     <div class="panel">
-      <h2>HTML à copier</h2>
+      <h2>HTML to copy</h2>
       <textarea id="b12-output" readonly></textarea>
       <div class="copy-row">
-        <button type="button" id="b12-copyBtn">Copier le HTML</button>
+        <button type="button" id="b12-copyBtn">Copy HTML</button>
         <span class="status" id="b12-copyStatus"></span>
       </div>
     </div>
@@ -497,11 +497,11 @@
 
   <div class="tab-panel" id="tab-odds-scorers" role="tabpanel">
     <h2 class="widget-title">Odds scorers</h2>
-    <p class="subtitle">Widget Buteurs unifié — choisis le site éditeur (Topmercato ou Afrik-Foot FR) puis renseigne le top 3 buteurs avec leurs cotes. Le branding bascule automatiquement.</p>
+    <p class="subtitle">Unified scorers widget — pick the publisher site, fill in the top 3 scorers with their odds. Branding switches automatically.</p>
 
     <div class="panel">
-      <h2>1. Site</h2>
-      <label for="os-site">Site (palette appliquée au header, badge, dots et noms du widget)</label>
+      <h2>1. Select your website</h2>
+      <label for="os-site">Site (palette applied to the widget header, badge, dots and names)</label>
       <select id="os-site" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
         <option value="topmercato">Topmercato</option>
         <option value="afrik-foot-fr">Afrik-Foot FR</option>
@@ -518,92 +518,92 @@
     </div>
 
     <div class="panel">
-      <h2>2. URL du match Betclic (optionnel)</h2>
+      <h2>2. Betclic match URL (optional)</h2>
       <label for="os-url">URL</label>
       <input type="text" id="os-url" placeholder="https://www.betclic.fr/football-s1/.../paris-saint-germain-olympique-de-marseille-m..." />
-      <div class="hint">Sert uniquement à pré-remplir les noms des clubs affichés en en-tête du widget.</div>
+      <div class="hint">Only used to pre-fill the club names shown in the widget header.</div>
       <div style="margin-top: 12px;">
-        <button type="button" id="os-parseBtn">Extraire les clubs</button>
+        <button type="button" id="os-parseBtn">Extract clubs</button>
         <span class="status" id="os-parseStatus" style="margin-left: 10px;"></span>
       </div>
     </div>
 
     <div class="panel">
-      <h2>3. Équipes (en-tête du widget)</h2>
+      <h2>3. Teams (widget header)</h2>
       <div class="row">
         <div>
-          <label for="os-club1">Club 1 (domicile)</label>
+          <label for="os-club1">Club 1 (home)</label>
           <input type="text" id="os-club1" placeholder="Paris Saint-Germain" />
         </div>
         <div>
-          <label for="os-club2">Club 2 (extérieur)</label>
+          <label for="os-club2">Club 2 (away)</label>
           <input type="text" id="os-club2" placeholder="Olympique de Marseille" />
         </div>
       </div>
     </div>
 
     <div class="panel">
-      <h2>4. Top 3 — Meilleures cotes Buteur</h2>
+      <h2>4. Top 3 — Best scorer odds</h2>
 
       <div class="ocr-zone">
         <label for="os-ocrFile" class="ocr-drop">
           <input type="file" id="os-ocrFile" accept="image/*" hidden />
           <span class="ocr-drop__icon">📷</span>
-          <span class="ocr-drop__text">Importer une capture des buteurs — auto-fill par OCR</span>
-          <span class="ocr-drop__hint">PNG/JPG. Idéal : capture rognée sur les 3 buteurs (nom + cote sur une ligne).</span>
+          <span class="ocr-drop__text">Import a screenshot of the scorers — auto-fill via OCR</span>
+          <span class="ocr-drop__hint">PNG/JPG. Ideal: screenshot cropped to the 3 scorers (name + odds per line).</span>
         </label>
         <div id="os-ocrPreview" class="ocr-preview" hidden>
-          <img id="os-ocrImg" alt="Aperçu" />
+          <img id="os-ocrImg" alt="Preview" />
           <div class="ocr-side">
-            <div class="status" id="os-ocrStatus">En attente…</div>
-            <button type="button" class="secondary" id="os-ocrRetry" hidden>Relancer l'OCR</button>
-            <button type="button" class="secondary" id="os-ocrClear">Retirer l'image</button>
+            <div class="status" id="os-ocrStatus">Waiting…</div>
+            <button type="button" class="secondary" id="os-ocrRetry" hidden>Re-run OCR</button>
+            <button type="button" class="secondary" id="os-ocrClear">Remove image</button>
           </div>
         </div>
       </div>
 
       <div class="row" style="grid-template-columns: 2fr 1fr;">
         <div>
-          <label for="os-p1">#1 — Buteur</label>
+          <label for="os-p1">#1 — Scorer</label>
           <input type="text" id="os-p1" placeholder="Mbappé" />
         </div>
         <div>
-          <label for="os-c1">Cote</label>
-          <input type="text" id="os-c1" placeholder="1,80" inputmode="decimal" />
+          <label for="os-c1">Odds</label>
+          <input type="text" id="os-c1" placeholder="1.80" inputmode="decimal" />
         </div>
       </div>
       <div class="row" style="grid-template-columns: 2fr 1fr;">
         <div>
-          <label for="os-p2">#2 — Buteur</label>
+          <label for="os-p2">#2 — Scorer</label>
           <input type="text" id="os-p2" placeholder="Dembélé" />
         </div>
         <div>
-          <label for="os-c2">Cote</label>
-          <input type="text" id="os-c2" placeholder="2,30" inputmode="decimal" />
+          <label for="os-c2">Odds</label>
+          <input type="text" id="os-c2" placeholder="2.30" inputmode="decimal" />
         </div>
       </div>
       <div class="row" style="grid-template-columns: 2fr 1fr;">
         <div>
-          <label for="os-p3">#3 — Buteur</label>
+          <label for="os-p3">#3 — Scorer</label>
           <input type="text" id="os-p3" placeholder="Vitinha" />
         </div>
         <div>
-          <label for="os-c3">Cote</label>
-          <input type="text" id="os-c3" placeholder="3,10" inputmode="decimal" />
+          <label for="os-c3">Odds</label>
+          <input type="text" id="os-c3" placeholder="3.10" inputmode="decimal" />
         </div>
       </div>
     </div>
 
     <div class="panel">
-      <h2>Aperçu</h2>
+      <h2>Preview</h2>
       <div class="preview-wrap" id="os-preview"></div>
     </div>
 
     <div class="panel">
-      <h2>HTML à copier</h2>
+      <h2>HTML to copy</h2>
       <textarea id="os-output" readonly></textarea>
       <div class="copy-row">
-        <button type="button" id="os-copyBtn">Copier le HTML</button>
+        <button type="button" id="os-copyBtn">Copy HTML</button>
         <span class="status" id="os-copyStatus"></span>
       </div>
     </div>
@@ -2312,15 +2312,15 @@ function parsePlayerOddsFromText(text) {
   $('b12-parseBtn').addEventListener('click', () => {
     const url = $('b12-url').value.trim();
     const status = $('b12-parseStatus');
-    if (!url) { status.textContent = "Colle une URL d'abord."; return; }
+    if (!url) { status.textContent = "Paste a URL first."; return; }
     const slug = extractBetclicSlug(url);
-    if (!slug) { status.textContent = "URL non reconnue (Betclic attendu)."; return; }
+    if (!slug) { status.textContent = "URL not recognised (Betclic expected)."; return; }
     const parsed = parseMatchSlug(slug);
     $('b12-club1').value = parsed.club1;
     $('b12-club2').value = parsed.club2;
-    if (parsed.method === "dictionary") status.textContent = "✓ Clubs reconnus.";
-    else if (parsed.method === "midpoint-fallback") status.textContent = "⚠ Clubs inconnus, split approximatif — vérifie.";
-    else status.textContent = "⚠ Impossible de séparer — corrige à la main.";
+    if (parsed.method === "dictionary") status.textContent = "✓ Clubs recognised.";
+    else if (parsed.method === "midpoint-fallback") status.textContent = "⚠ Unknown clubs, approximate split — please verify.";
+    else status.textContent = "⚠ Could not split — please fix manually.";
     uwRender();
   });
 
@@ -2332,19 +2332,19 @@ function parsePlayerOddsFromText(text) {
 
   async function runOCRUw(blob) {
     const status = $('b12-ocrStatus');
-    status.textContent = "Chargement du moteur OCR…";
+    status.textContent = "Loading OCR engine…";
     try {
       if (!window.Tesseract) {
-        status.textContent = "⚠ Tesseract.js non chargé (vérifie ta connexion).";
+        status.textContent = "⚠ Tesseract.js not loaded (check your connection).";
         return;
       }
-      status.textContent = "Pré-traitement de l'image…";
+      status.textContent = "Pre-processing image…";
       const processed = await preprocessForOCR(blob);
       const worker = await Tesseract.createWorker('eng', 1, {
         logger: m => {
-          if (m.status === 'recognizing text') status.textContent = `Analyse en cours… ${Math.round(m.progress * 100)}%`;
-          else if (m.status === 'loading tesseract core' || m.status === 'initializing tesseract') status.textContent = "Initialisation du moteur OCR…";
-          else if (m.status === 'loading language traineddata') status.textContent = "Chargement du modèle…";
+          if (m.status === 'recognizing text') status.textContent = `Analysing… ${Math.round(m.progress * 100)}%`;
+          else if (m.status === 'loading tesseract core' || m.status === 'initializing tesseract') status.textContent = "Initialising OCR engine…";
+          else if (m.status === 'loading language traineddata') status.textContent = "Loading model…";
         }
       });
       await worker.setParameters({
@@ -2360,21 +2360,21 @@ function parsePlayerOddsFromText(text) {
         $('b12-coteN').value = odds[1];
         $('b12-cote2').value = odds[2];
         uwRender();
-        status.innerHTML = `✓ 3 cotes détectées : <strong>${odds[0]} / ${odds[1]} / ${odds[2]}</strong>. Vérifie l'ordre.`;
-        if (odds.length > 3) status.innerHTML += ` <br><span style="font-size:11px">(${odds.length} valeurs trouvées, les 3 premières ont été utilisées.)</span>`;
+        status.innerHTML = `✓ 3 odds detected : <strong>${odds[0]} / ${odds[1]} / ${odds[2]}</strong>. Check the order.`;
+        if (odds.length > 3) status.innerHTML += ` <br><span style="font-size:11px">(${odds.length} values found, only the first 3 used.)</span>`;
       } else if (odds.length > 0) {
         odds.forEach((v, i) => {
           if (i === 0) $('b12-cote1').value = v;
           if (i === 1) $('b12-coteN').value = v;
         });
         uwRender();
-        status.innerHTML = `⚠ Seulement ${odds.length} cote(s) détectée(s) : ${odds.join(' / ')}. Complète à la main.`;
+        status.innerHTML = `⚠ Only ${odds.length} odds detected: ${odds.join(' / ')}. Please complete manually.`;
       } else {
-        status.innerHTML = "⚠ Aucune cote détectée. Essaie une capture plus nette et rognée sur les chiffres.";
+        status.innerHTML = "⚠ No odds detected. Try a sharper screenshot cropped to the numbers.";
       }
       $('b12-ocrRetry').hidden = false;
     } catch (err) {
-      status.textContent = "⚠ Erreur OCR : " + (err.message || err);
+      status.textContent = "⚠ OCR error: " + (err.message || err);
       $('b12-ocrRetry').hidden = false;
     }
   }
@@ -2405,11 +2405,11 @@ function parsePlayerOddsFromText(text) {
     ta.select();
     try {
       await navigator.clipboard.writeText(ta.value);
-      $('b12-copyStatus').textContent = "✓ Copié.";
+      $('b12-copyStatus').textContent = "✓ Copied.";
       setTimeout(() => $('b12-copyStatus').textContent = '', 2000);
     } catch (e) {
       document.execCommand('copy');
-      $('b12-copyStatus').textContent = "✓ Copié.";
+      $('b12-copyStatus').textContent = "✓ Copied.";
     }
   });
 
@@ -2517,15 +2517,15 @@ function parsePlayerOddsFromText(text) {
   $('os-parseBtn').addEventListener('click', () => {
     const url = $('os-url').value.trim();
     const status = $('os-parseStatus');
-    if (!url) { status.textContent = "Colle une URL d'abord."; return; }
+    if (!url) { status.textContent = "Paste a URL first."; return; }
     const slug = extractBetclicSlug(url);
-    if (!slug) { status.textContent = "URL non reconnue (Betclic attendu)."; return; }
+    if (!slug) { status.textContent = "URL not recognised (Betclic expected)."; return; }
     const parsed = parseMatchSlug(slug);
     $('os-club1').value = parsed.club1;
     $('os-club2').value = parsed.club2;
-    if (parsed.method === "dictionary") status.textContent = "✓ Clubs reconnus.";
-    else if (parsed.method === "midpoint-fallback") status.textContent = "⚠ Clubs inconnus, split approximatif — vérifie.";
-    else status.textContent = "⚠ Impossible de séparer — corrige à la main.";
+    if (parsed.method === "dictionary") status.textContent = "✓ Clubs recognised.";
+    else if (parsed.method === "midpoint-fallback") status.textContent = "⚠ Unknown clubs, approximate split — please verify.";
+    else status.textContent = "⚠ Could not split — please fix manually.";
     osRender();
   });
 
@@ -2537,19 +2537,19 @@ function parsePlayerOddsFromText(text) {
 
   async function runOCROs(blob) {
     const status = $('os-ocrStatus');
-    status.textContent = "Chargement du moteur OCR…";
+    status.textContent = "Loading OCR engine…";
     try {
       if (!window.Tesseract) {
-        status.textContent = "⚠ Tesseract.js non chargé (vérifie ta connexion).";
+        status.textContent = "⚠ Tesseract.js not loaded (check your connection).";
         return;
       }
-      status.textContent = "Pré-traitement de l'image…";
+      status.textContent = "Pre-processing image…";
       const processed = await preprocessForOCR(blob);
       const worker = await Tesseract.createWorker('eng', 1, {
         logger: m => {
-          if (m.status === 'recognizing text') status.textContent = `Analyse en cours… ${Math.round(m.progress * 100)}%`;
-          else if (m.status === 'loading tesseract core' || m.status === 'initializing tesseract') status.textContent = "Initialisation du moteur OCR…";
-          else if (m.status === 'loading language traineddata') status.textContent = "Chargement du modèle…";
+          if (m.status === 'recognizing text') status.textContent = `Analysing… ${Math.round(m.progress * 100)}%`;
+          else if (m.status === 'loading tesseract core' || m.status === 'initializing tesseract') status.textContent = "Initialising OCR engine…";
+          else if (m.status === 'loading language traineddata') status.textContent = "Loading model…";
         }
       });
       await worker.setParameters({
@@ -2570,15 +2570,15 @@ function parsePlayerOddsFromText(text) {
       if (filled === 3) {
         const names = pairs.slice(0,3).map(p => p.name || '?').join(' / ');
         const odds = pairs.slice(0,3).map(p => p.odds).join(' / ');
-        status.innerHTML = `✓ 3 buteurs détectés : <strong>${escapeHtml(names)}</strong> — ${odds}. Vérifie les noms.`;
+        status.innerHTML = `✓ 3 scorers detected : <strong>${escapeHtml(names)}</strong> — ${odds}. Check the names.`;
       } else if (filled > 0) {
-        status.innerHTML = `⚠ Seulement ${filled} buteur(s) détecté(s). Complète à la main.`;
+        status.innerHTML = `⚠ Only ${filled} scorer(s) detected. Please complete manually.`;
       } else {
-        status.innerHTML = "⚠ Aucun buteur détecté. Essaie une capture plus nette (nom + cote par ligne).";
+        status.innerHTML = "⚠ No scorer detected. Try a sharper screenshot (name + odds per line).";
       }
       $('os-ocrRetry').hidden = false;
     } catch (err) {
-      status.textContent = "⚠ Erreur OCR : " + (err.message || err);
+      status.textContent = "⚠ OCR error: " + (err.message || err);
       $('os-ocrRetry').hidden = false;
     }
   }
@@ -2609,11 +2609,11 @@ function parsePlayerOddsFromText(text) {
     ta.select();
     try {
       await navigator.clipboard.writeText(ta.value);
-      $('os-copyStatus').textContent = "✓ Copié.";
+      $('os-copyStatus').textContent = "✓ Copied.";
       setTimeout(() => $('os-copyStatus').textContent = '', 2000);
     } catch (e) {
       document.execCommand('copy');
-      $('os-copyStatus').textContent = "✓ Copié.";
+      $('os-copyStatus').textContent = "✓ Copied.";
     }
   });
 
