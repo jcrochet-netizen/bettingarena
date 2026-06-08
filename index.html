@@ -1155,30 +1155,6 @@ function extractBetclicSlug(url) {
 // ========== UI wiring ==========
 const $ = id => document.getElementById(id);
 
-$('parseBtn').addEventListener('click', () => {
-  const url = $('url').value.trim();
-  const status = $('parseStatus');
-  if (!url) { status.textContent = "Colle une URL d'abord."; return; }
-
-  const slug = extractBetclicSlug(url);
-  if (!slug) {
-    status.textContent = "URL non reconnue (Betclic attendu).";
-    return;
-  }
-  const parsed = parseMatchSlug(slug);
-  $('club1').value = parsed.club1;
-  $('club2').value = parsed.club2;
-
-  if (parsed.method === "dictionary") {
-    status.textContent = "✓ Clubs reconnus.";
-  } else if (parsed.method === "midpoint-fallback") {
-    status.textContent = "⚠ Clubs inconnus, split approximatif — vérifie.";
-  } else {
-    status.textContent = "⚠ Impossible de séparer — corrige à la main.";
-  }
-  render();
-});
-
 function escapeHtml(s) {
   return (s || '')
     .replace(/&/g, '&amp;')
