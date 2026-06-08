@@ -407,7 +407,8 @@
       <select id="b12-site" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
         <option value="topmercato">Topmercato</option>
         <option value="afrik-foot-fr">Afrik-Foot FR</option>
-        <option value="afrik-foot-en">Afrik-Foot ZA &amp; NG</option>
+        <option value="afrik-foot-za">Afrik-Foot ZA</option>
+        <option value="afrik-foot-ng">Afrik-Foot NG</option>
         <option value="sports-mole">Sports Mole</option>
         <option value="trivela">Trivela</option>
         <option value="umdois">UmDoisEsportes</option>
@@ -505,7 +506,8 @@
       <select id="os-site" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
         <option value="topmercato">Topmercato</option>
         <option value="afrik-foot-fr">Afrik-Foot FR</option>
-        <option value="afrik-foot-en">Afrik-Foot ZA &amp; NG</option>
+        <option value="afrik-foot-za">Afrik-Foot ZA</option>
+        <option value="afrik-foot-ng">Afrik-Foot NG</option>
         <option value="sports-mole">Sports Mole</option>
         <option value="trivela">Trivela</option>
         <option value="umdois">UmDoisEsportes</option>
@@ -1182,7 +1184,7 @@ function escapeHtml(s) {
     .replace(/"/g, '&quot;');
 }
 
-// ========== i18n des widgets Odds (label par langue, mapping site → langue) ==========
+// ========== i18n des widgets Odds (libellés visibles, par langue) ==========
 // La langue d'un site est portée par son champ `lang` dans SITES_UW / SITES_OS.
 const I18N = {
   fr: {
@@ -1192,8 +1194,7 @@ const I18N = {
     draw:            "Match nul",
     player:          "Joueur",
     subtitleScorer:  "Top 3 — Meilleures cotes buteur",
-    cta:             "Parier sur Betclic →",
-    legal:           "Cotes indicatives susceptibles de varier. Les jeux d'argent sont interdits aux moins de 18 ans. Jouer comporte des risques : endettement, dépendance… Appelez le 09 74 75 13 13 (appel non surtaxé)."
+    cta:             "Parier sur Betclic →"
   },
   en: {
     bookmaker:       "Odds",
@@ -1202,8 +1203,7 @@ const I18N = {
     draw:            "Draw",
     player:          "Player",
     subtitleScorer:  "Top 3 — Best scorer odds",
-    cta:             "Bet on Betclic →",
-    legal:           "Odds are indicative and subject to change. Gambling is restricted to over-18s. Gambling can be harmful — please gamble responsibly. For help, visit BeGambleAware.org."
+    cta:             "Bet on Betclic →"
   },
   ptBR: {
     bookmaker:       "Odds",
@@ -1212,8 +1212,7 @@ const I18N = {
     draw:            "Empate",
     player:          "Jogador",
     subtitleScorer:  "Top 3 — Melhores odds para artilheiro",
-    cta:             "Aposte na Betclic →",
-    legal:           "As odds são indicativas e podem variar. Apostas restritas a maiores de 18 anos. Aposte com responsabilidade."
+    cta:             "Aposte na Betclic →"
   },
   es: {
     bookmaker:       "Cuotas",
@@ -1222,8 +1221,30 @@ const I18N = {
     draw:            "Empate",
     player:          "Jugador",
     subtitleScorer:  "Top 3 — Mejores cuotas goleador",
-    cta:             "Apuesta en Betclic →",
-    legal:           "Las cuotas son indicativas y pueden variar. Apuestas restringidas a mayores de 18 años. Juega con responsabilidad."
+    cta:             "Apuesta en Betclic →"
+  }
+};
+
+// ========== Mention légale par marché (régulateur) ==========
+// Le marché d'un site est porté par son champ `market` dans SITES_UW / SITES_OS.
+const MARKETS = {
+  FR: { // ANJ
+    legal: "Cotes indicatives susceptibles de varier. Les jeux d'argent sont interdits aux moins de 18 ans. Jouer comporte des risques : endettement, dépendance… Appelez le 09 74 75 13 13 (appel non surtaxé)."
+  },
+  UK: { // UK Gambling Commission
+    legal: "Odds are indicative and subject to change. Gambling restricted to 18+. When the fun stops, stop. For help and advice, visit BeGambleAware.org or call the National Gambling Helpline on 0808 8020 133."
+  },
+  ZA: { // National Gambling Board (South Africa)
+    legal: "Odds are indicative and subject to change. National Responsible Gambling Programme: 0800 006 008. Winners know when to stop. No persons under 18 years."
+  },
+  NG: { // NLRC (Nigeria)
+    legal: "Odds are indicative and subject to change. Gambling restricted to 18+. Play responsibly. Visit www.nlrc.gov.ng for support and information."
+  },
+  BR: { // SECAP / Ministério da Fazenda
+    legal: "As odds são indicativas e podem variar. Apostas restritas a maiores de 18 anos. Aposte com responsabilidade. Em caso de dificuldades, procure ajuda em jogadoresanonimos.org.br."
+  },
+  ES: { // DGOJ (España)
+    legal: "Las cuotas son indicativas y pueden variar. Apuestas restringidas a mayores de 18 años. Juego responsable. Para ayuda, visite jugarbien.es o llame al 900 81 08 25."
   }
 };
 
@@ -2263,17 +2284,18 @@ function parsePlayerOddsFromText(text) {
 // ========== WIDGET : 1N2 unifié (Topmercato + Afrik-Foot FR) ==========
 (function() {
   const SITES_UW = {
-    "topmercato":            { lang: "fr", label: "Topmercato",          accent: "#e30613", accentBg: "#fdecee", affiliateUrl: "https://www.topmercato.com/go-betclic-arena-live-fr", logoUrl: "https://media.topmercato.com/main/2026/03/TM_1200px_red.png", logoAlt: "Topmercato",            logoHeight: 18 },
-    "afrik-foot-fr":         { lang: "fr", label: "Afrik-Foot FR",       accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
-    "afrik-foot-en":         { lang: "en", label: "Afrik-Foot ZA & NG",  accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
-    "sports-mole":           { lang: "en", label: "Sports Mole",         accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "#", logoUrl: BRAND_LOGOS["sports-mole"],                                      logoAlt: "Sports Mole",           logoHeight: 22 },
-    "trivela":               { lang: "ptBR", label: "Trivela",             accent: "#BE0022", accentBg: "#fce6ea", affiliateUrl: "#", logoUrl: BRAND_LOGOS["trivela"],                                          logoAlt: "Trivela",               logoHeight: 22 },
-    "umdois":                { lang: "ptBR", label: "UmDoisEsportes",      accent: "#000000", accentBg: "#fff8d6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["umdois"],                                           logoAlt: "UmDoisEsportes",        logoHeight: 22 },
-    "football-whispers":     { lang: "en", label: "Football Whispers",   accent: "#44BD32", accentBg: "#e8f7e3", affiliateUrl: "#", logoUrl: BRAND_LOGOS["football-whispers"],                                logoAlt: "Football Whispers",     logoHeight: 22 },
-    "football-ground-guide": { lang: "en", label: "Football Ground Guide", accent: "#1D2A41", accentBg: "#e1eaf2", affiliateUrl: "#", logoUrl: BRAND_LOGOS["football-ground-guide"],                          logoAlt: "Football Ground Guide", logoHeight: 22 },
-    "mrfixit":               { lang: "en", label: "MrFixIt's Tips",      accent: "#EE0000", accentBg: "#fde6e6", affiliateUrl: "#", logoUrl: null, logoText: "MrFixIt's",                                     logoAlt: "MrFixIt's Tips",        logoHeight: 18 },
-    "al-aire-libre":         { lang: "es", label: "Al-Aire Libre",       accent: "#005CB9", accentBg: "#e0ecf6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["al-aire-libre"],                                    logoAlt: "Al-Aire Libre",         logoHeight: 22 },
-    "soccernet":             { lang: "en", label: "Soccernet",           accent: "#66923d", accentBg: "#ecf2e3", affiliateUrl: "#", logoUrl: BRAND_LOGOS["soccernet"],                                        logoAlt: "Soccernet",             logoHeight: 22 }
+    "topmercato":            { lang: "fr", market: "FR", label: "Topmercato",          accent: "#e30613", accentBg: "#fdecee", affiliateUrl: "https://www.topmercato.com/go-betclic-arena-live-fr", logoUrl: "https://media.topmercato.com/main/2026/03/TM_1200px_red.png", logoAlt: "Topmercato",            logoHeight: 18 },
+    "afrik-foot-fr":         { lang: "fr", market: "FR", label: "Afrik-Foot FR",       accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
+    "afrik-foot-za":         { lang: "en", market: "ZA", label: "Afrik-Foot ZA",  accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
+    "afrik-foot-ng":         { lang: "en", market: "NG", label: "Afrik-Foot NG",  accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
+    "sports-mole":           { lang: "en", market: "UK", label: "Sports Mole",         accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "#", logoUrl: BRAND_LOGOS["sports-mole"],                                      logoAlt: "Sports Mole",           logoHeight: 22 },
+    "trivela":               { lang: "ptBR", market: "BR", label: "Trivela",             accent: "#BE0022", accentBg: "#fce6ea", affiliateUrl: "#", logoUrl: BRAND_LOGOS["trivela"],                                          logoAlt: "Trivela",               logoHeight: 22 },
+    "umdois":                { lang: "ptBR", market: "BR", label: "UmDoisEsportes",      accent: "#000000", accentBg: "#fff8d6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["umdois"],                                           logoAlt: "UmDoisEsportes",        logoHeight: 22 },
+    "football-whispers":     { lang: "en", market: "UK", label: "Football Whispers",   accent: "#44BD32", accentBg: "#e8f7e3", affiliateUrl: "#", logoUrl: BRAND_LOGOS["football-whispers"],                                logoAlt: "Football Whispers",     logoHeight: 22 },
+    "football-ground-guide": { lang: "en", market: "UK", label: "Football Ground Guide", accent: "#1D2A41", accentBg: "#e1eaf2", affiliateUrl: "#", logoUrl: BRAND_LOGOS["football-ground-guide"],                          logoAlt: "Football Ground Guide", logoHeight: 22 },
+    "mrfixit":               { lang: "en", market: "UK", label: "MrFixIt's Tips",      accent: "#EE0000", accentBg: "#fde6e6", affiliateUrl: "#", logoUrl: null, logoText: "MrFixIt's",                                     logoAlt: "MrFixIt's Tips",        logoHeight: 18 },
+    "al-aire-libre":         { lang: "es", market: "ES", label: "Al-Aire Libre",       accent: "#005CB9", accentBg: "#e0ecf6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["al-aire-libre"],                                    logoAlt: "Al-Aire Libre",         logoHeight: 22 },
+    "soccernet":             { lang: "en", market: "UK", label: "Soccernet",           accent: "#66923d", accentBg: "#ecf2e3", affiliateUrl: "#", logoUrl: BRAND_LOGOS["soccernet"],                                        logoAlt: "Soccernet",             logoHeight: 22 }
   };
 
   function getUwTheme() {
@@ -2334,7 +2356,7 @@ function parsePlayerOddsFromText(text) {
     </a>
   </div>
   <a class="uw__cta" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${escapeHtml(s.cta)}</a>
-  <div class="uw__legal">${escapeHtml(s.legal)}</div>
+  <div class="uw__legal">${escapeHtml((MARKETS[theme.market] || {}).legal || "")}</div>
 </div>`;
   }
 
@@ -2465,17 +2487,18 @@ function parsePlayerOddsFromText(text) {
 // ========== WIDGET : Odds scorers (Topmercato + Afrik-Foot FR) ==========
 (function() {
   const SITES_OS = {
-    "topmercato":            { lang: "fr", label: "Topmercato",          accent: "#e30613", accentBg: "#fdecee", affiliateUrl: "https://www.topmercato.com/go-betclic-arena-live-fr", logoUrl: "https://media.topmercato.com/main/2026/03/TM_1200px_red.png", logoAlt: "Topmercato",            logoHeight: 18 },
-    "afrik-foot-fr":         { lang: "fr", label: "Afrik-Foot FR",       accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
-    "afrik-foot-en":         { lang: "en", label: "Afrik-Foot ZA & NG",  accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
-    "sports-mole":           { lang: "en", label: "Sports Mole",         accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "#", logoUrl: BRAND_LOGOS["sports-mole"],                                      logoAlt: "Sports Mole",           logoHeight: 22 },
-    "trivela":               { lang: "ptBR", label: "Trivela",             accent: "#BE0022", accentBg: "#fce6ea", affiliateUrl: "#", logoUrl: BRAND_LOGOS["trivela"],                                          logoAlt: "Trivela",               logoHeight: 22 },
-    "umdois":                { lang: "ptBR", label: "UmDoisEsportes",      accent: "#000000", accentBg: "#fff8d6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["umdois"],                                           logoAlt: "UmDoisEsportes",        logoHeight: 22 },
-    "football-whispers":     { lang: "en", label: "Football Whispers",   accent: "#44BD32", accentBg: "#e8f7e3", affiliateUrl: "#", logoUrl: BRAND_LOGOS["football-whispers"],                                logoAlt: "Football Whispers",     logoHeight: 22 },
-    "football-ground-guide": { lang: "en", label: "Football Ground Guide", accent: "#1D2A41", accentBg: "#e1eaf2", affiliateUrl: "#", logoUrl: BRAND_LOGOS["football-ground-guide"],                          logoAlt: "Football Ground Guide", logoHeight: 22 },
-    "mrfixit":               { lang: "en", label: "MrFixIt's Tips",      accent: "#EE0000", accentBg: "#fde6e6", affiliateUrl: "#", logoUrl: null, logoText: "MrFixIt's",                                     logoAlt: "MrFixIt's Tips",        logoHeight: 18 },
-    "al-aire-libre":         { lang: "es", label: "Al-Aire Libre",       accent: "#005CB9", accentBg: "#e0ecf6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["al-aire-libre"],                                    logoAlt: "Al-Aire Libre",         logoHeight: 22 },
-    "soccernet":             { lang: "en", label: "Soccernet",           accent: "#66923d", accentBg: "#ecf2e3", affiliateUrl: "#", logoUrl: BRAND_LOGOS["soccernet"],                                        logoAlt: "Soccernet",             logoHeight: 22 }
+    "topmercato":            { lang: "fr", market: "FR", label: "Topmercato",          accent: "#e30613", accentBg: "#fdecee", affiliateUrl: "https://www.topmercato.com/go-betclic-arena-live-fr", logoUrl: "https://media.topmercato.com/main/2026/03/TM_1200px_red.png", logoAlt: "Topmercato",            logoHeight: 18 },
+    "afrik-foot-fr":         { lang: "fr", market: "FR", label: "Afrik-Foot FR",       accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
+    "afrik-foot-za":         { lang: "en", market: "ZA", label: "Afrik-Foot ZA",  accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
+    "afrik-foot-ng":         { lang: "en", market: "NG", label: "Afrik-Foot NG",  accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
+    "sports-mole":           { lang: "en", market: "UK", label: "Sports Mole",         accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "#", logoUrl: BRAND_LOGOS["sports-mole"],                                      logoAlt: "Sports Mole",           logoHeight: 22 },
+    "trivela":               { lang: "ptBR", market: "BR", label: "Trivela",             accent: "#BE0022", accentBg: "#fce6ea", affiliateUrl: "#", logoUrl: BRAND_LOGOS["trivela"],                                          logoAlt: "Trivela",               logoHeight: 22 },
+    "umdois":                { lang: "ptBR", market: "BR", label: "UmDoisEsportes",      accent: "#000000", accentBg: "#fff8d6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["umdois"],                                           logoAlt: "UmDoisEsportes",        logoHeight: 22 },
+    "football-whispers":     { lang: "en", market: "UK", label: "Football Whispers",   accent: "#44BD32", accentBg: "#e8f7e3", affiliateUrl: "#", logoUrl: BRAND_LOGOS["football-whispers"],                                logoAlt: "Football Whispers",     logoHeight: 22 },
+    "football-ground-guide": { lang: "en", market: "UK", label: "Football Ground Guide", accent: "#1D2A41", accentBg: "#e1eaf2", affiliateUrl: "#", logoUrl: BRAND_LOGOS["football-ground-guide"],                          logoAlt: "Football Ground Guide", logoHeight: 22 },
+    "mrfixit":               { lang: "en", market: "UK", label: "MrFixIt's Tips",      accent: "#EE0000", accentBg: "#fde6e6", affiliateUrl: "#", logoUrl: null, logoText: "MrFixIt's",                                     logoAlt: "MrFixIt's Tips",        logoHeight: 18 },
+    "al-aire-libre":         { lang: "es", market: "ES", label: "Al-Aire Libre",       accent: "#005CB9", accentBg: "#e0ecf6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["al-aire-libre"],                                    logoAlt: "Al-Aire Libre",         logoHeight: 22 },
+    "soccernet":             { lang: "en", market: "UK", label: "Soccernet",           accent: "#66923d", accentBg: "#ecf2e3", affiliateUrl: "#", logoUrl: BRAND_LOGOS["soccernet"],                                        logoAlt: "Soccernet",             logoHeight: 22 }
   };
 
   function getOsTheme() {
@@ -2537,7 +2560,7 @@ function parsePlayerOddsFromText(text) {
   <div class="uw__odds">${oddsHtml}
   </div>
   <a class="uw__cta" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${escapeHtml(t.cta)}</a>
-  <div class="uw__legal">${escapeHtml(t.legal)}</div>
+  <div class="uw__legal">${escapeHtml((MARKETS[theme.market] || {}).legal || "")}</div>
 </div>`;
   }
 
