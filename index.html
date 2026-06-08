@@ -480,6 +480,42 @@
   .buw__cta { display: block; text-align: center; margin-top: 14px; font-size: 15px; font-weight: 600; color: #1f6fd6; text-decoration: none; }
   .buw__cta:hover { color: #1854a8; }
   .buw__legal { font-size: 10px; color: #9ca3af; text-align: center; margin-top: 10px; line-height: 1.4; }
+
+  /* ===== Universal 1N2 widget (.uw) — palette pilotée par CSS variables sur le wrapper ===== */
+  .uw {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    border: 1px solid #e3e6eb;
+    border-radius: 10px;
+    background: #fff;
+    padding: 18px 20px;
+    max-width: 560px;
+    color: #1a1d23;
+    --uw-accent: #e30613;
+    --uw-accent-bg: #fdecee;
+    --uw-logo-height: 18px;
+  }
+  .uw__head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid #eef0f3;
+  }
+  .uw__logo { height: var(--uw-logo-height); width: auto; max-width: 140px; display: block; }
+  .uw__bookmaker { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7280; }
+  .uw__bookmaker strong { font-weight: 700; color: var(--uw-accent); margin-left: 4px; }
+  .uw__match { font-size: 17px; font-weight: 700; margin-bottom: 14px; text-align: center; }
+  .uw__match span { color: #6b7280; font-weight: 400; margin: 0 6px; }
+  .uw__odds { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .uw__odd {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 12px 8px; border: 1px solid #e3e6eb; border-radius: 8px; background: #fafbfc;
+    text-decoration: none; color: #1a1d23; transition: all 0.15s;
+  }
+  .uw__odd:hover { border-color: var(--uw-accent); background: var(--uw-accent-bg); }
+  .uw__odd-label { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .uw__odd-team { font-size: 13px; font-weight: 600; text-align: center; margin-bottom: 6px; min-height: 32px; display: flex; align-items: center; }
+  .uw__odd-value { font-size: 20px; font-weight: 700; color: var(--uw-accent); }
+  .uw__cta { display: block; text-align: center; margin-top: 14px; font-size: 15px; font-weight: 600; color: #1f6fd6; text-decoration: none; }
+  .uw__cta:hover { color: #1854a8; }
+  .uw__legal { font-size: 10px; color: #9ca3af; text-align: center; margin-top: 10px; line-height: 1.4; }
 </style>
 </head>
 <body>
@@ -502,9 +538,8 @@
     <div class="drawer__cat">Betting</div>
     <button type="button" class="drawer__item active" data-tab="tab-1n2-bu">Betting BasketUSA</button>
     <button type="button" class="drawer__item" data-tab="tab-top3-bu">TOP 3 BasketUSA</button>
-    <button type="button" class="drawer__item" data-tab="tab-1n2-tm">1N2 Topmercato</button>
+    <button type="button" class="drawer__item" data-tab="tab-1n2">1N2</button>
     <button type="button" class="drawer__item" data-tab="tab-buteurs-tm">Buteurs Topmercato</button>
-    <button type="button" class="drawer__item" data-tab="tab-1n2-af">1N2 Afrik-Foot FR</button>
     <button type="button" class="drawer__item" data-tab="tab-buteurs-af">Buteurs Afrik-Foot FR</button>
     <div class="drawer__cat drawer__cat--sep">Autres</div>
     <button type="button" class="drawer__item" data-tab="tab-essentiel">L'Essentiel TM</button>
@@ -591,6 +626,95 @@
     </div>
   </div>
   </div><!-- /tab-1n2-tm -->
+
+  <div class="tab-panel" id="tab-1n2" role="tabpanel">
+    <h2 class="widget-title">1N2</h2>
+    <p class="subtitle">Widget 1N2 unifié — choisis le site éditeur (Topmercato ou Afrik-Foot FR) puis renseigne le match Betclic et les 3 cotes. Les couleurs, le logo et le lien affilié s'adaptent automatiquement.</p>
+
+    <div class="panel">
+      <h2>1. Site</h2>
+      <label for="b12-site">Site (palette appliquée au header, badge, dots et noms du widget)</label>
+      <select id="b12-site" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
+        <option value="topmercato">Topmercato (rouge)</option>
+        <option value="afrik-foot">Afrik-Foot FR (vert)</option>
+      </select>
+    </div>
+
+    <div class="panel">
+      <h2>2. URL du match Betclic</h2>
+      <label for="b12-url">URL</label>
+      <input type="text" id="b12-url" placeholder="https://www.betclic.fr/football-s1/.../paris-saint-germain-olympique-de-marseille-m..." />
+      <div class="hint">Exemple : <code>https://www.betclic.fr/football-s1/ligue-1-mcdonalds-c4/paris-saint-germain-olympique-de-marseille-m12345</code></div>
+      <div style="margin-top: 12px;">
+        <button type="button" id="b12-parseBtn">Extraire les clubs</button>
+        <span class="status" id="b12-parseStatus" style="margin-left: 10px;"></span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Équipes (corrige si besoin)</h2>
+      <div class="row">
+        <div>
+          <label for="b12-club1">Club 1 (domicile)</label>
+          <input type="text" id="b12-club1" placeholder="Paris Saint-Germain" />
+        </div>
+        <div>
+          <label for="b12-club2">Club 2 (extérieur)</label>
+          <input type="text" id="b12-club2" placeholder="Olympique de Marseille" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>4. Cotes 1 N 2</h2>
+
+      <div class="ocr-zone">
+        <label for="b12-ocrFile" class="ocr-drop">
+          <input type="file" id="b12-ocrFile" accept="image/*" hidden />
+          <span class="ocr-drop__icon">📷</span>
+          <span class="ocr-drop__text">Importer une capture des cotes — auto-fill par OCR</span>
+          <span class="ocr-drop__hint">PNG/JPG. Idéal : capture rognée sur les 3 cotes 1/N/2.</span>
+        </label>
+        <div id="b12-ocrPreview" class="ocr-preview" hidden>
+          <img id="b12-ocrImg" alt="Aperçu" />
+          <div class="ocr-side">
+            <div class="status" id="b12-ocrStatus">En attente…</div>
+            <button type="button" class="secondary" id="b12-ocrRetry" hidden>Relancer l'OCR</button>
+            <button type="button" class="secondary" id="b12-ocrClear">Retirer l'image</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row-3">
+        <div>
+          <label for="b12-cote1">Cote 1 (victoire Club 1)</label>
+          <input type="text" id="b12-cote1" placeholder="2,50" inputmode="decimal" />
+        </div>
+        <div>
+          <label for="b12-coteN">Cote N (match nul)</label>
+          <input type="text" id="b12-coteN" placeholder="4,10" inputmode="decimal" />
+        </div>
+        <div>
+          <label for="b12-cote2">Cote 2 (victoire Club 2)</label>
+          <input type="text" id="b12-cote2" placeholder="7,80" inputmode="decimal" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Aperçu</h2>
+      <div class="preview-wrap" id="b12-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML à copier</h2>
+      <textarea id="b12-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="b12-copyBtn">Copier le HTML</button>
+        <span class="status" id="b12-copyStatus"></span>
+      </div>
+    </div>
+  </div>
 
   <div class="tab-panel" id="tab-buteurs-tm" role="tabpanel">
     <h2 class="widget-title">Buteurs Topmercato</h2>
@@ -3196,6 +3320,213 @@ function parsePlayerOddsFromText(text) {
       $('cf2-copyStatus').textContent = "✓ Copied.";
     }
   });
+})();
+
+// ========== WIDGET : 1N2 unifié (Topmercato + Afrik-Foot FR) ==========
+(function() {
+  const SITES_UW = {
+    "topmercato": {
+      label: "Topmercato",
+      accent: "#e30613",
+      accentBg: "#fdecee",
+      affiliateUrl: "https://www.topmercato.com/go-betclic-arena-live-fr",
+      logoUrl: "https://media.topmercato.com/main/2026/03/TM_1200px_red.png",
+      logoAlt: "Topmercato",
+      logoHeight: 18
+    },
+    "afrik-foot": {
+      label: "Afrik-Foot FR",
+      accent: "#6d8e3f",
+      accentBg: "#f1f5ec",
+      affiliateUrl: "#", // TODO: URL affilié Afrik-Foot FR quand fournie
+      logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",
+      logoAlt: "Afrik-Foot",
+      logoHeight: 22
+    }
+  };
+
+  function getUwTheme() {
+    return SITES_UW[$('b12-site').value] || SITES_UW["topmercato"];
+  }
+
+  const EMBED_CSS_UW = `<style>
+.uw{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;border:1px solid #e3e6eb;border-radius:10px;background:#fff;padding:18px 20px;max-width:560px;color:#1a1d23;margin:16px auto;--uw-accent:#e30613;--uw-accent-bg:#fdecee;--uw-logo-height:18px}
+.uw__head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #eef0f3}
+.uw__logo{height:var(--uw-logo-height);width:auto;max-width:140px;display:block}
+.uw__bookmaker{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#6b7280}
+.uw__bookmaker strong{font-weight:700;color:var(--uw-accent);margin-left:4px}
+.uw__match{font-size:17px;font-weight:700;margin-bottom:14px;text-align:center}
+.uw__match span{color:#6b7280;font-weight:400;margin:0 6px}
+.uw__odds{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.uw__odd{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;border:1px solid #e3e6eb;border-radius:8px;background:#fafbfc;text-decoration:none;color:#1a1d23;transition:all .15s}
+.uw__odd:hover{border-color:var(--uw-accent);background:var(--uw-accent-bg)}
+.uw__odd-label{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.uw__odd-team{font-size:13px;font-weight:600;text-align:center;margin-bottom:6px;min-height:32px;display:flex;align-items:center}
+.uw__odd-value{font-size:20px;font-weight:700;color:var(--uw-accent)}
+.uw__cta{display:block;text-align:center;margin-top:14px;font-size:15px;font-weight:600;color:#1f6fd6;text-decoration:none}
+.uw__cta:hover{color:#1854a8}
+.uw__legal{font-size:10px;color:#9ca3af;text-align:center;margin-top:10px;line-height:1.4}
+</style>
+`;
+
+  function buildUwHtml({ club1, club2, cote1, coteN, cote2, theme }) {
+    const safeUrl = theme.affiliateUrl;
+    const c1 = escapeHtml(club1 || 'Club 1');
+    const c2 = escapeHtml(club2 || 'Club 2');
+    const o1 = escapeHtml(cote1 || '-');
+    const oN = escapeHtml(coteN || '-');
+    const o2 = escapeHtml(cote2 || '-');
+    const styleVars = '--uw-accent:' + theme.accent + ';--uw-accent-bg:' + theme.accentBg + ';--uw-logo-height:' + theme.logoHeight + 'px';
+    return `<div class="uw" style="${styleVars}">
+  <div class="uw__head">
+    <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener"><img class="uw__logo" src="${theme.logoUrl}" alt="${escapeHtml(theme.logoAlt)}"></a>
+    <span class="uw__bookmaker">Cotes <strong>Betclic</strong></span>
+  </div>
+  <div class="uw__match">${c1} <span>vs</span> ${c2}</div>
+  <div class="uw__odds">
+    <a class="uw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
+      <span class="uw__odd-label">1</span>
+      <span class="uw__odd-team">${c1}</span>
+      <span class="uw__odd-value">${o1}</span>
+    </a>
+    <a class="uw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
+      <span class="uw__odd-label">N</span>
+      <span class="uw__odd-team">Match nul</span>
+      <span class="uw__odd-value">${oN}</span>
+    </a>
+    <a class="uw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
+      <span class="uw__odd-label">2</span>
+      <span class="uw__odd-team">${c2}</span>
+      <span class="uw__odd-value">${o2}</span>
+    </a>
+  </div>
+  <a class="uw__cta" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">Parier sur Betclic →</a>
+  <div class="uw__legal">Cotes indicatives susceptibles de varier. Les jeux d'argent sont interdits aux moins de 18 ans. Jouer comporte des risques : endettement, dépendance… Appelez le 09 74 75 13 13 (appel non surtaxé).</div>
+</div>`;
+  }
+
+  function uwRender() {
+    const theme = getUwTheme();
+    const data = {
+      club1: $('b12-club1').value.trim(),
+      club2: $('b12-club2').value.trim(),
+      cote1: $('b12-cote1').value.trim(),
+      coteN: $('b12-coteN').value.trim(),
+      cote2: $('b12-cote2').value.trim(),
+      theme
+    };
+    const html = buildUwHtml(data);
+    $('b12-preview').innerHTML = html;
+    $('b12-output').value = EMBED_CSS_UW + html;
+  }
+
+  $('b12-site').addEventListener('change', uwRender);
+
+  $('b12-parseBtn').addEventListener('click', () => {
+    const url = $('b12-url').value.trim();
+    const status = $('b12-parseStatus');
+    if (!url) { status.textContent = "Colle une URL d'abord."; return; }
+    const slug = extractBetclicSlug(url);
+    if (!slug) { status.textContent = "URL non reconnue (Betclic attendu)."; return; }
+    const parsed = parseMatchSlug(slug);
+    $('b12-club1').value = parsed.club1;
+    $('b12-club2').value = parsed.club2;
+    if (parsed.method === "dictionary") status.textContent = "✓ Clubs reconnus.";
+    else if (parsed.method === "midpoint-fallback") status.textContent = "⚠ Clubs inconnus, split approximatif — vérifie.";
+    else status.textContent = "⚠ Impossible de séparer — corrige à la main.";
+    uwRender();
+  });
+
+  ['b12-club1','b12-club2','b12-cote1','b12-coteN','b12-cote2'].forEach(id => {
+    $(id).addEventListener('input', uwRender);
+  });
+
+  let uwCurrentBlob = null;
+
+  async function runOCRUw(blob) {
+    const status = $('b12-ocrStatus');
+    status.textContent = "Chargement du moteur OCR…";
+    try {
+      if (!window.Tesseract) {
+        status.textContent = "⚠ Tesseract.js non chargé (vérifie ta connexion).";
+        return;
+      }
+      status.textContent = "Pré-traitement de l'image…";
+      const processed = await preprocessForOCR(blob);
+      const worker = await Tesseract.createWorker('eng', 1, {
+        logger: m => {
+          if (m.status === 'recognizing text') status.textContent = `Analyse en cours… ${Math.round(m.progress * 100)}%`;
+          else if (m.status === 'loading tesseract core' || m.status === 'initializing tesseract') status.textContent = "Initialisation du moteur OCR…";
+          else if (m.status === 'loading language traineddata') status.textContent = "Chargement du modèle…";
+        }
+      });
+      await worker.setParameters({
+        tessedit_char_whitelist: '0123456789.,',
+        tessedit_pageseg_mode: '6'
+      });
+      const { data: { text } } = await worker.recognize(processed);
+      await worker.terminate();
+
+      const odds = parseOddsFromText(text);
+      if (odds.length >= 3) {
+        $('b12-cote1').value = odds[0];
+        $('b12-coteN').value = odds[1];
+        $('b12-cote2').value = odds[2];
+        uwRender();
+        status.innerHTML = `✓ 3 cotes détectées : <strong>${odds[0]} / ${odds[1]} / ${odds[2]}</strong>. Vérifie l'ordre.`;
+        if (odds.length > 3) status.innerHTML += ` <br><span style="font-size:11px">(${odds.length} valeurs trouvées, les 3 premières ont été utilisées.)</span>`;
+      } else if (odds.length > 0) {
+        odds.forEach((v, i) => {
+          if (i === 0) $('b12-cote1').value = v;
+          if (i === 1) $('b12-coteN').value = v;
+        });
+        uwRender();
+        status.innerHTML = `⚠ Seulement ${odds.length} cote(s) détectée(s) : ${odds.join(' / ')}. Complète à la main.`;
+      } else {
+        status.innerHTML = "⚠ Aucune cote détectée. Essaie une capture plus nette et rognée sur les chiffres.";
+      }
+      $('b12-ocrRetry').hidden = false;
+    } catch (err) {
+      status.textContent = "⚠ Erreur OCR : " + (err.message || err);
+      $('b12-ocrRetry').hidden = false;
+    }
+  }
+
+  $('b12-ocrFile').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    uwCurrentBlob = file;
+    $('b12-ocrImg').src = URL.createObjectURL(file);
+    $('b12-ocrPreview').hidden = false;
+    runOCRUw(file);
+  });
+
+  $('b12-ocrRetry').addEventListener('click', () => {
+    if (uwCurrentBlob) runOCRUw(uwCurrentBlob);
+  });
+
+  $('b12-ocrClear').addEventListener('click', () => {
+    uwCurrentBlob = null;
+    $('b12-ocrFile').value = '';
+    $('b12-ocrImg').src = '';
+    $('b12-ocrPreview').hidden = true;
+    $('b12-ocrRetry').hidden = true;
+  });
+
+  $('b12-copyBtn').addEventListener('click', async () => {
+    const ta = $('b12-output');
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('b12-copyStatus').textContent = "✓ Copié.";
+      setTimeout(() => $('b12-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('b12-copyStatus').textContent = "✓ Copié.";
+    }
+  });
+
+  uwRender();
 })();
 
 // Premier rendu vide
