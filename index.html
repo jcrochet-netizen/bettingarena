@@ -797,8 +797,8 @@
       <h2>1. Contenu (3 lignes)</h2>
       <div class="row" style="grid-template-columns: 1fr 2fr;">
         <div>
-          <label for="es-lib1">Libellé 1 <span class="charcount" id="es-lib1-count">0/150</span></label>
-          <input type="text" id="es-lib1" maxlength="150" />
+          <label for="es-lib1">Libellé 1 <span class="charcount" id="es-lib1-count">0/50</span></label>
+          <input type="text" id="es-lib1" maxlength="50" />
         </div>
         <div>
           <label for="es-det1">Détail 1 <span class="charcount" id="es-det1-count">0/150</span></label>
@@ -807,8 +807,8 @@
       </div>
       <div class="row" style="grid-template-columns: 1fr 2fr;">
         <div>
-          <label for="es-lib2">Libellé 2 <span class="charcount" id="es-lib2-count">0/150</span></label>
-          <input type="text" id="es-lib2" maxlength="150" />
+          <label for="es-lib2">Libellé 2 <span class="charcount" id="es-lib2-count">0/50</span></label>
+          <input type="text" id="es-lib2" maxlength="50" />
         </div>
         <div>
           <label for="es-det2">Détail 2 <span class="charcount" id="es-det2-count">0/150</span></label>
@@ -817,8 +817,8 @@
       </div>
       <div class="row" style="grid-template-columns: 1fr 2fr;">
         <div>
-          <label for="es-lib3">Libellé 3 <span class="charcount" id="es-lib3-count">0/150</span></label>
-          <input type="text" id="es-lib3" maxlength="150" />
+          <label for="es-lib3">Libellé 3 <span class="charcount" id="es-lib3-count">0/50</span></label>
+          <input type="text" id="es-lib3" maxlength="50" />
         </div>
         <div>
           <label for="es-det3">Détail 3 <span class="charcount" id="es-det3-count">0/150</span></label>
@@ -869,8 +869,8 @@
       <h2>1. Contenu (3 lignes)</h2>
       <div class="row" style="grid-template-columns: 1fr 2fr;">
         <div>
-          <label for="ea-lib1">Libellé 1 <span class="charcount" id="ea-lib1-count">0/150</span></label>
-          <input type="text" id="ea-lib1" maxlength="150" />
+          <label for="ea-lib1">Libellé 1 <span class="charcount" id="ea-lib1-count">0/50</span></label>
+          <input type="text" id="ea-lib1" maxlength="50" />
         </div>
         <div>
           <label for="ea-det1">Détail 1 <span class="charcount" id="ea-det1-count">0/150</span></label>
@@ -879,8 +879,8 @@
       </div>
       <div class="row" style="grid-template-columns: 1fr 2fr;">
         <div>
-          <label for="ea-lib2">Libellé 2 <span class="charcount" id="ea-lib2-count">0/150</span></label>
-          <input type="text" id="ea-lib2" maxlength="150" />
+          <label for="ea-lib2">Libellé 2 <span class="charcount" id="ea-lib2-count">0/50</span></label>
+          <input type="text" id="ea-lib2" maxlength="50" />
         </div>
         <div>
           <label for="ea-det2">Détail 2 <span class="charcount" id="ea-det2-count">0/150</span></label>
@@ -889,8 +889,8 @@
       </div>
       <div class="row" style="grid-template-columns: 1fr 2fr;">
         <div>
-          <label for="ea-lib3">Libellé 3 <span class="charcount" id="ea-lib3-count">0/150</span></label>
-          <input type="text" id="ea-lib3" maxlength="150" />
+          <label for="ea-lib3">Libellé 3 <span class="charcount" id="ea-lib3-count">0/50</span></label>
+          <input type="text" id="ea-lib3" maxlength="50" />
         </div>
         <div>
           <label for="ea-det3">Détail 3 <span class="charcount" id="ea-det3-count">0/150</span></label>
@@ -1832,8 +1832,9 @@ function parsePlayerOddsFromText(text) {
     const counter = $(id + '-count');
     const update = () => {
       const len = input.value.length;
-      counter.textContent = len + '/150';
-      counter.classList.toggle('full', len >= 150);
+      const max = input.maxLength;
+      counter.textContent = len + '/' + max;
+      counter.classList.toggle('full', len >= max);
     };
     input.addEventListener('input', update);
     update();
@@ -1901,8 +1902,9 @@ function parsePlayerOddsFromText(text) {
     const counter = $(id + '-count');
     const update = () => {
       const len = input.value.length;
-      counter.textContent = len + '/150';
-      counter.classList.toggle('full', len >= 150);
+      const max = input.maxLength;
+      counter.textContent = len + '/' + max;
+      counter.classList.toggle('full', len >= max);
     };
     input.addEventListener('input', update);
     update();
