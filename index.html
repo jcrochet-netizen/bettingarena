@@ -358,18 +358,18 @@
     text-decoration: none; color: #1a1d23; transition: all 0.15s;
   }
   .uw__odd:hover { border-color: var(--uw-accent); background: var(--uw-accent-bg); }
-  .uw__odd-label { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
-  .uw__odd-team { font-size: 13px; font-weight: 600; text-align: center; margin-bottom: 6px; min-height: 32px; display: flex; align-items: center; }
-  .uw__odd-value { font-size: 20px; font-weight: 700; color: var(--uw-accent); }
-  .uw__cta { display: block; text-align: center; margin-top: 14px; font-size: 15px; font-weight: 600; color: #1f6fd6; text-decoration: none; }
-  .uw__cta:hover { color: #1854a8; }
+  .uw__odd-label { font-size: 11px; color: #6b7280 !important; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .uw__odd-team { font-size: 13px; font-weight: 600; color: #1a1d23 !important; text-align: center; margin-bottom: 6px; min-height: 32px; display: flex; align-items: center; }
+  .uw__odd-value { font-size: 20px; font-weight: 700; color: var(--uw-accent) !important; }
+  .uw__cta { display: block; text-align: center; margin-top: 14px; font-size: 15px; font-weight: 600; color: #1f6fd6 !important; text-decoration: none; }
+  .uw__cta:hover { color: #1854a8 !important; }
   .uw__legal { font-size: 10px; color: #9ca3af; text-align: center; margin-top: 10px; line-height: 1.4; }
   /* Variante scorers : ajoute un sous-titre + spacing match réduit */
   .uw__subtitle { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7280; text-align: center; margin-bottom: 12px; }
   .uw--scorers .uw__match { margin-bottom: 6px; }
   .uw--ou .uw__match { margin-bottom: 6px; }
   .uw--ou .uw__odds { grid-template-columns: 1fr 1fr 1fr 1fr; }
-  .uw--ou .uw__odd-team { min-height: 0; font-size: 16px; }
+  .uw--ou .uw__odd-team { min-height: 0; font-size: 16px; color: #1a1d23 !important; }
 </style>
 </head>
 <body>
@@ -2442,16 +2442,17 @@ function parsePlayerOddsFromText(text) {
 .uw__logo-text{font-size:16px;font-weight:700;letter-spacing:.01em}
 .uw__bookmaker{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#6b7280}
 .uw__bookmaker strong{font-weight:700;color:var(--uw-accent);margin-left:4px}
+.uw a,.uw a:visited,.uw a:hover{color:inherit !important;text-decoration:none !important}
 .uw__match{font-size:17px;font-weight:700;margin-bottom:14px;text-align:center}
 .uw__match span{color:#6b7280;font-weight:400;margin:0 6px}
 .uw__odds{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .uw__odd{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;border:1px solid #e3e6eb;border-radius:8px;background:#fafbfc;text-decoration:none;color:#1a1d23;transition:all .15s}
 .uw__odd:hover{border-color:var(--uw-accent);background:var(--uw-accent-bg)}
-.uw__odd-label{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
-.uw__odd-team{font-size:13px;font-weight:600;text-align:center;margin-bottom:6px;min-height:32px;display:flex;align-items:center}
-.uw__odd-value{font-size:20px;font-weight:700;color:var(--uw-accent)}
-.uw__cta{display:block;text-align:center;margin-top:14px;font-size:15px;font-weight:600;color:#1f6fd6;text-decoration:none}
-.uw__cta:hover{color:#1854a8}
+.uw__odd-label{font-size:11px;color:#6b7280 !important;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.uw__odd-team{font-size:13px;font-weight:600;color:#1a1d23 !important;text-align:center;margin-bottom:6px;min-height:32px;display:flex;align-items:center}
+.uw__odd-value{font-size:20px;font-weight:700;color:var(--uw-accent) !important}
+.uw__cta{display:block;text-align:center;margin-top:14px;font-size:15px;font-weight:600;color:#1f6fd6 !important;text-decoration:none}
+.uw__cta:hover{color:#1854a8 !important}
 .uw__legal{font-size:10px;color:#9ca3af;text-align:center;margin-top:10px;line-height:1.4}
 </style>
 `;
@@ -2466,7 +2467,7 @@ function parsePlayerOddsFromText(text) {
     const oN = escapeHtml(coteN || '-');
     const o2 = escapeHtml(cote2 || '-');
     const styleVars = '--uw-accent:' + theme.accent + ';--uw-accent-bg:' + theme.accentBg + ';--uw-logo-height:' + theme.logoHeight + 'px';
-    const siteCss = `<style>.uw--${theme.slug} .uw__bookmaker strong{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd-value{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd:hover{border-color:${theme.accent} !important;background:${theme.accentBg} !important}</style>`;
+    const siteCss = `<style>.uw--${theme.slug} .uw__bookmaker strong{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd-value{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd:hover{border-color:${theme.accent} !important;background:${theme.accentBg} !important}.uw--${theme.slug} .uw__odd-team{color:#1a1d23 !important}.uw--${theme.slug} .uw__odd-label{color:#6b7280 !important}.uw--${theme.slug} .uw__cta{color:#1f6fd6 !important}.uw--${theme.slug} .uw__cta:hover{color:#1854a8 !important}.uw--${theme.slug} a,.uw--${theme.slug} a:visited,.uw--${theme.slug} a:hover{text-decoration:none !important}</style>`;
     return `${siteCss}<div class="uw uw--${theme.slug}" style="${styleVars}">
   <div class="uw__head">
     <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${theme.logoUrl ? `<img class="uw__logo" src="${theme.logoUrl}" alt="${escapeHtml(theme.logoAlt)}" height="12" style="height:${theme.logoHeight}px !important;width:auto !important;max-width:140px !important;display:block !important">` : `<span class="uw__logo-text" style="color:${theme.accent};font-size:16px;font-weight:700;letter-spacing:.01em;line-height:1">${escapeHtml(theme.logoText || theme.logoAlt)}</span>`}</a>
@@ -2476,21 +2477,21 @@ function parsePlayerOddsFromText(text) {
   <div class="uw__odds">
     <a class="uw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
       <span class="uw__odd-label">1</span>
-      <span class="uw__odd-team">${c1}</span>
+      <span class="uw__odd-team" style="color:#1a1d23 !important">${c1}</span>
       <span class="uw__odd-value" style="color:${theme.accent} !important">${o1}</span>
     </a>
     <a class="uw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
       <span class="uw__odd-label">${escapeHtml(s.drawLabel)}</span>
-      <span class="uw__odd-team">${escapeHtml(s.draw)}</span>
+      <span class="uw__odd-team" style="color:#1a1d23 !important">${escapeHtml(s.draw)}</span>
       <span class="uw__odd-value" style="color:${theme.accent} !important">${oN}</span>
     </a>
     <a class="uw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
       <span class="uw__odd-label">2</span>
-      <span class="uw__odd-team">${c2}</span>
+      <span class="uw__odd-team" style="color:#1a1d23 !important">${c2}</span>
       <span class="uw__odd-value" style="color:${theme.accent} !important">${o2}</span>
     </a>
   </div>
-  <a class="uw__cta" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${escapeHtml(s.cta.replace("{bookmaker}", bookmakerName))}</a>
+  <a class="uw__cta" style="color:#1f6fd6 !important" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${escapeHtml(s.cta.replace("{bookmaker}", bookmakerName))}</a>
   <div class="uw__legal">${escapeHtml((MARKETS[theme.market] || {}).legal || "")}</div>
 </div>`;
   }
@@ -2638,6 +2639,7 @@ function parsePlayerOddsFromText(text) {
 .uw__logo-text{font-size:16px;font-weight:700;letter-spacing:.01em}
 .uw__bookmaker{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#6b7280}
 .uw__bookmaker strong{font-weight:700;color:var(--uw-accent);margin-left:4px}
+.uw a,.uw a:visited,.uw a:hover{color:inherit !important;text-decoration:none !important}
 .uw__match{font-size:17px;font-weight:700;margin-bottom:14px;text-align:center}
 .uw__match span{color:#6b7280;font-weight:400;margin:0 6px}
 .uw--scorers .uw__match{margin-bottom:6px}
@@ -2645,11 +2647,11 @@ function parsePlayerOddsFromText(text) {
 .uw__odds{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .uw__odd{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;border:1px solid #e3e6eb;border-radius:8px;background:#fafbfc;text-decoration:none;color:#1a1d23;transition:all .15s}
 .uw__odd:hover{border-color:var(--uw-accent);background:var(--uw-accent-bg)}
-.uw__odd-label{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
-.uw__odd-team{font-size:13px;font-weight:600;text-align:center;margin-bottom:6px;min-height:32px;display:flex;align-items:center}
-.uw__odd-value{font-size:20px;font-weight:700;color:var(--uw-accent)}
-.uw__cta{display:block;text-align:center;margin-top:14px;font-size:15px;font-weight:600;color:#1f6fd6;text-decoration:none}
-.uw__cta:hover{color:#1854a8}
+.uw__odd-label{font-size:11px;color:#6b7280 !important;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.uw__odd-team{font-size:13px;font-weight:600;color:#1a1d23 !important;text-align:center;margin-bottom:6px;min-height:32px;display:flex;align-items:center}
+.uw__odd-value{font-size:20px;font-weight:700;color:var(--uw-accent) !important}
+.uw__cta{display:block;text-align:center;margin-top:14px;font-size:15px;font-weight:600;color:#1f6fd6 !important;text-decoration:none}
+.uw__cta:hover{color:#1854a8 !important}
 .uw__legal{font-size:10px;color:#9ca3af;text-align:center;margin-top:10px;line-height:1.4}
 </style>
 `;
@@ -2671,11 +2673,11 @@ function parsePlayerOddsFromText(text) {
     const oddsHtml = slots.map(s => `
     <a class="uw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
       <span class="uw__odd-label">${s.rank}</span>
-      <span class="uw__odd-team">${escapeHtml(s.name || t.player)}</span>
+      <span class="uw__odd-team" style="color:#1a1d23 !important">${escapeHtml(s.name || t.player)}</span>
       <span class="uw__odd-value" style="color:${theme.accent} !important">${escapeHtml(s.odds || '-')}</span>
     </a>`).join('');
     const styleVars = '--uw-accent:' + theme.accent + ';--uw-accent-bg:' + theme.accentBg + ';--uw-logo-height:' + theme.logoHeight + 'px';
-    const siteCss = `<style>.uw--${theme.slug} .uw__bookmaker strong{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd-value{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd:hover{border-color:${theme.accent} !important;background:${theme.accentBg} !important}</style>`;
+    const siteCss = `<style>.uw--${theme.slug} .uw__bookmaker strong{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd-value{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd:hover{border-color:${theme.accent} !important;background:${theme.accentBg} !important}.uw--${theme.slug} .uw__odd-team{color:#1a1d23 !important}.uw--${theme.slug} .uw__odd-label{color:#6b7280 !important}.uw--${theme.slug} .uw__cta{color:#1f6fd6 !important}.uw--${theme.slug} .uw__cta:hover{color:#1854a8 !important}.uw--${theme.slug} a,.uw--${theme.slug} a:visited,.uw--${theme.slug} a:hover{text-decoration:none !important}</style>`;
     return `${siteCss}<div class="uw uw--scorers uw--${theme.slug}" style="${styleVars}">
   <div class="uw__head">
     <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${theme.logoUrl ? `<img class="uw__logo" src="${theme.logoUrl}" alt="${escapeHtml(theme.logoAlt)}" height="12" style="height:${theme.logoHeight}px !important;width:auto !important;max-width:140px !important;display:block !important">` : `<span class="uw__logo-text" style="color:${theme.accent};font-size:16px;font-weight:700;letter-spacing:.01em;line-height:1">${escapeHtml(theme.logoText || theme.logoAlt)}</span>`}</a>
@@ -2685,7 +2687,7 @@ function parsePlayerOddsFromText(text) {
   <div class="uw__subtitle">${escapeHtml(t.subtitleScorer)}</div>
   <div class="uw__odds">${oddsHtml}
   </div>
-  <a class="uw__cta" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${escapeHtml(t.cta.replace("{bookmaker}", bookmakerName))}</a>
+  <a class="uw__cta" style="color:#1f6fd6 !important" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${escapeHtml(t.cta.replace("{bookmaker}", bookmakerName))}</a>
   <div class="uw__legal">${escapeHtml((MARKETS[theme.market] || {}).legal || "")}</div>
 </div>`;
   }
@@ -2833,6 +2835,7 @@ function parsePlayerOddsFromText(text) {
 .uw__logo-text{font-size:16px;font-weight:700;letter-spacing:.01em}
 .uw__bookmaker{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#6b7280}
 .uw__bookmaker strong{font-weight:700;color:var(--uw-accent);margin-left:4px}
+.uw a,.uw a:visited,.uw a:hover{color:inherit !important;text-decoration:none !important}
 .uw__match{font-size:17px;font-weight:700;margin-bottom:14px;text-align:center}
 .uw__match span{color:#6b7280;font-weight:400;margin:0 6px}
 .uw--ou .uw__match{margin-bottom:6px}
@@ -2840,11 +2843,11 @@ function parsePlayerOddsFromText(text) {
 .uw__odds{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
 .uw__odd{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;border:1px solid #e3e6eb;border-radius:8px;background:#fafbfc;text-decoration:none;color:#1a1d23;transition:all .15s}
 .uw__odd:hover{border-color:var(--uw-accent);background:var(--uw-accent-bg)}
-.uw__odd-label{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
-.uw__odd-team{font-size:16px;font-weight:700;text-align:center;margin-bottom:6px;display:flex;align-items:center}
-.uw__odd-value{font-size:20px;font-weight:700;color:var(--uw-accent)}
-.uw__cta{display:block;text-align:center;margin-top:14px;font-size:15px;font-weight:600;color:#1f6fd6;text-decoration:none}
-.uw__cta:hover{color:#1854a8}
+.uw__odd-label{font-size:11px;color:#6b7280 !important;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.uw__odd-team{font-size:16px;font-weight:700;color:#1a1d23 !important;text-align:center;margin-bottom:6px;display:flex;align-items:center}
+.uw__odd-value{font-size:20px;font-weight:700;color:var(--uw-accent) !important}
+.uw__cta{display:block;text-align:center;margin-top:14px;font-size:15px;font-weight:600;color:#1f6fd6 !important;text-decoration:none}
+.uw__cta:hover{color:#1854a8 !important}
 .uw__legal{font-size:10px;color:#9ca3af;text-align:center;margin-top:10px;line-height:1.4}
 </style>
 `;
@@ -2868,11 +2871,11 @@ function parsePlayerOddsFromText(text) {
     const oddsHtml = slots.map(s2 => `
     <a class="uw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
       <span class="uw__odd-label">Over</span>
-      <span class="uw__odd-team">${escapeHtml(s2.threshold)}</span>
+      <span class="uw__odd-team" style="color:#1a1d23 !important">${escapeHtml(s2.threshold)}</span>
       <span class="uw__odd-value" style="color:${theme.accent} !important">${escapeHtml(s2.odds || '-')}</span>
     </a>`).join('');
     const styleVars = '--uw-accent:' + theme.accent + ';--uw-accent-bg:' + theme.accentBg + ';--uw-logo-height:' + theme.logoHeight + 'px';
-    const siteCss = `<style>.uw--${theme.slug} .uw__bookmaker strong{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd-value{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd:hover{border-color:${theme.accent} !important;background:${theme.accentBg} !important}</style>`;
+    const siteCss = `<style>.uw--${theme.slug} .uw__bookmaker strong{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd-value{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd:hover{border-color:${theme.accent} !important;background:${theme.accentBg} !important}.uw--${theme.slug} .uw__odd-team{color:#1a1d23 !important}.uw--${theme.slug} .uw__odd-label{color:#6b7280 !important}.uw--${theme.slug} .uw__cta{color:#1f6fd6 !important}.uw--${theme.slug} .uw__cta:hover{color:#1854a8 !important}.uw--${theme.slug} a,.uw--${theme.slug} a:visited,.uw--${theme.slug} a:hover{text-decoration:none !important}</style>`;
     return `${siteCss}<div class="uw uw--ou uw--${theme.slug}" style="${styleVars}">
   <div class="uw__head">
     <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${theme.logoUrl ? `<img class="uw__logo" src="${theme.logoUrl}" alt="${escapeHtml(theme.logoAlt)}" height="12" style="height:${theme.logoHeight}px !important;width:auto !important;max-width:140px !important;display:block !important">` : `<span class="uw__logo-text" style="color:${theme.accent};font-size:16px;font-weight:700;letter-spacing:.01em;line-height:1">${escapeHtml(theme.logoText || theme.logoAlt)}</span>`}</a>
@@ -2882,7 +2885,7 @@ function parsePlayerOddsFromText(text) {
   <div class="uw__subtitle">Over / Under</div>
   <div class="uw__odds">${oddsHtml}
   </div>
-  <a class="uw__cta" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${escapeHtml(s.cta.replace("{bookmaker}", bookmakerName))}</a>
+  <a class="uw__cta" style="color:#1f6fd6 !important" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${escapeHtml(s.cta.replace("{bookmaker}", bookmakerName))}</a>
   <div class="uw__legal">${escapeHtml((MARKETS[theme.market] || {}).legal || '')}</div>
 </div>`;
   }
