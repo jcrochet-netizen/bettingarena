@@ -2430,7 +2430,9 @@ function parsePlayerOddsFromText(text) {
   const SITES_UW = SITES_BETTING;
 
   function getUwTheme() {
-    return SITES_UW[$('b12-site').value] || SITES_UW["topmercato"];
+    const slug = $('b12-site').value;
+    const theme = SITES_UW[slug] || SITES_UW["topmercato"];
+    return Object.assign({}, theme, { slug });
   }
 
   const EMBED_CSS_UW = `<style>
@@ -2464,27 +2466,28 @@ function parsePlayerOddsFromText(text) {
     const oN = escapeHtml(coteN || '-');
     const o2 = escapeHtml(cote2 || '-');
     const styleVars = '--uw-accent:' + theme.accent + ';--uw-accent-bg:' + theme.accentBg + ';--uw-logo-height:' + theme.logoHeight + 'px';
-    return `<div class="uw" style="${styleVars}">
+    const siteCss = `<style>.uw--${theme.slug} .uw__bookmaker strong{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd-value{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd:hover{border-color:${theme.accent} !important;background:${theme.accentBg} !important}</style>`;
+    return `${siteCss}<div class="uw uw--${theme.slug}" style="${styleVars}">
   <div class="uw__head">
     <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${theme.logoUrl ? `<img class="uw__logo" src="${theme.logoUrl}" alt="${escapeHtml(theme.logoAlt)}" height="12" style="height:${theme.logoHeight}px !important;width:auto !important;max-width:140px !important;display:block !important">` : `<span class="uw__logo-text" style="color:${theme.accent};font-size:16px;font-weight:700;letter-spacing:.01em;line-height:1">${escapeHtml(theme.logoText || theme.logoAlt)}</span>`}</a>
-    <span class="uw__bookmaker">${escapeHtml(s.bookmaker)} <strong>${escapeHtml(bookmakerName)}</strong></span>
+    <span class="uw__bookmaker">${escapeHtml(s.bookmaker)} <strong style="color:${theme.accent} !important">${escapeHtml(bookmakerName)}</strong></span>
   </div>
   <div class="uw__match">${c1} <span>vs</span> ${c2}</div>
   <div class="uw__odds">
     <a class="uw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
       <span class="uw__odd-label">1</span>
       <span class="uw__odd-team">${c1}</span>
-      <span class="uw__odd-value">${o1}</span>
+      <span class="uw__odd-value" style="color:${theme.accent} !important">${o1}</span>
     </a>
     <a class="uw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
       <span class="uw__odd-label">${escapeHtml(s.drawLabel)}</span>
       <span class="uw__odd-team">${escapeHtml(s.draw)}</span>
-      <span class="uw__odd-value">${oN}</span>
+      <span class="uw__odd-value" style="color:${theme.accent} !important">${oN}</span>
     </a>
     <a class="uw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
       <span class="uw__odd-label">2</span>
       <span class="uw__odd-team">${c2}</span>
-      <span class="uw__odd-value">${o2}</span>
+      <span class="uw__odd-value" style="color:${theme.accent} !important">${o2}</span>
     </a>
   </div>
   <a class="uw__cta" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${escapeHtml(s.cta.replace("{bookmaker}", bookmakerName))}</a>
@@ -2621,7 +2624,9 @@ function parsePlayerOddsFromText(text) {
   const SITES_OS = SITES_BETTING;
 
   function getOsTheme() {
-    return SITES_OS[$('os-site').value] || SITES_OS["topmercato"];
+    const slug = $('os-site').value;
+    const theme = SITES_OS[slug] || SITES_OS["topmercato"];
+    return Object.assign({}, theme, { slug });
   }
 
   // CSS embarqué : étend l'EMBED_CSS_UW (Odds 1N2) avec la classe modifier
@@ -2667,13 +2672,14 @@ function parsePlayerOddsFromText(text) {
     <a class="uw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
       <span class="uw__odd-label">${s.rank}</span>
       <span class="uw__odd-team">${escapeHtml(s.name || t.player)}</span>
-      <span class="uw__odd-value">${escapeHtml(s.odds || '-')}</span>
+      <span class="uw__odd-value" style="color:${theme.accent} !important">${escapeHtml(s.odds || '-')}</span>
     </a>`).join('');
     const styleVars = '--uw-accent:' + theme.accent + ';--uw-accent-bg:' + theme.accentBg + ';--uw-logo-height:' + theme.logoHeight + 'px';
-    return `<div class="uw uw--scorers" style="${styleVars}">
+    const siteCss = `<style>.uw--${theme.slug} .uw__bookmaker strong{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd-value{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd:hover{border-color:${theme.accent} !important;background:${theme.accentBg} !important}</style>`;
+    return `${siteCss}<div class="uw uw--scorers uw--${theme.slug}" style="${styleVars}">
   <div class="uw__head">
     <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${theme.logoUrl ? `<img class="uw__logo" src="${theme.logoUrl}" alt="${escapeHtml(theme.logoAlt)}" height="12" style="height:${theme.logoHeight}px !important;width:auto !important;max-width:140px !important;display:block !important">` : `<span class="uw__logo-text" style="color:${theme.accent};font-size:16px;font-weight:700;letter-spacing:.01em;line-height:1">${escapeHtml(theme.logoText || theme.logoAlt)}</span>`}</a>
-    <span class="uw__bookmaker">${escapeHtml(t.bookmakerScorer)} <strong>${escapeHtml(bookmakerName)}</strong></span>
+    <span class="uw__bookmaker">${escapeHtml(t.bookmakerScorer)} <strong style="color:${theme.accent} !important">${escapeHtml(bookmakerName)}</strong></span>
   </div>
   ${matchLine}
   <div class="uw__subtitle">${escapeHtml(t.subtitleScorer)}</div>
@@ -2815,7 +2821,9 @@ function parsePlayerOddsFromText(text) {
   const SITES_OU = SITES_BETTING;
 
   function getOuTheme() {
-    return SITES_OU[$('ou-site').value] || SITES_OU["topmercato"];
+    const slug = $('ou-site').value;
+    const theme = SITES_OU[slug] || SITES_OU["topmercato"];
+    return Object.assign({}, theme, { slug });
   }
 
   const EMBED_CSS_OU = `<style>
@@ -2861,13 +2869,14 @@ function parsePlayerOddsFromText(text) {
     <a class="uw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
       <span class="uw__odd-label">Over</span>
       <span class="uw__odd-team">${escapeHtml(s2.threshold)}</span>
-      <span class="uw__odd-value">${escapeHtml(s2.odds || '-')}</span>
+      <span class="uw__odd-value" style="color:${theme.accent} !important">${escapeHtml(s2.odds || '-')}</span>
     </a>`).join('');
     const styleVars = '--uw-accent:' + theme.accent + ';--uw-accent-bg:' + theme.accentBg + ';--uw-logo-height:' + theme.logoHeight + 'px';
-    return `<div class="uw uw--ou" style="${styleVars}">
+    const siteCss = `<style>.uw--${theme.slug} .uw__bookmaker strong{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd-value{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd:hover{border-color:${theme.accent} !important;background:${theme.accentBg} !important}</style>`;
+    return `${siteCss}<div class="uw uw--ou uw--${theme.slug}" style="${styleVars}">
   <div class="uw__head">
     <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${theme.logoUrl ? `<img class="uw__logo" src="${theme.logoUrl}" alt="${escapeHtml(theme.logoAlt)}" height="12" style="height:${theme.logoHeight}px !important;width:auto !important;max-width:140px !important;display:block !important">` : `<span class="uw__logo-text" style="color:${theme.accent};font-size:16px;font-weight:700;letter-spacing:.01em;line-height:1">${escapeHtml(theme.logoText || theme.logoAlt)}</span>`}</a>
-    <span class="uw__bookmaker">${escapeHtml(s.bookmaker)} <strong>${escapeHtml(bookmakerName)}</strong></span>
+    <span class="uw__bookmaker">${escapeHtml(s.bookmaker)} <strong style="color:${theme.accent} !important">${escapeHtml(bookmakerName)}</strong></span>
   </div>
   ${matchLine}
   <div class="uw__subtitle">Over / Under</div>
