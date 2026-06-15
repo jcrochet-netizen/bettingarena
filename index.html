@@ -367,6 +367,9 @@
   /* Variante scorers : ajoute un sous-titre + spacing match réduit */
   .uw__subtitle { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7280; text-align: center; margin-bottom: 12px; }
   .uw--scorers .uw__match { margin-bottom: 6px; }
+  .uw--ou .uw__match { margin-bottom: 6px; }
+  .uw--ou .uw__odds { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .uw--ou .uw__odd-team { min-height: 0; font-size: 16px; }
 </style>
 </head>
 <body>
@@ -391,6 +394,7 @@
     <button type="button" class="drawer__item" data-tab="tab-top3-bu">TOP 3 BasketUSA</button>
     <button type="button" class="drawer__item" data-tab="tab-1n2">Odds 1N2</button>
     <button type="button" class="drawer__item" data-tab="tab-odds-scorers">Odds scorers</button>
+    <button type="button" class="drawer__item" data-tab="tab-odds-ou">Odds Over/Under</button>
     <div class="drawer__cat drawer__cat--sep">Autres</div>
     <button type="button" class="drawer__item" data-tab="tab-essentiel">L'Essentiel TM</button>
     <button type="button" class="drawer__item" data-tab="tab-essentiel-af">L'Essentiel AF</button>
@@ -611,6 +615,111 @@
       <div class="copy-row">
         <button type="button" id="os-copyBtn">Copy HTML</button>
         <span class="status" id="os-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-odds-ou" role="tabpanel">
+    <h2 class="widget-title">Odds Over/Under</h2>
+    <p class="subtitle">Widget Over/Under unifié — choisis le site éditeur puis renseigne les 4 cotes (Over 0,5 / 1,5 / 2,5 / 3,5). Branding, langue et mention légale s'adaptent.</p>
+
+    <div class="panel">
+      <h2>1. Select your website</h2>
+      <label for="ou-site">Site (palette applied to the widget header, badge, dots and names)</label>
+      <select id="ou-site" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
+        <option value="topmercato">Topmercato</option>
+        <option value="afrik-foot-fr">Afrik-Foot FR</option>
+        <option value="afrik-foot-za">Afrik-Foot ZA</option>
+        <option value="afrik-foot-ng">Afrik-Foot NG</option>
+        <option value="sports-mole">Sports Mole</option>
+        <option value="sports-mole-21luckybet">Sports Mole — 21luckybet</option>
+        <option value="sports-mole-betmgm">Sports Mole — betMGM</option>
+        <option value="trivela">Trivela</option>
+        <option value="umdois">UmDoisEsportes</option>
+        <option value="football-whispers">Football Whispers</option>
+        <option value="football-ground-guide">Football Ground Guide</option>
+        <option value="mrfixit">MrFixIt's Tips</option>
+        <option value="al-aire-libre">Al-Aire Libre</option>
+        <option value="soccernet">Soccernet</option>
+      </select>
+    </div>
+
+    <div class="panel">
+      <h2>2. Betclic match URL (optional)</h2>
+      <label for="ou-url">URL</label>
+      <input type="text" id="ou-url" placeholder="https://www.betclic.fr/football-s1/.../paris-saint-germain-olympique-de-marseille-m..." />
+      <div class="hint">Only used to pre-fill the club names shown in the widget header.</div>
+      <div style="margin-top: 12px;">
+        <button type="button" id="ou-parseBtn">Extract clubs</button>
+        <span class="status" id="ou-parseStatus" style="margin-left: 10px;"></span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Teams (widget header)</h2>
+      <div class="row">
+        <div>
+          <label for="ou-club1">Club 1 (home)</label>
+          <input type="text" id="ou-club1" placeholder="Paris Saint-Germain" />
+        </div>
+        <div>
+          <label for="ou-club2">Club 2 (away)</label>
+          <input type="text" id="ou-club2" placeholder="Olympique de Marseille" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>4. Over / Under odds</h2>
+
+      <div class="ocr-zone">
+        <label for="ou-ocrFile" class="ocr-drop">
+          <input type="file" id="ou-ocrFile" accept="image/*" hidden />
+          <span class="ocr-drop__icon">📷</span>
+          <span class="ocr-drop__text">Import a screenshot of the odds — auto-fill via OCR</span>
+          <span class="ocr-drop__hint">PNG/JPG. Ideal: screenshot cropped to the 4 Over odds (0.5/1.5/2.5/3.5 order).</span>
+        </label>
+        <div id="ou-ocrPreview" class="ocr-preview" hidden>
+          <img id="ou-ocrImg" alt="Preview" />
+          <div class="ocr-side">
+            <div class="status" id="ou-ocrStatus">Waiting…</div>
+            <button type="button" class="secondary" id="ou-ocrRetry" hidden>Re-run OCR</button>
+            <button type="button" class="secondary" id="ou-ocrClear">Remove image</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
+        <div>
+          <label for="ou-c05">Over 0,5</label>
+          <input type="text" id="ou-c05" placeholder="1.05" inputmode="decimal" />
+        </div>
+        <div>
+          <label for="ou-c15">Over 1,5</label>
+          <input type="text" id="ou-c15" placeholder="1.35" inputmode="decimal" />
+        </div>
+        <div>
+          <label for="ou-c25">Over 2,5</label>
+          <input type="text" id="ou-c25" placeholder="2.10" inputmode="decimal" />
+        </div>
+        <div>
+          <label for="ou-c35">Over 3,5</label>
+          <input type="text" id="ou-c35" placeholder="3.75" inputmode="decimal" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Preview</h2>
+      <div class="preview-wrap" id="ou-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML to copy</h2>
+      <textarea id="ou-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="ou-copyBtn">Copy HTML</button>
+        <span class="status" id="ou-copyStatus"></span>
       </div>
     </div>
   </div>
@@ -1192,6 +1301,7 @@ function escapeHtml(s) {
 // La langue d'un site est portée par son champ `lang` dans SITES_UW / SITES_OS.
 const I18N = {
   fr: {
+    decSep:          ",",
     bookmaker:       "Cotes",
     bookmakerScorer: "Cotes Buteur",
     drawLabel:       "N",
@@ -1201,6 +1311,7 @@ const I18N = {
     cta:             "Parier sur {bookmaker} →"
   },
   en: {
+    decSep:          ".",
     bookmaker:       "Odds",
     bookmakerScorer: "Scorer odds",
     drawLabel:       "X",
@@ -1210,6 +1321,7 @@ const I18N = {
     cta:             "Bet on {bookmaker} →"
   },
   ptBR: {
+    decSep:          ",",
     bookmaker:       "Odds",
     bookmakerScorer: "Odds artilheiro",
     drawLabel:       "X",
@@ -1219,6 +1331,7 @@ const I18N = {
     cta:             "Aposte em {bookmaker} →"
   },
   es: {
+    decSep:          ",",
     bookmaker:       "Cuotas",
     bookmakerScorer: "Cuotas goleador",
     drawLabel:       "X",
@@ -1253,6 +1366,24 @@ const MARKETS = {
   CL: { // Chile (Superintendencia de Casinos de Juego)
     legal: "Las cuotas son indicativas y pueden variar. Apuestas restringidas a mayores de 18 años. Juega con responsabilidad. Si necesitas ayuda, contacta Jugadores Anónimos Chile."
   }
+};
+
+// ========== SITES Betting (partagés Odds 1N2, Odds Scorers, Odds Over/Under) ==========
+const SITES_BETTING = {
+    "topmercato":            { lang: "fr", market: "FR", label: "Topmercato",          accent: "#e30613", accentBg: "#fdecee", affiliateUrl: "https://www.topmercato.com/go-betclic-arena-live-fr", logoUrl: "https://media.topmercato.com/main/2026/03/TM_1200px_red.png", logoAlt: "Topmercato",            logoHeight: 18 },
+    "afrik-foot-fr":         { lang: "fr", market: "FR", label: "Afrik-Foot FR",       accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
+    "afrik-foot-za":         { lang: "en", market: "ZA", label: "Afrik-Foot ZA",  accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
+    "afrik-foot-ng":         { lang: "en", market: "NG", label: "Afrik-Foot NG",  accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
+    "sports-mole":           { lang: "en", market: "UK", label: "Sports Mole",         accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "#", logoUrl: BRAND_LOGOS["sports-mole"],                                      logoAlt: "Sports Mole",           logoHeight: 22 },
+    "sports-mole-21luckybet":{ lang: "en", market: "UK", label: "Sports Mole — 21luckybet", bookmaker: "21luckybet", accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "https://www.sportsmole.co.uk/online/go/21luckybet", logoUrl: BRAND_LOGOS["sports-mole"], logoAlt: "Sports Mole", logoHeight: 22 },
+    "sports-mole-betmgm":    { lang: "en", market: "UK", label: "Sports Mole — betMGM", bookmaker: "betMGM", accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "https://www.sportsmole.co.uk/online/go/betmgmuk", logoUrl: BRAND_LOGOS["sports-mole"], logoAlt: "Sports Mole", logoHeight: 22 },
+    "trivela":               { lang: "ptBR", market: "BR", label: "Trivela",             accent: "#BE0022", accentBg: "#fce6ea", affiliateUrl: "#", logoUrl: BRAND_LOGOS["trivela"],                                          logoAlt: "Trivela",               logoHeight: 22 },
+    "umdois":                { lang: "ptBR", market: "BR", label: "UmDoisEsportes",      accent: "#000000", accentBg: "#fff8d6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["umdois"],                                           logoAlt: "UmDoisEsportes",        logoHeight: 22 },
+    "football-whispers":     { lang: "en", market: "UK", label: "Football Whispers",   accent: "#44BD32", accentBg: "#e8f7e3", affiliateUrl: "#", logoUrl: BRAND_LOGOS["football-whispers"],                                logoAlt: "Football Whispers",     logoHeight: 22 },
+    "football-ground-guide": { lang: "en", market: "UK", label: "Football Ground Guide", accent: "#1D2A41", accentBg: "#e1eaf2", affiliateUrl: "#", logoUrl: BRAND_LOGOS["football-ground-guide"],                          logoAlt: "Football Ground Guide", logoHeight: 22 },
+    "mrfixit":               { lang: "en", market: "UK", label: "MrFixIt's Tips",      accent: "#EE0000", accentBg: "#fde6e6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["mrfixit"],                                     logoAlt: "MrFixIt's Tips",        logoHeight: 18 },
+    "al-aire-libre":         { lang: "es", market: "CL", label: "Al-Aire Libre",       accent: "#005CB9", accentBg: "#e0ecf6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["al-aire-libre"],                                    logoAlt: "Al-Aire Libre",         logoHeight: 22 },
+    "soccernet":             { lang: "en", market: "NG", label: "Soccernet",           accent: "#66923d", accentBg: "#ecf2e3", affiliateUrl: "#", logoUrl: BRAND_LOGOS["soccernet"],                                        logoAlt: "Soccernet",             logoHeight: 22 }
 };
 
 // ========== Logos brand (base64) — partagés entre Odds 1N2 et Odds Scorers ==========
@@ -2293,22 +2424,7 @@ function parsePlayerOddsFromText(text) {
 
 // ========== WIDGET : 1N2 unifié (Topmercato + Afrik-Foot FR) ==========
 (function() {
-  const SITES_UW = {
-    "topmercato":            { lang: "fr", market: "FR", label: "Topmercato",          accent: "#e30613", accentBg: "#fdecee", affiliateUrl: "https://www.topmercato.com/go-betclic-arena-live-fr", logoUrl: "https://media.topmercato.com/main/2026/03/TM_1200px_red.png", logoAlt: "Topmercato",            logoHeight: 18 },
-    "afrik-foot-fr":         { lang: "fr", market: "FR", label: "Afrik-Foot FR",       accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
-    "afrik-foot-za":         { lang: "en", market: "ZA", label: "Afrik-Foot ZA",  accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
-    "afrik-foot-ng":         { lang: "en", market: "NG", label: "Afrik-Foot NG",  accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
-    "sports-mole":           { lang: "en", market: "UK", label: "Sports Mole",         accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "#", logoUrl: BRAND_LOGOS["sports-mole"],                                      logoAlt: "Sports Mole",           logoHeight: 22 },
-    "sports-mole-21luckybet":{ lang: "en", market: "UK", label: "Sports Mole — 21luckybet", bookmaker: "21luckybet", accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "https://www.sportsmole.co.uk/online/go/21luckybet", logoUrl: BRAND_LOGOS["sports-mole"], logoAlt: "Sports Mole", logoHeight: 22 },
-    "sports-mole-betmgm":    { lang: "en", market: "UK", label: "Sports Mole — betMGM", bookmaker: "betMGM", accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "https://www.sportsmole.co.uk/online/go/betmgmuk", logoUrl: BRAND_LOGOS["sports-mole"], logoAlt: "Sports Mole", logoHeight: 22 },
-    "trivela":               { lang: "ptBR", market: "BR", label: "Trivela",             accent: "#BE0022", accentBg: "#fce6ea", affiliateUrl: "#", logoUrl: BRAND_LOGOS["trivela"],                                          logoAlt: "Trivela",               logoHeight: 22 },
-    "umdois":                { lang: "ptBR", market: "BR", label: "UmDoisEsportes",      accent: "#000000", accentBg: "#fff8d6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["umdois"],                                           logoAlt: "UmDoisEsportes",        logoHeight: 22 },
-    "football-whispers":     { lang: "en", market: "UK", label: "Football Whispers",   accent: "#44BD32", accentBg: "#e8f7e3", affiliateUrl: "#", logoUrl: BRAND_LOGOS["football-whispers"],                                logoAlt: "Football Whispers",     logoHeight: 22 },
-    "football-ground-guide": { lang: "en", market: "UK", label: "Football Ground Guide", accent: "#1D2A41", accentBg: "#e1eaf2", affiliateUrl: "#", logoUrl: BRAND_LOGOS["football-ground-guide"],                          logoAlt: "Football Ground Guide", logoHeight: 22 },
-    "mrfixit":               { lang: "en", market: "UK", label: "MrFixIt's Tips",      accent: "#EE0000", accentBg: "#fde6e6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["mrfixit"],                                     logoAlt: "MrFixIt's Tips",        logoHeight: 18 },
-    "al-aire-libre":         { lang: "es", market: "CL", label: "Al-Aire Libre",       accent: "#005CB9", accentBg: "#e0ecf6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["al-aire-libre"],                                    logoAlt: "Al-Aire Libre",         logoHeight: 22 },
-    "soccernet":             { lang: "en", market: "NG", label: "Soccernet",           accent: "#66923d", accentBg: "#ecf2e3", affiliateUrl: "#", logoUrl: BRAND_LOGOS["soccernet"],                                        logoAlt: "Soccernet",             logoHeight: 22 }
-  };
+  const SITES_UW = SITES_BETTING;
 
   function getUwTheme() {
     return SITES_UW[$('b12-site').value] || SITES_UW["topmercato"];
@@ -2499,22 +2615,7 @@ function parsePlayerOddsFromText(text) {
 
 // ========== WIDGET : Odds scorers (Topmercato + Afrik-Foot FR) ==========
 (function() {
-  const SITES_OS = {
-    "topmercato":            { lang: "fr", market: "FR", label: "Topmercato",          accent: "#e30613", accentBg: "#fdecee", affiliateUrl: "https://www.topmercato.com/go-betclic-arena-live-fr", logoUrl: "https://media.topmercato.com/main/2026/03/TM_1200px_red.png", logoAlt: "Topmercato",            logoHeight: 18 },
-    "afrik-foot-fr":         { lang: "fr", market: "FR", label: "Afrik-Foot FR",       accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
-    "afrik-foot-za":         { lang: "en", market: "ZA", label: "Afrik-Foot ZA",  accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
-    "afrik-foot-ng":         { lang: "en", market: "NG", label: "Afrik-Foot NG",  accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
-    "sports-mole":           { lang: "en", market: "UK", label: "Sports Mole",         accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "#", logoUrl: BRAND_LOGOS["sports-mole"],                                      logoAlt: "Sports Mole",           logoHeight: 22 },
-    "sports-mole-21luckybet":{ lang: "en", market: "UK", label: "Sports Mole — 21luckybet", bookmaker: "21luckybet", accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "https://www.sportsmole.co.uk/online/go/21luckybet", logoUrl: BRAND_LOGOS["sports-mole"], logoAlt: "Sports Mole", logoHeight: 22 },
-    "sports-mole-betmgm":    { lang: "en", market: "UK", label: "Sports Mole — betMGM", bookmaker: "betMGM", accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "https://www.sportsmole.co.uk/online/go/betmgmuk", logoUrl: BRAND_LOGOS["sports-mole"], logoAlt: "Sports Mole", logoHeight: 22 },
-    "trivela":               { lang: "ptBR", market: "BR", label: "Trivela",             accent: "#BE0022", accentBg: "#fce6ea", affiliateUrl: "#", logoUrl: BRAND_LOGOS["trivela"],                                          logoAlt: "Trivela",               logoHeight: 22 },
-    "umdois":                { lang: "ptBR", market: "BR", label: "UmDoisEsportes",      accent: "#000000", accentBg: "#fff8d6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["umdois"],                                           logoAlt: "UmDoisEsportes",        logoHeight: 22 },
-    "football-whispers":     { lang: "en", market: "UK", label: "Football Whispers",   accent: "#44BD32", accentBg: "#e8f7e3", affiliateUrl: "#", logoUrl: BRAND_LOGOS["football-whispers"],                                logoAlt: "Football Whispers",     logoHeight: 22 },
-    "football-ground-guide": { lang: "en", market: "UK", label: "Football Ground Guide", accent: "#1D2A41", accentBg: "#e1eaf2", affiliateUrl: "#", logoUrl: BRAND_LOGOS["football-ground-guide"],                          logoAlt: "Football Ground Guide", logoHeight: 22 },
-    "mrfixit":               { lang: "en", market: "UK", label: "MrFixIt's Tips",      accent: "#EE0000", accentBg: "#fde6e6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["mrfixit"],                                     logoAlt: "MrFixIt's Tips",        logoHeight: 18 },
-    "al-aire-libre":         { lang: "es", market: "CL", label: "Al-Aire Libre",       accent: "#005CB9", accentBg: "#e0ecf6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["al-aire-libre"],                                    logoAlt: "Al-Aire Libre",         logoHeight: 22 },
-    "soccernet":             { lang: "en", market: "NG", label: "Soccernet",           accent: "#66923d", accentBg: "#ecf2e3", affiliateUrl: "#", logoUrl: BRAND_LOGOS["soccernet"],                                        logoAlt: "Soccernet",             logoHeight: 22 }
-  };
+  const SITES_OS = SITES_BETTING;
 
   function getOsTheme() {
     return SITES_OS[$('os-site').value] || SITES_OS["topmercato"];
@@ -2704,6 +2805,195 @@ function parsePlayerOddsFromText(text) {
   });
 
   osRender();
+})();
+
+// ========== WIDGET : Odds Over/Under (Topmercato + Afrik-Foot FR + variantes) ==========
+(function() {
+  const SITES_OU = SITES_BETTING;
+
+  function getOuTheme() {
+    return SITES_OU[$('ou-site').value] || SITES_OU["topmercato"];
+  }
+
+  const EMBED_CSS_OU = `<style>
+.uw{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;border:1px solid #e3e6eb;border-radius:10px;background:#fff;padding:18px 20px;max-width:560px;color:#1a1d23;margin:16px auto;--uw-accent:#e30613;--uw-accent-bg:#fdecee;--uw-logo-height:18px}
+.uw__head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #eef0f3}
+.uw__logo{height:var(--uw-logo-height);width:auto;max-width:140px;display:block}
+.uw__logo-text{font-size:16px;font-weight:700;letter-spacing:.01em}
+.uw__bookmaker{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#6b7280}
+.uw__bookmaker strong{font-weight:700;color:var(--uw-accent);margin-left:4px}
+.uw__match{font-size:17px;font-weight:700;margin-bottom:14px;text-align:center}
+.uw__match span{color:#6b7280;font-weight:400;margin:0 6px}
+.uw--ou .uw__match{margin-bottom:6px}
+.uw__subtitle{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;text-align:center;margin-bottom:12px}
+.uw__odds{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
+.uw__odd{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;border:1px solid #e3e6eb;border-radius:8px;background:#fafbfc;text-decoration:none;color:#1a1d23;transition:all .15s}
+.uw__odd:hover{border-color:var(--uw-accent);background:var(--uw-accent-bg)}
+.uw__odd-label{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.uw__odd-team{font-size:16px;font-weight:700;text-align:center;margin-bottom:6px;display:flex;align-items:center}
+.uw__odd-value{font-size:20px;font-weight:700;color:var(--uw-accent)}
+.uw__cta{display:block;text-align:center;margin-top:14px;font-size:15px;font-weight:600;color:#1f6fd6;text-decoration:none}
+.uw__cta:hover{color:#1854a8}
+.uw__legal{font-size:10px;color:#9ca3af;text-align:center;margin-top:10px;line-height:1.4}
+</style>
+`;
+
+  function buildOuHtml({ club1, club2, c05, c15, c25, c35, theme }) {
+    const safeUrl = theme.affiliateUrl;
+    const s = I18N[theme.lang] || I18N.fr;
+    const bookmakerName = theme.bookmaker || "Betclic";
+    const cl1 = escapeHtml(club1 || 'Club 1');
+    const cl2 = escapeHtml(club2 || 'Club 2');
+    const matchLine = (club1 || club2)
+      ? `<div class="uw__match">${cl1} <span>vs</span> ${cl2}</div>`
+      : '';
+    const ds = s.decSep || ',';
+    const slots = [
+      { threshold: '0' + ds + '5', odds: c05 },
+      { threshold: '1' + ds + '5', odds: c15 },
+      { threshold: '2' + ds + '5', odds: c25 },
+      { threshold: '3' + ds + '5', odds: c35 },
+    ];
+    const oddsHtml = slots.map(s2 => `
+    <a class="uw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
+      <span class="uw__odd-label">Over</span>
+      <span class="uw__odd-team">${escapeHtml(s2.threshold)}</span>
+      <span class="uw__odd-value">${escapeHtml(s2.odds || '-')}</span>
+    </a>`).join('');
+    const styleVars = '--uw-accent:' + theme.accent + ';--uw-accent-bg:' + theme.accentBg + ';--uw-logo-height:' + theme.logoHeight + 'px';
+    return `<div class="uw uw--ou" style="${styleVars}">
+  <div class="uw__head">
+    <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${theme.logoUrl ? `<img class="uw__logo" src="${theme.logoUrl}" alt="${escapeHtml(theme.logoAlt)}">` : `<span class="uw__logo-text" style="color:${theme.accent}">${escapeHtml(theme.logoText || theme.logoAlt)}</span>`}</a>
+    <span class="uw__bookmaker">${escapeHtml(s.bookmaker)} <strong>${escapeHtml(bookmakerName)}</strong></span>
+  </div>
+  ${matchLine}
+  <div class="uw__subtitle">Over / Under</div>
+  <div class="uw__odds">${oddsHtml}
+  </div>
+  <a class="uw__cta" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${escapeHtml(s.cta.replace("{bookmaker}", bookmakerName))}</a>
+  <div class="uw__legal">${escapeHtml((MARKETS[theme.market] || {}).legal || '')}</div>
+</div>`;
+  }
+
+  function ouRender() {
+    const theme = getOuTheme();
+    const data = {
+      club1: $('ou-club1').value.trim(),
+      club2: $('ou-club2').value.trim(),
+      c05: $('ou-c05').value.trim(),
+      c15: $('ou-c15').value.trim(),
+      c25: $('ou-c25').value.trim(),
+      c35: $('ou-c35').value.trim(),
+      theme
+    };
+    const html = buildOuHtml(data);
+    $('ou-preview').innerHTML = html;
+    $('ou-output').value = EMBED_CSS_OU + html;
+  }
+
+  $('ou-site').addEventListener('change', ouRender);
+
+  $('ou-parseBtn').addEventListener('click', () => {
+    const url = $('ou-url').value.trim();
+    const status = $('ou-parseStatus');
+    if (!url) { status.textContent = "Paste a URL first."; return; }
+    const slug = extractBetclicSlug(url);
+    if (!slug) { status.textContent = "URL not recognised (Betclic expected)."; return; }
+    const parsed = parseMatchSlug(slug);
+    $('ou-club1').value = parsed.club1;
+    $('ou-club2').value = parsed.club2;
+    if (parsed.method === "dictionary") status.textContent = "✓ Clubs recognised.";
+    else if (parsed.method === "midpoint-fallback") status.textContent = "⚠ Unknown clubs, approximate split — please verify.";
+    else status.textContent = "⚠ Could not split — please fix manually.";
+    ouRender();
+  });
+
+  ['ou-club1','ou-club2','ou-c05','ou-c15','ou-c25','ou-c35'].forEach(id => {
+    $(id).addEventListener('input', ouRender);
+  });
+
+  let ouCurrentBlob = null;
+
+  async function runOCROu(blob) {
+    const status = $('ou-ocrStatus');
+    status.textContent = "Loading OCR engine…";
+    try {
+      if (!window.Tesseract) {
+        status.textContent = "⚠ Tesseract.js not loaded (check your connection).";
+        return;
+      }
+      status.textContent = "Pre-processing image…";
+      const processed = await preprocessForOCR(blob);
+      const worker = await Tesseract.createWorker('eng', 1, {
+        logger: m => {
+          if (m.status === 'recognizing text') status.textContent = `Analysing… ${Math.round(m.progress * 100)}%`;
+          else if (m.status === 'loading tesseract core' || m.status === 'initializing tesseract') status.textContent = "Initialising OCR engine…";
+          else if (m.status === 'loading language traineddata') status.textContent = "Loading model…";
+        }
+      });
+      await worker.setParameters({
+        tessedit_char_whitelist: '0123456789.,',
+        tessedit_pageseg_mode: '6'
+      });
+      const { data: { text } } = await worker.recognize(processed);
+      await worker.terminate();
+
+      const odds = parseOddsFromText(text);
+      const targets = ['ou-c05','ou-c15','ou-c25','ou-c35'];
+      if (odds.length >= 4) {
+        targets.forEach((id, i) => { $(id).value = odds[i]; });
+        ouRender();
+        status.innerHTML = `✓ 4 odds detected: <strong>${odds.slice(0,4).join(' / ')}</strong>. Check the order.`;
+        if (odds.length > 4) status.innerHTML += ` <br><span style="font-size:11px">(${odds.length} values found, only the first 4 used.)</span>`;
+      } else if (odds.length > 0) {
+        odds.forEach((v, i) => { if (i < targets.length) $(targets[i]).value = v; });
+        ouRender();
+        status.innerHTML = `⚠ Only ${odds.length} odds detected: ${odds.join(' / ')}. Please complete manually.`;
+      } else {
+        status.innerHTML = "⚠ No odds detected. Try a sharper screenshot cropped to the numbers.";
+      }
+      $('ou-ocrRetry').hidden = false;
+    } catch (err) {
+      status.textContent = "⚠ OCR error: " + (err.message || err);
+      $('ou-ocrRetry').hidden = false;
+    }
+  }
+
+  $('ou-ocrFile').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    ouCurrentBlob = file;
+    $('ou-ocrImg').src = URL.createObjectURL(file);
+    $('ou-ocrPreview').hidden = false;
+    runOCROu(file);
+  });
+
+  $('ou-ocrRetry').addEventListener('click', () => {
+    if (ouCurrentBlob) runOCROu(ouCurrentBlob);
+  });
+
+  $('ou-ocrClear').addEventListener('click', () => {
+    ouCurrentBlob = null;
+    $('ou-ocrFile').value = '';
+    $('ou-ocrImg').src = '';
+    $('ou-ocrPreview').hidden = true;
+    $('ou-ocrRetry').hidden = true;
+  });
+
+  $('ou-copyBtn').addEventListener('click', async () => {
+    const ta = $('ou-output');
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('ou-copyStatus').textContent = "✓ Copied.";
+      setTimeout(() => $('ou-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('ou-copyStatus').textContent = "✓ Copied.";
+    }
+  });
+
+  ouRender();
 })();
 
 </script>
