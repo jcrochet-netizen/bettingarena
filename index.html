@@ -2463,7 +2463,7 @@ function parsePlayerOddsFromText(text) {
     const styleVars = '--uw-accent:' + theme.accent + ';--uw-accent-bg:' + theme.accentBg + ';--uw-logo-height:' + theme.logoHeight + 'px';
     return `<div class="uw" style="${styleVars}">
   <div class="uw__head">
-    <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${theme.logoUrl ? `<img class="uw__logo" src="${theme.logoUrl}" alt="${escapeHtml(theme.logoAlt)}">` : `<span class="uw__logo-text" style="color:${theme.accent}">${escapeHtml(theme.logoText || theme.logoAlt)}</span>`}</a>
+    <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${theme.logoUrl ? `<img class="uw__logo" src="${theme.logoUrl}" alt="${escapeHtml(theme.logoAlt)}" style="height:${theme.logoHeight}px !important;width:auto !important;max-width:140px !important;display:block !important">` : `<span class="uw__logo-text" style="color:${theme.accent};font-size:16px;font-weight:700;letter-spacing:.01em;line-height:1">${escapeHtml(theme.logoText || theme.logoAlt)}</span>`}</a>
     <span class="uw__bookmaker">${escapeHtml(s.bookmaker)} <strong>${escapeHtml(bookmakerName)}</strong></span>
   </div>
   <div class="uw__match">${c1} <span>vs</span> ${c2}</div>
@@ -2669,7 +2669,7 @@ function parsePlayerOddsFromText(text) {
     const styleVars = '--uw-accent:' + theme.accent + ';--uw-accent-bg:' + theme.accentBg + ';--uw-logo-height:' + theme.logoHeight + 'px';
     return `<div class="uw uw--scorers" style="${styleVars}">
   <div class="uw__head">
-    <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${theme.logoUrl ? `<img class="uw__logo" src="${theme.logoUrl}" alt="${escapeHtml(theme.logoAlt)}">` : `<span class="uw__logo-text" style="color:${theme.accent}">${escapeHtml(theme.logoText || theme.logoAlt)}</span>`}</a>
+    <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${theme.logoUrl ? `<img class="uw__logo" src="${theme.logoUrl}" alt="${escapeHtml(theme.logoAlt)}" style="height:${theme.logoHeight}px !important;width:auto !important;max-width:140px !important;display:block !important">` : `<span class="uw__logo-text" style="color:${theme.accent};font-size:16px;font-weight:700;letter-spacing:.01em;line-height:1">${escapeHtml(theme.logoText || theme.logoAlt)}</span>`}</a>
     <span class="uw__bookmaker">${escapeHtml(t.bookmakerScorer)} <strong>${escapeHtml(bookmakerName)}</strong></span>
   </div>
   ${matchLine}
@@ -2863,7 +2863,7 @@ function parsePlayerOddsFromText(text) {
     const styleVars = '--uw-accent:' + theme.accent + ';--uw-accent-bg:' + theme.accentBg + ';--uw-logo-height:' + theme.logoHeight + 'px';
     return `<div class="uw uw--ou" style="${styleVars}">
   <div class="uw__head">
-    <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${theme.logoUrl ? `<img class="uw__logo" src="${theme.logoUrl}" alt="${escapeHtml(theme.logoAlt)}">` : `<span class="uw__logo-text" style="color:${theme.accent}">${escapeHtml(theme.logoText || theme.logoAlt)}</span>`}</a>
+    <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${theme.logoUrl ? `<img class="uw__logo" src="${theme.logoUrl}" alt="${escapeHtml(theme.logoAlt)}" style="height:${theme.logoHeight}px !important;width:auto !important;max-width:140px !important;display:block !important">` : `<span class="uw__logo-text" style="color:${theme.accent};font-size:16px;font-weight:700;letter-spacing:.01em;line-height:1">${escapeHtml(theme.logoText || theme.logoAlt)}</span>`}</a>
     <span class="uw__bookmaker">${escapeHtml(s.bookmaker)} <strong>${escapeHtml(bookmakerName)}</strong></span>
   </div>
   ${matchLine}
