@@ -410,6 +410,8 @@
         <option value="afrik-foot-za">Afrik-Foot ZA</option>
         <option value="afrik-foot-ng">Afrik-Foot NG</option>
         <option value="sports-mole">Sports Mole</option>
+        <option value="sports-mole-21luckybet">Sports Mole — 21luckybet</option>
+        <option value="sports-mole-betmgm">Sports Mole — betMGM</option>
         <option value="trivela">Trivela</option>
         <option value="umdois">UmDoisEsportes</option>
         <option value="football-whispers">Football Whispers</option>
@@ -1194,7 +1196,7 @@ const I18N = {
     draw:            "Match nul",
     player:          "Joueur",
     subtitleScorer:  "Top 3 — Meilleures cotes buteur",
-    cta:             "Parier sur Betclic →"
+    cta:             "Parier sur {bookmaker} →"
   },
   en: {
     bookmaker:       "Odds",
@@ -1203,7 +1205,7 @@ const I18N = {
     draw:            "Draw",
     player:          "Player",
     subtitleScorer:  "Top 3 — Best scorer odds",
-    cta:             "Bet on Betclic →"
+    cta:             "Bet on {bookmaker} →"
   },
   ptBR: {
     bookmaker:       "Odds",
@@ -1212,7 +1214,7 @@ const I18N = {
     draw:            "Empate",
     player:          "Jogador",
     subtitleScorer:  "Top 3 — Melhores odds para artilheiro",
-    cta:             "Aposte na Betclic →"
+    cta:             "Aposte em {bookmaker} →"
   },
   es: {
     bookmaker:       "Cuotas",
@@ -1221,7 +1223,7 @@ const I18N = {
     draw:            "Empate",
     player:          "Jugador",
     subtitleScorer:  "Top 3 — Mejores cuotas goleador",
-    cta:             "Apuesta en Betclic →"
+    cta:             "Apuesta en {bookmaker} →"
   }
 };
 
@@ -2295,6 +2297,8 @@ function parsePlayerOddsFromText(text) {
     "afrik-foot-za":         { lang: "en", market: "ZA", label: "Afrik-Foot ZA",  accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
     "afrik-foot-ng":         { lang: "en", market: "NG", label: "Afrik-Foot NG",  accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: "https://media.afrik-foot.com/main/2026/05/afrikfoot.png",       logoAlt: "Afrik-Foot",            logoHeight: 22 },
     "sports-mole":           { lang: "en", market: "UK", label: "Sports Mole",         accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "#", logoUrl: BRAND_LOGOS["sports-mole"],                                      logoAlt: "Sports Mole",           logoHeight: 22 },
+    "sports-mole-21luckybet":{ lang: "en", market: "UK", label: "Sports Mole — 21luckybet", bookmaker: "21luckybet", accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "https://www.sportsmole.co.uk/online/go/21luckybet", logoUrl: BRAND_LOGOS["sports-mole"], logoAlt: "Sports Mole", logoHeight: 22 },
+    "sports-mole-betmgm":    { lang: "en", market: "UK", label: "Sports Mole — betMGM", bookmaker: "betMGM", accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "https://www.sportsmole.co.uk/online/go/betmgmuk", logoUrl: BRAND_LOGOS["sports-mole"], logoAlt: "Sports Mole", logoHeight: 22 },
     "trivela":               { lang: "ptBR", market: "BR", label: "Trivela",             accent: "#BE0022", accentBg: "#fce6ea", affiliateUrl: "#", logoUrl: BRAND_LOGOS["trivela"],                                          logoAlt: "Trivela",               logoHeight: 22 },
     "umdois":                { lang: "ptBR", market: "BR", label: "UmDoisEsportes",      accent: "#000000", accentBg: "#fff8d6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["umdois"],                                           logoAlt: "UmDoisEsportes",        logoHeight: 22 },
     "football-whispers":     { lang: "en", market: "UK", label: "Football Whispers",   accent: "#44BD32", accentBg: "#e8f7e3", affiliateUrl: "#", logoUrl: BRAND_LOGOS["football-whispers"],                                logoAlt: "Football Whispers",     logoHeight: 22 },
@@ -2332,6 +2336,7 @@ function parsePlayerOddsFromText(text) {
   function buildUwHtml({ club1, club2, cote1, coteN, cote2, theme }) {
     const safeUrl = theme.affiliateUrl;
     const s = I18N[theme.lang] || I18N.fr;
+    const bookmakerName = theme.bookmaker || "Betclic";
     const c1 = escapeHtml(club1 || 'Club 1');
     const c2 = escapeHtml(club2 || 'Club 2');
     const o1 = escapeHtml(cote1 || '-');
@@ -2341,7 +2346,7 @@ function parsePlayerOddsFromText(text) {
     return `<div class="uw" style="${styleVars}">
   <div class="uw__head">
     <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${theme.logoUrl ? `<img class="uw__logo" src="${theme.logoUrl}" alt="${escapeHtml(theme.logoAlt)}">` : `<span class="uw__logo-text" style="color:${theme.accent}">${escapeHtml(theme.logoText || theme.logoAlt)}</span>`}</a>
-    <span class="uw__bookmaker">${escapeHtml(s.bookmaker)} <strong>Betclic</strong></span>
+    <span class="uw__bookmaker">${escapeHtml(s.bookmaker)} <strong>${escapeHtml(bookmakerName)}</strong></span>
   </div>
   <div class="uw__match">${c1} <span>vs</span> ${c2}</div>
   <div class="uw__odds">
@@ -2361,7 +2366,7 @@ function parsePlayerOddsFromText(text) {
       <span class="uw__odd-value">${o2}</span>
     </a>
   </div>
-  <a class="uw__cta" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${escapeHtml(s.cta)}</a>
+  <a class="uw__cta" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${escapeHtml(s.cta.replace("{bookmaker}", bookmakerName))}</a>
   <div class="uw__legal">${escapeHtml((MARKETS[theme.market] || {}).legal || "")}</div>
 </div>`;
   }
@@ -2539,6 +2544,7 @@ function parsePlayerOddsFromText(text) {
   function buildOsHtml({ club1, club2, p1, c1, p2, c2, p3, c3, theme }) {
     const safeUrl = theme.affiliateUrl;
     const t = I18N[theme.lang] || I18N.fr;
+    const bookmakerName = theme.bookmaker || "Betclic";
     const cl1 = escapeHtml(club1 || 'Club 1');
     const cl2 = escapeHtml(club2 || 'Club 2');
     const matchLine = (club1 || club2)
@@ -2559,13 +2565,13 @@ function parsePlayerOddsFromText(text) {
     return `<div class="uw uw--scorers" style="${styleVars}">
   <div class="uw__head">
     <a href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${theme.logoUrl ? `<img class="uw__logo" src="${theme.logoUrl}" alt="${escapeHtml(theme.logoAlt)}">` : `<span class="uw__logo-text" style="color:${theme.accent}">${escapeHtml(theme.logoText || theme.logoAlt)}</span>`}</a>
-    <span class="uw__bookmaker">${escapeHtml(t.bookmakerScorer)} <strong>Betclic</strong></span>
+    <span class="uw__bookmaker">${escapeHtml(t.bookmakerScorer)} <strong>${escapeHtml(bookmakerName)}</strong></span>
   </div>
   ${matchLine}
   <div class="uw__subtitle">${escapeHtml(t.subtitleScorer)}</div>
   <div class="uw__odds">${oddsHtml}
   </div>
-  <a class="uw__cta" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${escapeHtml(t.cta)}</a>
+  <a class="uw__cta" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">${escapeHtml(t.cta.replace("{bookmaker}", bookmakerName))}</a>
   <div class="uw__legal">${escapeHtml((MARKETS[theme.market] || {}).legal || "")}</div>
 </div>`;
   }
