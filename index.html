@@ -680,7 +680,7 @@
           <input type="file" id="ou-ocrFile" accept="image/*" hidden />
           <span class="ocr-drop__icon">📷</span>
           <span class="ocr-drop__text">Import a screenshot of the odds — auto-fill via OCR</span>
-          <span class="ocr-drop__hint">PNG/JPG. Ideal: screenshot cropped to the 4 Over odds (0.5/1.5/2.5/3.5 order).</span>
+          <span class="ocr-drop__hint">PNG/JPG. Ideal: screenshot cropped to the 8 odds — Over 0.5/1.5/2.5/3.5 then Under 0.5/1.5/2.5/3.5.</span>
         </label>
         <div id="ou-ocrPreview" class="ocr-preview" hidden>
           <img id="ou-ocrImg" alt="Preview" />
@@ -708,6 +708,25 @@
         <div>
           <label for="ou-c35">Over 3,5</label>
           <input type="text" id="ou-c35" placeholder="3.75" inputmode="decimal" />
+        </div>
+      </div>
+
+      <div class="row" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
+        <div>
+          <label for="ou-u05">Under 0,5</label>
+          <input type="text" id="ou-u05" placeholder="9.50" inputmode="decimal" />
+        </div>
+        <div>
+          <label for="ou-u15">Under 1,5</label>
+          <input type="text" id="ou-u15" placeholder="3.10" inputmode="decimal" />
+        </div>
+        <div>
+          <label for="ou-u25">Under 2,5</label>
+          <input type="text" id="ou-u25" placeholder="1.70" inputmode="decimal" />
+        </div>
+        <div>
+          <label for="ou-u35">Under 3,5</label>
+          <input type="text" id="ou-u35" placeholder="1.27" inputmode="decimal" />
         </div>
       </div>
     </div>
@@ -2964,7 +2983,7 @@ function parsePlayerOddsFromText(text) {
 </style>
 `;
 
-  function buildOuHtml({ club1, club2, c05, c15, c25, c35, theme }) {
+  function buildOuHtml({ club1, club2, c05, c15, c25, c35, u05, u15, u25, u35, theme }) {
     const safeUrl = theme.affiliateUrl;
     const s = I18N[theme.lang] || I18N.fr;
     const bookmakerName = theme.bookmaker || "Betclic";
@@ -2975,14 +2994,18 @@ function parsePlayerOddsFromText(text) {
       : '';
     const ds = s.decSep || ',';
     const slots = [
-      { threshold: '0' + ds + '5', odds: c05 },
-      { threshold: '1' + ds + '5', odds: c15 },
-      { threshold: '2' + ds + '5', odds: c25 },
-      { threshold: '3' + ds + '5', odds: c35 },
+      { label: 'Over',  threshold: '0' + ds + '5', odds: c05 },
+      { label: 'Over',  threshold: '1' + ds + '5', odds: c15 },
+      { label: 'Over',  threshold: '2' + ds + '5', odds: c25 },
+      { label: 'Over',  threshold: '3' + ds + '5', odds: c35 },
+      { label: 'Under', threshold: '0' + ds + '5', odds: u05 },
+      { label: 'Under', threshold: '1' + ds + '5', odds: u15 },
+      { label: 'Under', threshold: '2' + ds + '5', odds: u25 },
+      { label: 'Under', threshold: '3' + ds + '5', odds: u35 },
     ];
     const oddsHtml = slots.map(s2 => `
     <a class="uw__odd" href="${safeUrl}" target="_blank" rel="nofollow sponsored noopener">
-      <span class="uw__odd-label">Over</span>
+      <span class="uw__odd-label">${s2.label}</span>
       <span class="uw__odd-team" style="color:#1a1d23 !important">${escapeHtml(s2.threshold)}</span>
       <span class="uw__odd-value" style="color:${theme.accent} !important">${escapeHtml(s2.odds || '-')}</span>
     </a>`).join('');
@@ -3011,6 +3034,10 @@ function parsePlayerOddsFromText(text) {
       c15: $('ou-c15').value.trim(),
       c25: $('ou-c25').value.trim(),
       c35: $('ou-c35').value.trim(),
+      u05: $('ou-u05').value.trim(),
+      u15: $('ou-u15').value.trim(),
+      u25: $('ou-u25').value.trim(),
+      u35: $('ou-u35').value.trim(),
       theme
     };
     const html = buildOuHtml(data);
@@ -3035,7 +3062,7 @@ function parsePlayerOddsFromText(text) {
     ouRender();
   });
 
-  ['ou-club1','ou-club2','ou-c05','ou-c15','ou-c25','ou-c35'].forEach(id => {
+  ['ou-club1','ou-club2','ou-c05','ou-c15','ou-c25','ou-c35','ou-u05','ou-u15','ou-u25','ou-u35'].forEach(id => {
     $(id).addEventListener('input', ouRender);
   });
 
@@ -3066,12 +3093,12 @@ function parsePlayerOddsFromText(text) {
       await worker.terminate();
 
       const odds = parseOddsFromText(text);
-      const targets = ['ou-c05','ou-c15','ou-c25','ou-c35'];
-      if (odds.length >= 4) {
+      const targets = ['ou-c05','ou-c15','ou-c25','ou-c35','ou-u05','ou-u15','ou-u25','ou-u35'];
+      if (odds.length >= 8) {
         targets.forEach((id, i) => { $(id).value = odds[i]; });
         ouRender();
-        status.innerHTML = `✓ 4 odds detected: <strong>${odds.slice(0,4).join(' / ')}</strong>. Check the order.`;
-        if (odds.length > 4) status.innerHTML += ` <br><span style="font-size:11px">(${odds.length} values found, only the first 4 used.)</span>`;
+        status.innerHTML = `✓ 8 odds detected: <strong>${odds.slice(0,8).join(' / ')}</strong>. Check the order (Over then Under).`;
+        if (odds.length > 8) status.innerHTML += ` <br><span style="font-size:11px">(${odds.length} values found, only the first 8 used.)</span>`;
       } else if (odds.length > 0) {
         odds.forEach((v, i) => { if (i < targets.length) $(targets[i]).value = v; });
         ouRender();
