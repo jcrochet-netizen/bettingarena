@@ -624,7 +624,7 @@
 
   <div class="tab-panel" id="tab-odds-ou" role="tabpanel">
     <h2 class="widget-title">Odds Over/Under</h2>
-    <p class="subtitle">Widget Over/Under unifié — choisis le site éditeur puis renseigne les 4 cotes (Over 0,5 / 1,5 / 2,5 / 3,5). Branding, langue et mention légale s'adaptent.</p>
+    <p class="subtitle">Widget Over/Under unifié — choisis le site éditeur, saisis les équipes et les 8 cotes (Over puis Under, 0,5 / 1,5 / 2,5 / 3,5). Branding, langue et mention légale s'adaptent.</p>
 
     <div class="panel">
       <h2>1. Select your website</h2>
@@ -648,18 +648,7 @@
     </div>
 
     <div class="panel">
-      <h2>2. Betclic match URL (optional)</h2>
-      <label for="ou-url">URL</label>
-      <input type="text" id="ou-url" placeholder="https://www.betclic.fr/football-s1/.../paris-saint-germain-olympique-de-marseille-m..." />
-      <div class="hint">Only used to pre-fill the club names shown in the widget header.</div>
-      <div style="margin-top: 12px;">
-        <button type="button" id="ou-parseBtn">Extract clubs</button>
-        <span class="status" id="ou-parseStatus" style="margin-left: 10px;"></span>
-      </div>
-    </div>
-
-    <div class="panel">
-      <h2>3. Teams (widget header)</h2>
+      <h2>2. Teams (widget header)</h2>
       <div class="row">
         <div>
           <label for="ou-club1">Club 1 (home)</label>
@@ -673,24 +662,7 @@
     </div>
 
     <div class="panel">
-      <h2>4. Over / Under odds</h2>
-
-      <div class="ocr-zone">
-        <label for="ou-ocrFile" class="ocr-drop">
-          <input type="file" id="ou-ocrFile" accept="image/*" hidden />
-          <span class="ocr-drop__icon">📷</span>
-          <span class="ocr-drop__text">Import a screenshot of the odds — auto-fill via OCR</span>
-          <span class="ocr-drop__hint">PNG/JPG. Ideal: screenshot cropped to the 8 odds — Over 0.5/1.5/2.5/3.5 then Under 0.5/1.5/2.5/3.5.</span>
-        </label>
-        <div id="ou-ocrPreview" class="ocr-preview" hidden>
-          <img id="ou-ocrImg" alt="Preview" />
-          <div class="ocr-side">
-            <div class="status" id="ou-ocrStatus">Waiting…</div>
-            <button type="button" class="secondary" id="ou-ocrRetry" hidden>Re-run OCR</button>
-            <button type="button" class="secondary" id="ou-ocrClear">Remove image</button>
-          </div>
-        </div>
-      </div>
+      <h2>3. Over / Under odds</h2>
 
       <div class="row" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
         <div>
@@ -3047,91 +3019,8 @@ function parsePlayerOddsFromText(text) {
 
   $('ou-site').addEventListener('change', ouRender);
 
-  $('ou-parseBtn').addEventListener('click', () => {
-    const url = $('ou-url').value.trim();
-    const status = $('ou-parseStatus');
-    if (!url) { status.textContent = "Paste a URL first."; return; }
-    const slug = extractBetclicSlug(url);
-    if (!slug) { status.textContent = "URL not recognised (Betclic expected)."; return; }
-    const parsed = parseMatchSlug(slug);
-    $('ou-club1').value = parsed.club1;
-    $('ou-club2').value = parsed.club2;
-    if (parsed.method === "dictionary") status.textContent = "✓ Clubs recognised.";
-    else if (parsed.method === "midpoint-fallback") status.textContent = "⚠ Unknown clubs, approximate split — please verify.";
-    else status.textContent = "⚠ Could not split — please fix manually.";
-    ouRender();
-  });
-
   ['ou-club1','ou-club2','ou-c05','ou-c15','ou-c25','ou-c35','ou-u05','ou-u15','ou-u25','ou-u35'].forEach(id => {
     $(id).addEventListener('input', ouRender);
-  });
-
-  let ouCurrentBlob = null;
-
-  async function runOCROu(blob) {
-    const status = $('ou-ocrStatus');
-    status.textContent = "Loading OCR engine…";
-    try {
-      if (!window.Tesseract) {
-        status.textContent = "⚠ Tesseract.js not loaded (check your connection).";
-        return;
-      }
-      status.textContent = "Pre-processing image…";
-      const processed = await preprocessForOCR(blob);
-      const worker = await Tesseract.createWorker('eng', 1, {
-        logger: m => {
-          if (m.status === 'recognizing text') status.textContent = `Analysing… ${Math.round(m.progress * 100)}%`;
-          else if (m.status === 'loading tesseract core' || m.status === 'initializing tesseract') status.textContent = "Initialising OCR engine…";
-          else if (m.status === 'loading language traineddata') status.textContent = "Loading model…";
-        }
-      });
-      await worker.setParameters({
-        tessedit_char_whitelist: '0123456789.,',
-        tessedit_pageseg_mode: '6'
-      });
-      const { data: { text } } = await worker.recognize(processed);
-      await worker.terminate();
-
-      const odds = parseOddsFromText(text);
-      const targets = ['ou-c05','ou-c15','ou-c25','ou-c35','ou-u05','ou-u15','ou-u25','ou-u35'];
-      if (odds.length >= 8) {
-        targets.forEach((id, i) => { $(id).value = odds[i]; });
-        ouRender();
-        status.innerHTML = `✓ 8 odds detected: <strong>${odds.slice(0,8).join(' / ')}</strong>. Check the order (Over then Under).`;
-        if (odds.length > 8) status.innerHTML += ` <br><span style="font-size:11px">(${odds.length} values found, only the first 8 used.)</span>`;
-      } else if (odds.length > 0) {
-        odds.forEach((v, i) => { if (i < targets.length) $(targets[i]).value = v; });
-        ouRender();
-        status.innerHTML = `⚠ Only ${odds.length} odds detected: ${odds.join(' / ')}. Please complete manually.`;
-      } else {
-        status.innerHTML = "⚠ No odds detected. Try a sharper screenshot cropped to the numbers.";
-      }
-      $('ou-ocrRetry').hidden = false;
-    } catch (err) {
-      status.textContent = "⚠ OCR error: " + (err.message || err);
-      $('ou-ocrRetry').hidden = false;
-    }
-  }
-
-  $('ou-ocrFile').addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    ouCurrentBlob = file;
-    $('ou-ocrImg').src = URL.createObjectURL(file);
-    $('ou-ocrPreview').hidden = false;
-    runOCROu(file);
-  });
-
-  $('ou-ocrRetry').addEventListener('click', () => {
-    if (ouCurrentBlob) runOCROu(ouCurrentBlob);
-  });
-
-  $('ou-ocrClear').addEventListener('click', () => {
-    ouCurrentBlob = null;
-    $('ou-ocrFile').value = '';
-    $('ou-ocrImg').src = '';
-    $('ou-ocrPreview').hidden = true;
-    $('ou-ocrRetry').hidden = true;
   });
 
   $('ou-copyBtn').addEventListener('click', async () => {
