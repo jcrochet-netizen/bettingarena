@@ -2544,7 +2544,7 @@ function parsePlayerOddsFromText(text) {
   }
 
   const EMBED_CSS_UW = `<style>
-.uw{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;border:4px solid #d4af37 !important;border-radius:10px !important;background:#fff;padding:18px 20px;max-width:560px;color:#1a1d23;margin:16px auto;--uw-accent:#e30613;--uw-accent-bg:#fdecee;--uw-logo-height:18px}
+.uw{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;border:4px solid #FFD400 !important;border-radius:10px !important;background:#fff;padding:18px 20px;max-width:560px;color:#1a1d23;margin:16px auto;--uw-accent:#e30613;--uw-accent-bg:#fdecee;--uw-logo-height:18px}
 .uw__head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #eef0f3}
 .uw .uw__head a img.uw__logo,.uw .uw__head img.uw__logo,.uw img.uw__logo,img.uw__logo,.uw__logo{height:12px !important;width:auto !important;max-width:140px !important;display:block !important;min-height:0 !important;min-width:0 !important}
 .uw__logo-text{font-size:16px;font-weight:700;letter-spacing:.01em}
@@ -2574,7 +2574,7 @@ function parsePlayerOddsFromText(text) {
     const o1 = escapeHtml(cote1 || '-');
     const oN = escapeHtml(coteN || '-');
     const o2 = escapeHtml(cote2 || '-');
-    const styleVars = 'border:4px solid #d4af37 !important;border-radius:10px !important;--uw-accent:' + theme.accent + ';--uw-accent-bg:' + theme.accentBg + ';--uw-logo-height:' + theme.logoHeight + 'px';
+    const styleVars = 'border:4px solid #FFD400 !important;border-radius:10px !important;--uw-accent:' + theme.accent + ';--uw-accent-bg:' + theme.accentBg + ';--uw-logo-height:' + theme.logoHeight + 'px';
     const siteCss = `<style>.uw--${theme.slug} .uw__bookmaker strong{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd-value{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd:hover{border-color:${theme.accent} !important;background:${theme.accentBg} !important}.uw--${theme.slug} .uw__odd-team{color:#1a1d23 !important}.uw--${theme.slug} .uw__odd-label{color:#6b7280 !important}.uw--${theme.slug} .uw__cta{color:${theme.accent} !important}.uw--${theme.slug} .uw__cta:hover{color:${theme.accent} !important;opacity:.85}.uw--${theme.slug} a,.uw--${theme.slug} a:visited,.uw--${theme.slug} a:hover{text-decoration:none !important}</style>`;
     return `${siteCss}<div class="uw uw--${theme.slug}" style="${styleVars}">
   <div class="uw__head">
@@ -2741,7 +2741,7 @@ function parsePlayerOddsFromText(text) {
   // CSS embarqué : étend l'EMBED_CSS_UW (Odds 1N2) avec la classe modifier
   // .uw--scorers (margin-bottom du match réduit) et .uw__subtitle.
   const EMBED_CSS_OS = `<style>
-.uw{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;border:4px solid #d4af37 !important;border-radius:10px !important;background:#fff;padding:18px 20px;max-width:560px;color:#1a1d23;margin:16px auto;--uw-accent:#e30613;--uw-accent-bg:#fdecee;--uw-logo-height:18px}
+.uw{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;border:4px solid #FFD400 !important;border-radius:10px !important;background:#fff;padding:18px 20px;max-width:560px;color:#1a1d23;margin:16px auto;--uw-accent:#e30613;--uw-accent-bg:#fdecee;--uw-logo-height:18px}
 .uw__head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #eef0f3}
 .uw .uw__head a img.uw__logo,.uw .uw__head img.uw__logo,.uw img.uw__logo,img.uw__logo,.uw__logo{height:12px !important;width:auto !important;max-width:140px !important;display:block !important;min-height:0 !important;min-width:0 !important}
 .uw__logo-text{font-size:16px;font-weight:700;letter-spacing:.01em}
@@ -2784,7 +2784,7 @@ function parsePlayerOddsFromText(text) {
       <span class="uw__odd-team" style="color:#1a1d23 !important">${escapeHtml(s.name || t.player)}</span>
       <span class="uw__odd-value" style="color:${theme.accent} !important">${escapeHtml(s.odds || '-')}</span>
     </a>`).join('');
-    const styleVars = 'border:4px solid #d4af37 !important;border-radius:10px !important;--uw-accent:' + theme.accent + ';--uw-accent-bg:' + theme.accentBg + ';--uw-logo-height:' + theme.logoHeight + 'px';
+    const styleVars = 'border:4px solid #FFD400 !important;border-radius:10px !important;--uw-accent:' + theme.accent + ';--uw-accent-bg:' + theme.accentBg + ';--uw-logo-height:' + theme.logoHeight + 'px';
     const siteCss = `<style>.uw--${theme.slug} .uw__bookmaker strong{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd-value{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd:hover{border-color:${theme.accent} !important;background:${theme.accentBg} !important}.uw--${theme.slug} .uw__odd-team{color:#1a1d23 !important}.uw--${theme.slug} .uw__odd-label{color:#6b7280 !important}.uw--${theme.slug} .uw__cta{color:${theme.accent} !important}.uw--${theme.slug} .uw__cta:hover{color:${theme.accent} !important;opacity:.85}.uw--${theme.slug} a,.uw--${theme.slug} a:visited,.uw--${theme.slug} a:hover{text-decoration:none !important}</style>`;
     return `${siteCss}<div class="uw uw--scorers uw--${theme.slug}" style="${styleVars}">
   <div class="uw__head">
@@ -2937,7 +2937,7 @@ function parsePlayerOddsFromText(text) {
   }
 
   const EMBED_CSS_OU = `<style>
-.uw{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;border:4px solid #d4af37 !important;border-radius:10px !important;background:#fff;padding:18px 20px;max-width:560px;color:#1a1d23;margin:16px auto;--uw-accent:#e30613;--uw-accent-bg:#fdecee;--uw-logo-height:18px}
+.uw{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;border:4px solid #FFD400 !important;border-radius:10px !important;background:#fff;padding:18px 20px;max-width:560px;color:#1a1d23;margin:16px auto;--uw-accent:#e30613;--uw-accent-bg:#fdecee;--uw-logo-height:18px}
 .uw__head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #eef0f3}
 .uw .uw__head a img.uw__logo,.uw .uw__head img.uw__logo,.uw img.uw__logo,img.uw__logo,.uw__logo{height:12px !important;width:auto !important;max-width:140px !important;display:block !important;min-height:0 !important;min-width:0 !important}
 .uw__logo-text{font-size:16px;font-weight:700;letter-spacing:.01em}
@@ -2986,7 +2986,7 @@ function parsePlayerOddsFromText(text) {
       <span class="uw__odd-team" style="color:#1a1d23 !important">${escapeHtml(s2.threshold)}</span>
       <span class="uw__odd-value" style="color:${theme.accent} !important">${escapeHtml(s2.odds || '-')}</span>
     </a>`).join('');
-    const styleVars = 'border:4px solid #d4af37 !important;border-radius:10px !important;--uw-accent:' + theme.accent + ';--uw-accent-bg:' + theme.accentBg + ';--uw-logo-height:' + theme.logoHeight + 'px';
+    const styleVars = 'border:4px solid #FFD400 !important;border-radius:10px !important;--uw-accent:' + theme.accent + ';--uw-accent-bg:' + theme.accentBg + ';--uw-logo-height:' + theme.logoHeight + 'px';
     const siteCss = `<style>.uw--${theme.slug} .uw__bookmaker strong{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd-value{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd:hover{border-color:${theme.accent} !important;background:${theme.accentBg} !important}.uw--${theme.slug} .uw__odd-team{color:#1a1d23 !important}.uw--${theme.slug} .uw__odd-label{color:#6b7280 !important}.uw--${theme.slug} .uw__cta{color:${theme.accent} !important}.uw--${theme.slug} .uw__cta:hover{color:${theme.accent} !important;opacity:.85}.uw--${theme.slug} a,.uw--${theme.slug} a:visited,.uw--${theme.slug} a:hover{text-decoration:none !important}</style>`;
     return `${siteCss}<div class="uw uw--ou uw--${theme.slug}" style="${styleVars}">
   <div class="uw__head">
@@ -3055,7 +3055,7 @@ function parsePlayerOddsFromText(text) {
   }
 
   const EMBED_CSS_BTS = `<style>
-.uw{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;border:4px solid #d4af37 !important;border-radius:10px !important;background:#fff;padding:18px 20px;max-width:560px;color:#1a1d23;margin:16px auto;--uw-accent:#e30613;--uw-accent-bg:#fdecee;--uw-logo-height:22px}
+.uw{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;border:4px solid #FFD400 !important;border-radius:10px !important;background:#fff;padding:18px 20px;max-width:560px;color:#1a1d23;margin:16px auto;--uw-accent:#e30613;--uw-accent-bg:#fdecee;--uw-logo-height:22px}
 .uw__head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #eef0f3}
 .uw__logo{height:22px !important;width:auto !important;max-width:140px !important;display:block !important}
 .uw__logo-text{font-size:16px;font-weight:700;letter-spacing:.01em}
@@ -3096,7 +3096,7 @@ function parsePlayerOddsFromText(text) {
       <span class="uw__odd-team" style="color:#1a1d23 !important">${escapeHtml(o.team)}</span>
       <span class="uw__odd-value" style="color:${theme.accent} !important">${escapeHtml(o.odds || '-')}</span>
     </a>`).join('');
-    const styleVars = 'border:4px solid #d4af37 !important;border-radius:10px !important;--uw-accent:' + theme.accent + ';--uw-accent-bg:' + theme.accentBg + ';--uw-logo-height:' + theme.logoHeight + 'px';
+    const styleVars = 'border:4px solid #FFD400 !important;border-radius:10px !important;--uw-accent:' + theme.accent + ';--uw-accent-bg:' + theme.accentBg + ';--uw-logo-height:' + theme.logoHeight + 'px';
     const siteCss = `<style>.uw--${theme.slug} .uw__bookmaker strong{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd-value{color:${theme.accent} !important}.uw--${theme.slug} .uw__odd:hover{border-color:${theme.accent} !important;background:${theme.accentBg} !important}.uw--${theme.slug} .uw__odd-team{color:#1a1d23 !important}.uw--${theme.slug} .uw__odd-label{color:#6b7280 !important}.uw--${theme.slug} .uw__cta{color:${theme.accent} !important}.uw--${theme.slug} .uw__cta:hover{color:${theme.accent} !important;opacity:.85}.uw--${theme.slug} a,.uw--${theme.slug} a:visited,.uw--${theme.slug} a:hover{text-decoration:none !important}</style>`;
     return `${siteCss}<div class="uw uw--btts uw--${theme.slug}" style="${styleVars}">
   <div class="uw__head">
