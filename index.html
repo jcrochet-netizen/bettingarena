@@ -3366,7 +3366,7 @@ function parsePlayerOddsFromText(text) {
     const safeUrl     = escapeHtml(url     || '#');
     const safeImage   = escapeHtml(image   || '');
     const imageBlock = image
-      ? `<div class="nsnbn-image"><img src="${safeImage}" alt="${safeTitle}"></div>`
+      ? `<div class="nsnbn-image"><img src="${safeImage}" alt="${safeTitle}" width="170" height="95" loading="lazy" decoding="async"></div>`
       : '';
     const badgeBg    = (theme.bannerBadge && theme.bannerBadge.bg)    || '#fff';
     const badgeColor = (theme.bannerBadge && theme.bannerBadge.color) || accent;
