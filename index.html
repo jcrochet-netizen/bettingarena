@@ -3390,41 +3390,82 @@ function parsePlayerOddsFromText(text) {
     $(id).addEventListener('input', ebRender);
   });
 
+  async function ebFetchMicrolink(url) {
+    const r = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}`);
+    if (!r.ok) throw new Error('Microlink HTTP ' + r.status);
+    const j = await r.json();
+    if (j.status !== 'success' || !j.data) throw new Error('Microlink non-success');
+    return {
+      title: (j.data.title || '').trim(),
+      image: ((j.data.image && j.data.image.url) || '').trim(),
+      source: 'microlink'
+    };
+  }
+
+  async function ebFetchViaProxy(url) {
+    const PROXIES = [
+      u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+      u => `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(u)}`,
+      u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+    ];
+    let lastErr;
+    for (const buildUrl of PROXIES) {
+      try {
+        const r = await fetch(buildUrl(url));
+        if (!r.ok) { lastErr = new Error('HTTP ' + r.status); continue; }
+        const html = await r.text();
+        if (!html || html.length < 200) { lastErr = new Error('Empty response'); continue; }
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const pick = sel => doc.querySelector(sel);
+        const ogTitle = (pick('meta[property="og:title"]')?.content)
+          || (pick('meta[name="twitter:title"]')?.content)
+          || (pick('title')?.textContent) || '';
+        let ogImage = (pick('meta[property="og:image"]')?.content)
+          || (pick('meta[property="og:image:secure_url"]')?.content)
+          || (pick('meta[name="twitter:image"]')?.content) || '';
+        if (ogImage && ogImage.startsWith('//')) ogImage = 'https:' + ogImage;
+        if (ogImage && ogImage.startsWith('/')) {
+          try { ogImage = new URL(ogImage, url).href; } catch (e) {}
+        }
+        const title = ogTitle.trim();
+        const image = ogImage.trim();
+        if (title || image) return { title, image, source: 'proxy' };
+        lastErr = new Error('No OG tags found');
+      } catch (e) { lastErr = e; }
+    }
+    throw lastErr || new Error('All proxies failed');
+  }
+
   $('eb-fetchBtn').addEventListener('click', async () => {
     const url = $('eb-url').value.trim();
     const status = $('eb-fetchStatus');
     if (!url) { status.textContent = "Colle une URL d'article d'abord."; return; }
     if (!/^https?:\/\//i.test(url)) { status.textContent = "L'URL doit commencer par http(s)://"; return; }
-    status.textContent = "Récupération…";
+    status.textContent = "Récupération via Microlink…";
+    let result = null;
     try {
-      const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-      const resp = await fetch(proxy);
-      if (!resp.ok) throw new Error('HTTP ' + resp.status);
-      const html = await resp.text();
-      const doc = new DOMParser().parseFromString(html, 'text/html');
-      const pick = sel => doc.querySelector(sel);
-      const ogTitle = (pick('meta[property="og:title"]')?.content)
-        || (pick('meta[name="twitter:title"]')?.content)
-        || (pick('title')?.textContent) || '';
-      let ogImage = (pick('meta[property="og:image"]')?.content)
-        || (pick('meta[property="og:image:secure_url"]')?.content)
-        || (pick('meta[name="twitter:image"]')?.content) || '';
-      if (ogImage && ogImage.startsWith('//')) ogImage = 'https:' + ogImage;
-      if (ogImage && ogImage.startsWith('/')) {
-        try { ogImage = new URL(ogImage, url).href; } catch (e) {}
+      result = await ebFetchMicrolink(url);
+    } catch (e1) {
+      status.textContent = "Microlink KO, tentative via proxy…";
+      try {
+        result = await ebFetchViaProxy(url);
+      } catch (e2) {
+        status.textContent = "⚠ Échec : " + (e2.message || e2) + ". Remplis à la main.";
+        return;
       }
-      const title = ogTitle.trim();
-      const image = ogImage.trim();
+    }
+    try {
+      const { title, image, source } = result;
       if (!title && !image) {
-        status.textContent = "⚠ Aucune métadonnée OpenGraph trouvée — remplis à la main.";
+        status.textContent = "⚠ Aucune métadonnée trouvée — remplis à la main.";
         return;
       }
       if (title) $('eb-title').value = title;
       if (image) $('eb-image').value = image;
       ebRender();
-      status.innerHTML = `✓ Récupéré : <strong>${escapeHtml(title || '(pas de titre)')}</strong>${image ? ' + image' : ''}`;
+      status.innerHTML = `✓ Récupéré (${source}) : <strong>${escapeHtml(title || '(pas de titre)')}</strong>${image ? ' + image' : ''}`;
     } catch (err) {
-      status.textContent = "⚠ Échec de la récupération : " + (err.message || err) + ". Remplis à la main.";
+      status.textContent = "⚠ Erreur post-fetch : " + (err.message || err) + ". Remplis à la main.";
     }
   });
 
