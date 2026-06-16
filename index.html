@@ -1042,7 +1042,8 @@
     <div class="panel">
       <h2>4. Titre de l'article</h2>
       <label for="eb-title">Auto-rempli, éditable</label>
-      <input type="text" id="eb-title" maxlength="160" placeholder="Simulez le parcours de votre équipe favorite" />
+      <input type="text" id="eb-title" maxlength="50" placeholder="Simulez le parcours de votre équipe favorite" />
+      <div class="hint"><span id="eb-title-count">0</span> / 50</div>
     </div>
 
     <div class="panel">
@@ -1052,10 +1053,10 @@
     </div>
 
     <div class="panel">
-      <h2>6. Résumé (max 200 caractères)</h2>
+      <h2>6. Résumé (max 100 caractères)</h2>
       <label for="eb-summary">À saisir manuellement</label>
-      <textarea id="eb-summary" maxlength="200" rows="3" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;resize:vertical;" placeholder="Créez votre tableau et testez tous les scénarios du Mondial 2026."></textarea>
-      <div class="hint"><span id="eb-summary-count">0</span> / 200</div>
+      <textarea id="eb-summary" maxlength="100" rows="3" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;resize:vertical;" placeholder="Créez votre tableau et testez tous les scénarios du Mondial 2026."></textarea>
+      <div class="hint"><span id="eb-summary-count">0</span> / 100</div>
     </div>
 
     <div class="panel">
@@ -3331,11 +3332,11 @@ function parsePlayerOddsFromText(text) {
 .nsnbn-image img{width:100% !important;height:100% !important;object-fit:cover;display:block;max-width:none !important}
 .nsnbn-content{flex:1;color:#fff;min-width:0}
 .nsnbn-badge{display:inline-block;background:#fff;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;padding:5px 9px;border-radius:999px;margin-bottom:8px}
-.nsnbn-content h2{margin:0 0 6px !important;font-size:25px !important;line-height:1.1 !important;font-weight:800 !important;color:#fff !important}
+.nsnbn-content h3{margin:0 0 6px !important;font-size:25px !important;line-height:1.1 !important;font-weight:800 !important;color:#fff !important}
 .nsnbn-content p{margin:0 !important;color:rgba(255,255,255,.92) !important;font-size:14px !important;line-height:1.4 !important}
 .nsnbn-button{flex-shrink:0;background:#fff;font-size:14px;font-weight:700;padding:11px 16px;border-radius:9px;white-space:nowrap;transition:all .2s ease}
 .nsnbn:hover .nsnbn-button{background:#f3f3f3}
-@media (max-width:700px){.nsnbn{flex-direction:column;align-items:flex-start}.nsnbn-image{width:100%;height:180px}.nsnbn-content h2{font-size:22px !important}.nsnbn-button{margin-top:10px}}
+@media (max-width:700px){.nsnbn{flex-direction:column;align-items:flex-start}.nsnbn-image{width:100%;height:180px}.nsnbn-content h3{font-size:22px !important}.nsnbn-button{margin-top:10px}}
 </style>
 `;
 
@@ -3360,7 +3361,7 @@ function parsePlayerOddsFromText(text) {
   ${imageBlock}
   <div class="nsnbn-content">
     ${badgeBlock}
-    <h2 style="color:#fff !important">${safeTitle || "Titre de l'article"}</h2>
+    <h3 style="color:#fff !important">${safeTitle || "Titre de l'article"}</h3>
     ${summaryBlock}
   </div>
   <div class="nsnbn-button" style="color:${accent} !important;background:#fff !important">${escapeHtml(readCta)} →</div>
@@ -3381,6 +3382,7 @@ function parsePlayerOddsFromText(text) {
     $('eb-preview').innerHTML = EMBED_CSS_EB + html;
     $('eb-output').value = EMBED_CSS_EB + html;
     $('eb-summary-count').textContent = $('eb-summary').value.length;
+    $('eb-title-count').textContent = $('eb-title').value.length;
   }
 
   $('eb-site').addEventListener('change', ebRender);
