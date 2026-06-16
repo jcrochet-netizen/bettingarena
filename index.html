@@ -398,6 +398,8 @@
     <button type="button" class="drawer__item" data-tab="tab-odds-scorers">Odds scorers</button>
     <button type="button" class="drawer__item" data-tab="tab-odds-ou">Odds Over/Under</button>
     <button type="button" class="drawer__item" data-tab="tab-odds-btts">Both teams will score</button>
+    <div class="drawer__cat drawer__cat--sep">Editorial</div>
+    <button type="button" class="drawer__item" data-tab="tab-editorial-banner">Banner article</button>
     <div class="drawer__cat drawer__cat--sep">Autres</div>
     <button type="button" class="drawer__item" data-tab="tab-essentiel">L'Essentiel TM</button>
     <button type="button" class="drawer__item" data-tab="tab-essentiel-af">L'Essentiel AF</button>
@@ -993,6 +995,80 @@
       <div class="copy-row">
         <button type="button" id="t3bu-copyBtn">Copier le HTML</button>
         <span class="status" id="t3bu-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-editorial-banner" role="tabpanel">
+    <h2 class="widget-title">Banner article</h2>
+    <p class="subtitle">Bandeau éditorial cliquable — choisis le site, colle l'URL d'un article, le titre et l'image sont auto-récupérés via OpenGraph. Le badge et le résumé se renseignent à la main. CTA traduit selon la langue du site.</p>
+
+    <div class="panel">
+      <h2>1. Select your website</h2>
+      <label for="eb-site">Site (palette appliquée au fond, badge et bouton)</label>
+      <select id="eb-site" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
+        <option value="afrik-foot-fr" selected>Afrik-Foot FR</option>
+        <option value="afrik-foot-za">Afrik-Foot ZA</option>
+        <option value="afrik-foot-ng">Afrik-Foot NG</option>
+        <option value="topmercato">Topmercato</option>
+        <option value="sports-mole">Sports Mole</option>
+        <option value="trivela">Trivela</option>
+        <option value="umdois">UmDoisEsportes</option>
+        <option value="football-whispers">Football Whispers</option>
+        <option value="football-ground-guide">Football Ground Guide</option>
+        <option value="mrfixit">MrFixIt's Tips</option>
+        <option value="al-aire-libre">Al-Aire Libre</option>
+        <option value="soccernet">Soccernet</option>
+      </select>
+    </div>
+
+    <div class="panel">
+      <h2>2. Badge (compétition)</h2>
+      <label for="eb-badge">Texte du badge rond (ex. « Coupe du monde 2026 »)</label>
+      <input type="text" id="eb-badge" maxlength="60" placeholder="Coupe du monde 2026" />
+    </div>
+
+    <div class="panel">
+      <h2>3. Article URL</h2>
+      <label for="eb-url">URL d'un article du site choisi</label>
+      <input type="text" id="eb-url" placeholder="https://www.afrik-foot.com/simulateur-resultat-coupe-du-monde-2026-parcours" />
+      <div style="margin-top:12px;">
+        <button type="button" id="eb-fetchBtn">Récupérer titre & image</button>
+        <span class="status" id="eb-fetchStatus" style="margin-left:10px;"></span>
+      </div>
+      <div class="hint">Récupère <code>og:title</code> et <code>og:image</code> via le proxy AllOrigins. Si l'auto-fetch échoue (CORS, robots), tu peux remplir le titre et l'image à la main ci-dessous.</div>
+    </div>
+
+    <div class="panel">
+      <h2>4. Titre de l'article</h2>
+      <label for="eb-title">Auto-rempli, éditable</label>
+      <input type="text" id="eb-title" maxlength="160" placeholder="Simulez le parcours de votre équipe favorite" />
+    </div>
+
+    <div class="panel">
+      <h2>5. Image de l'article (URL)</h2>
+      <label for="eb-image">Auto-remplie, éditable</label>
+      <input type="text" id="eb-image" placeholder="https://media.afrik-foot.com/.../simulateur-coupe-du-monde-2026.jpg" />
+    </div>
+
+    <div class="panel">
+      <h2>6. Résumé (max 200 caractères)</h2>
+      <label for="eb-summary">À saisir manuellement</label>
+      <textarea id="eb-summary" maxlength="200" rows="3" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;resize:vertical;" placeholder="Créez votre tableau et testez tous les scénarios du Mondial 2026."></textarea>
+      <div class="hint"><span id="eb-summary-count">0</span> / 200</div>
+    </div>
+
+    <div class="panel">
+      <h2>Preview</h2>
+      <div class="preview-wrap" id="eb-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML to copy</h2>
+      <textarea id="eb-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="eb-copyBtn">Copy HTML</button>
+        <span class="status" id="eb-copyStatus"></span>
       </div>
     </div>
   </div>
@@ -3229,6 +3305,141 @@ function parsePlayerOddsFromText(text) {
   });
 
   btsRender();
+})();
+
+// ========== WIDGET : Editorial Banner — bandeau article cliquable avec auto-fetch OG ==========
+(function() {
+  const SITES_EB = SITES_BETTING;
+
+  function getEbTheme() {
+    const slug = $('eb-site').value;
+    const theme = SITES_EB[slug] || SITES_EB["afrik-foot-fr"];
+    return Object.assign({}, theme, { slug });
+  }
+
+  const READ_CTA = {
+    fr:   "À lire",
+    en:   "Read more",
+    ptBR: "Read more",
+    es:   "Leer más"
+  };
+
+  const EMBED_CSS_EB = `<style>
+.nsnbn{max-width:800px;width:100%;display:flex;align-items:center;gap:18px;padding:16px 18px;border:2px solid #fff;border-radius:16px;text-decoration:none;font-family:Arial,sans-serif;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.12);transition:all .2s ease;margin:16px auto;box-sizing:border-box}
+.nsnbn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.18)}
+.nsnbn-image{flex-shrink:0;width:170px;height:95px;border-radius:12px;overflow:hidden;border:2px solid rgba(255,255,255,.35)}
+.nsnbn-image img{width:100% !important;height:100% !important;object-fit:cover;display:block;max-width:none !important}
+.nsnbn-content{flex:1;color:#fff;min-width:0}
+.nsnbn-badge{display:inline-block;background:#fff;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;padding:5px 9px;border-radius:999px;margin-bottom:8px}
+.nsnbn-content h2{margin:0 0 6px !important;font-size:25px !important;line-height:1.1 !important;font-weight:800 !important;color:#fff !important}
+.nsnbn-content p{margin:0 !important;color:rgba(255,255,255,.92) !important;font-size:14px !important;line-height:1.4 !important}
+.nsnbn-button{flex-shrink:0;background:#fff;font-size:14px;font-weight:700;padding:11px 16px;border-radius:9px;white-space:nowrap;transition:all .2s ease}
+.nsnbn:hover .nsnbn-button{background:#f3f3f3}
+@media (max-width:700px){.nsnbn{flex-direction:column;align-items:flex-start}.nsnbn-image{width:100%;height:180px}.nsnbn-content h2{font-size:22px !important}.nsnbn-button{margin-top:10px}}
+</style>
+`;
+
+  function buildEbHtml({ badge, url, title, image, summary, theme }) {
+    const accent = theme.accent;
+    const readCta = READ_CTA[theme.lang] || READ_CTA.fr;
+    const safeBadge   = escapeHtml(badge   || '');
+    const safeTitle   = escapeHtml(title   || '');
+    const safeSummary = escapeHtml(summary || '');
+    const safeUrl     = escapeHtml(url     || '#');
+    const safeImage   = escapeHtml(image   || '');
+    const imageBlock = image
+      ? `<div class="nsnbn-image"><img src="${safeImage}" alt="${safeTitle}"></div>`
+      : '';
+    const badgeBlock = badge
+      ? `<span class="nsnbn-badge" style="color:${accent} !important;background:#fff !important">${safeBadge}</span>`
+      : '';
+    const summaryBlock = summary
+      ? `<p style="color:rgba(255,255,255,.92) !important">${safeSummary}</p>`
+      : '';
+    return `<a class="nsnbn nsnbn--${theme.slug}" href="${safeUrl}" target="_blank" rel="noopener" style="background:${accent} !important;border:2px solid #fff !important;color:#fff !important">
+  ${imageBlock}
+  <div class="nsnbn-content">
+    ${badgeBlock}
+    <h2 style="color:#fff !important">${safeTitle || "Titre de l'article"}</h2>
+    ${summaryBlock}
+  </div>
+  <div class="nsnbn-button" style="color:${accent} !important;background:#fff !important">${escapeHtml(readCta)} →</div>
+</a>`;
+  }
+
+  function ebRender() {
+    const theme = getEbTheme();
+    const data = {
+      badge:   $('eb-badge').value.trim(),
+      url:     $('eb-url').value.trim(),
+      title:   $('eb-title').value.trim(),
+      image:   $('eb-image').value.trim(),
+      summary: $('eb-summary').value.trim(),
+      theme
+    };
+    const html = buildEbHtml(data);
+    $('eb-preview').innerHTML = EMBED_CSS_EB + html;
+    $('eb-output').value = EMBED_CSS_EB + html;
+    $('eb-summary-count').textContent = $('eb-summary').value.length;
+  }
+
+  $('eb-site').addEventListener('change', ebRender);
+  ['eb-badge','eb-url','eb-title','eb-image','eb-summary'].forEach(id => {
+    $(id).addEventListener('input', ebRender);
+  });
+
+  $('eb-fetchBtn').addEventListener('click', async () => {
+    const url = $('eb-url').value.trim();
+    const status = $('eb-fetchStatus');
+    if (!url) { status.textContent = "Colle une URL d'article d'abord."; return; }
+    if (!/^https?:\/\//i.test(url)) { status.textContent = "L'URL doit commencer par http(s)://"; return; }
+    status.textContent = "Récupération…";
+    try {
+      const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+      const resp = await fetch(proxy);
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      const html = await resp.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const pick = sel => doc.querySelector(sel);
+      const ogTitle = (pick('meta[property="og:title"]')?.content)
+        || (pick('meta[name="twitter:title"]')?.content)
+        || (pick('title')?.textContent) || '';
+      let ogImage = (pick('meta[property="og:image"]')?.content)
+        || (pick('meta[property="og:image:secure_url"]')?.content)
+        || (pick('meta[name="twitter:image"]')?.content) || '';
+      if (ogImage && ogImage.startsWith('//')) ogImage = 'https:' + ogImage;
+      if (ogImage && ogImage.startsWith('/')) {
+        try { ogImage = new URL(ogImage, url).href; } catch (e) {}
+      }
+      const title = ogTitle.trim();
+      const image = ogImage.trim();
+      if (!title && !image) {
+        status.textContent = "⚠ Aucune métadonnée OpenGraph trouvée — remplis à la main.";
+        return;
+      }
+      if (title) $('eb-title').value = title;
+      if (image) $('eb-image').value = image;
+      ebRender();
+      status.innerHTML = `✓ Récupéré : <strong>${escapeHtml(title || '(pas de titre)')}</strong>${image ? ' + image' : ''}`;
+    } catch (err) {
+      status.textContent = "⚠ Échec de la récupération : " + (err.message || err) + ". Remplis à la main.";
+    }
+  });
+
+  $('eb-copyBtn').addEventListener('click', async () => {
+    const ta = $('eb-output');
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('eb-copyStatus').textContent = "✓ Copied.";
+      setTimeout(() => $('eb-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('eb-copyStatus').textContent = "✓ Copied.";
+    }
+  });
+
+  ebRender();
 })();
 
 </script>
