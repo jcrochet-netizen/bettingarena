@@ -1005,7 +1005,6 @@
 
     <div class="panel">
       <h2>1. Select your website</h2>
-      <label for="eb-site">Site (palette appliquée au fond, badge et bouton)</label>
       <select id="eb-site" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
         <option value="afrik-foot-fr" selected>Afrik-Foot FR</option>
         <option value="afrik-foot-za">Afrik-Foot ZA</option>
@@ -1023,14 +1022,14 @@
     </div>
 
     <div class="panel">
-      <h2>2. Badge (compétition)</h2>
-      <label for="eb-badge">Texte du badge rond (ex. « Coupe du monde 2026 »)</label>
+      <h2>2. Competition (facultative)</h2>
+      <label for="eb-badge">Write it. Example : World Cup 2026, Premier League, Champions League, Serie A…</label>
       <input type="text" id="eb-badge" maxlength="60" placeholder="Coupe du monde 2026" />
     </div>
 
     <div class="panel">
       <h2>3. Article URL</h2>
-      <label for="eb-url">URL d'un article du site choisi</label>
+      <label for="eb-url">Copy/Paste the url</label>
       <input type="text" id="eb-url" placeholder="https://www.afrik-foot.com/simulateur-resultat-coupe-du-monde-2026-parcours" />
       <div style="margin-top:12px;">
         <button type="button" id="eb-fetchBtn">Récupérer titre & image</button>
@@ -1041,21 +1040,21 @@
 
     <div class="panel">
       <h2>4. Titre de l'article</h2>
-      <label for="eb-title">Auto-rempli, éditable</label>
+      <label for="eb-title">auto-filled and you can edit if > 50 car.</label>
       <input type="text" id="eb-title" maxlength="50" placeholder="Simulez le parcours de votre équipe favorite" />
       <div class="hint"><span id="eb-title-count">0</span> / 50</div>
     </div>
 
     <div class="panel">
-      <h2>5. Image de l'article (URL)</h2>
-      <label for="eb-image">Auto-remplie, éditable</label>
+      <h2>5. Image URL</h2>
+      <label for="eb-image">auto-filled and you can edit if > 50 car.</label>
       <input type="text" id="eb-image" placeholder="https://media.afrik-foot.com/.../simulateur-coupe-du-monde-2026.jpg" />
     </div>
 
     <div class="panel">
-      <h2>6. Résumé (max 84 caractères)</h2>
-      <label for="eb-summary">À saisir manuellement</label>
-      <textarea id="eb-summary" maxlength="84" rows="3" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;resize:vertical;" placeholder="Créez votre tableau et testez tous les scénarios du Mondial 2026."></textarea>
+      <h2>6. Subtitle (max 84 car.)</h2>
+      <label for="eb-summary">Write it</label>
+      <textarea id="eb-summary" maxlength="84" rows="3" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;resize:vertical;" placeholder="Write your subtitle here"></textarea>
       <div class="hint"><span id="eb-summary-count">0</span> / 84</div>
     </div>
 
