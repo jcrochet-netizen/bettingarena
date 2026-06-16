@@ -1590,11 +1590,11 @@ const SITES_BETTING = {
     "afrik-foot-fr":         { lang: "fr", market: "FR", label: "Afrik-Foot FR",       accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "https://www.afrik-foot.com/go-betclic-arena-live-fr", logoUrl: BRAND_LOGOS["afrik-foot"],       logoAlt: "Afrik-Foot",            logoHeight: 12 },
     "afrik-foot-za":         { lang: "en", market: "ZA", label: "Afrik-Foot ZA",  accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: BRAND_LOGOS["afrik-foot"],       logoAlt: "Afrik-Foot",            logoHeight: 12 },
     "afrik-foot-ng":         { lang: "en", market: "NG", label: "Afrik-Foot NG",  accent: "#6d8e3f", accentBg: "#f1f5ec", affiliateUrl: "#", logoUrl: BRAND_LOGOS["afrik-foot"],       logoAlt: "Afrik-Foot",            logoHeight: 12 },
-    "sports-mole":           { lang: "en", market: "UK", label: "Sports Mole",         accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "#", logoUrl: BRAND_LOGOS["sports-mole"],                                      logoAlt: "Sports Mole",           logoHeight: 12 },
-    "sports-mole-21luckybet":{ lang: "en", market: "UK", label: "Sports Mole — 21luckybet", bookmaker: "21luckybet", accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "https://www.sportsmole.co.uk/online/go/21luckybet", logoUrl: BRAND_LOGOS["sports-mole"], logoAlt: "Sports Mole", logoHeight: 12 },
-    "sports-mole-betmgm":    { lang: "en", market: "UK", label: "Sports Mole — betMGM", bookmaker: "betMGM", accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "https://www.sportsmole.co.uk/online/go/betmgmuk", logoUrl: BRAND_LOGOS["sports-mole"], logoAlt: "Sports Mole", logoHeight: 12 },
+    "sports-mole":           { lang: "en", market: "UK", label: "Sports Mole",         accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "#", logoUrl: BRAND_LOGOS["sports-mole"],                                      logoAlt: "Sports Mole",           logoHeight: 12, bannerBadge: { bg: "#E30613", color: "#ffffff" } },
+    "sports-mole-21luckybet":{ lang: "en", market: "UK", label: "Sports Mole — 21luckybet", bookmaker: "21luckybet", accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "https://www.sportsmole.co.uk/online/go/21luckybet", logoUrl: BRAND_LOGOS["sports-mole"], logoAlt: "Sports Mole", logoHeight: 12, bannerBadge: { bg: "#E30613", color: "#ffffff" } },
+    "sports-mole-betmgm":    { lang: "en", market: "UK", label: "Sports Mole — betMGM", bookmaker: "betMGM", accent: "#003300", accentBg: "#e0e8e0", affiliateUrl: "https://www.sportsmole.co.uk/online/go/betmgmuk", logoUrl: BRAND_LOGOS["sports-mole"], logoAlt: "Sports Mole", logoHeight: 12, bannerBadge: { bg: "#E30613", color: "#ffffff" } },
     "trivela":               { lang: "ptBR", market: "BR", label: "Trivela",             accent: "#BE0022", accentBg: "#fce6ea", affiliateUrl: "#", logoUrl: BRAND_LOGOS["trivela"],                                          logoAlt: "Trivela",               logoHeight: 12 },
-    "umdois":                { lang: "ptBR", market: "BR", label: "UmDoisEsportes",      accent: "#000000", accentBg: "#fff8d6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["umdois"],                                           logoAlt: "UmDoisEsportes",        logoHeight: 12 },
+    "umdois":                { lang: "ptBR", market: "BR", label: "UmDoisEsportes",      accent: "#000000", accentBg: "#fff8d6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["umdois"],                                           logoAlt: "UmDoisEsportes",        logoHeight: 12, bannerBadge: { bg: "#FED937", color: "#000000" } },
     "football-whispers":     { lang: "en", market: "UK", label: "Football Whispers",   accent: "#44BD32", accentBg: "#e8f7e3", affiliateUrl: "#", logoUrl: BRAND_LOGOS["football-whispers"],                                logoAlt: "Football Whispers",     logoHeight: 12 },
     "football-ground-guide": { lang: "en", market: "UK", label: "Football Ground Guide", accent: "#1D2A41", accentBg: "#e1eaf2", affiliateUrl: "#", logoUrl: BRAND_LOGOS["football-ground-guide"],                          logoAlt: "Football Ground Guide", logoHeight: 12 },
     "mrfixit":               { lang: "en", market: "UK", label: "MrFixIt's Tips",      accent: "#EE0000", accentBg: "#fde6e6", affiliateUrl: "#", logoUrl: BRAND_LOGOS["mrfixit"],                                     logoAlt: "MrFixIt's Tips",        logoHeight: 12 },
@@ -3368,8 +3368,10 @@ function parsePlayerOddsFromText(text) {
     const imageBlock = image
       ? `<div class="nsnbn-image"><img src="${safeImage}" alt="${safeTitle}"></div>`
       : '';
+    const badgeBg    = (theme.bannerBadge && theme.bannerBadge.bg)    || '#fff';
+    const badgeColor = (theme.bannerBadge && theme.bannerBadge.color) || accent;
     const badgeBlock = badge
-      ? `<span class="nsnbn-badge" style="color:${accent} !important;background:#fff !important">${safeBadge}</span>`
+      ? `<span class="nsnbn-badge" style="color:${badgeColor} !important;background:${badgeBg} !important">${safeBadge}</span>`
       : '';
     const summaryBlock = summary
       ? `<p style="color:rgba(255,255,255,.92) !important">${safeSummary}</p>`
