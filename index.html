@@ -3641,20 +3641,20 @@ function parsePlayerOddsFromText(text) {
   }
 
   const EMBED_CSS_UG = `<style>
-.ug{max-width:680px;width:100%;font-family:Arial,sans-serif;border-radius:16px !important;background:#fff;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.12);margin:16px auto;box-sizing:border-box;color:#1a1d23}
-.ug__head{padding:18px 22px;color:#fff;display:flex;flex-direction:column;gap:10px}
-.ug__category{align-self:flex-start;background:#fff;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:5px 10px;border-radius:999px}
-.ug__country{display:flex;align-items:center;gap:14px}
-.ug__flag{width:56px !important;height:56px !important;border-radius:50% !important;object-fit:cover !important;border:2px solid rgba(255,255,255,.4);display:block !important;max-width:56px !important;flex-shrink:0}
-.ug__country-name{margin:0 !important;font-size:28px !important;font-weight:800 !important;line-height:1.1 !important;color:#fff !important}
-.ug__stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#e3e6eb}
-.ug__stat{padding:16px 18px;background:#fff;display:flex;flex-direction:column;gap:4px}
-.ug__stat-label{font-size:11px;text-transform:uppercase;letter-spacing:.4px;font-weight:600}
-.ug__stat-value{font-size:24px !important;font-weight:800 !important;color:#1a1d23 !important;margin:0}
-.ug__resume{padding:18px 22px;background:#fafbfc;border-top:1px solid #e3e6eb}
-.ug__resume p{margin:0 !important;font-size:14px !important;color:#3b4250 !important;line-height:1.5 !important}
+.ug{max-width:680px;width:100%;font-family:Arial,sans-serif;border-radius:14px !important;background:#fff;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.10);margin:12px auto;box-sizing:border-box;color:#1a1d23}
+.ug__head{padding:12px 16px;color:#fff;display:flex;align-items:center}
+.ug__category{display:inline-block;background:#fff;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:4px 9px;border-radius:999px}
+.ug__country{display:flex;align-items:center;gap:10px}
+.ug__flag{width:42px !important;height:42px !important;border-radius:50% !important;object-fit:cover !important;border:2px solid rgba(255,255,255,.4);display:block !important;max-width:42px !important;flex-shrink:0}
+.ug__country-name{margin:0 !important;font-size:22px !important;font-weight:800 !important;line-height:1.1 !important;color:#fff !important}
+.ug__stats{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1px;background:#e3e6eb}
+.ug__stat{padding:10px 8px;background:#fff;display:flex;flex-direction:column;gap:3px;text-align:center;justify-content:center;align-items:center}
+.ug__stat-label{font-size:10px;text-transform:uppercase;letter-spacing:.3px;font-weight:600;line-height:1.2}
+.ug__stat-value{font-size:17px !important;font-weight:800 !important;color:#1a1d23 !important;margin:0;line-height:1.15;word-break:break-word}
+.ug__resume{padding:12px 16px;background:#fafbfc;border-top:1px solid #e3e6eb}
+.ug__resume p{margin:0 !important;font-size:13px !important;color:#3b4250 !important;line-height:1.45 !important}
 .ug a,.ug a:visited,.ug a:hover{text-decoration:none !important}
-@media (max-width:560px){.ug__head{padding:16px 18px}.ug__country-name{font-size:22px !important}.ug__flag{width:48px !important;height:48px !important;max-width:48px !important}.ug__stat-value{font-size:20px !important}.ug__stat{padding:14px 16px}}
+@media (max-width:560px){.ug__head{padding:10px 14px}.ug__country-name{font-size:19px !important}.ug__flag{width:36px !important;height:36px !important;max-width:36px !important}.ug__stats{grid-template-columns:1fr 1fr}.ug__stat-value{font-size:17px !important}.ug__stat{padding:10px 10px}}
 </style>
 `;
 
@@ -3675,7 +3675,7 @@ function parsePlayerOddsFromText(text) {
       ? `<img class="ug__flag" src="${safeFlag}" alt="${safeCountry}" width="56" height="56" loading="lazy" decoding="async" style="border-radius:50% !important;object-fit:cover !important">`
       : '';
     const categoryBlock = category
-      ? `<span class="ug__category" style="display:inline-block;color:#fff !important;background:${accent} !important;margin-bottom:10px">${safeCategory}</span>`
+      ? `<span class="ug__category" style="display:inline-block;color:#fff !important;background:${accent} !important;margin-bottom:6px">${safeCategory}</span>`
       : '';
     const footBlock = (category || resume)
       ? `<div class="ug__resume" style="background:#fafbfc !important;border-top:1px solid #e3e6eb !important">${categoryBlock}${resume ? `<p style="color:#3b4250 !important">${safeResume}</p>` : ''}</div>`
