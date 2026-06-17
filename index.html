@@ -400,6 +400,7 @@
     <button type="button" class="drawer__item" data-tab="tab-odds-btts">Both teams will score</button>
     <div class="drawer__cat drawer__cat--sep">Editorial</div>
     <button type="button" class="drawer__item" data-tab="tab-editorial-banner">Banner article</button>
+    <button type="button" class="drawer__item" data-tab="tab-ultimate-guide">Ultimate Guide widget</button>
     <div class="drawer__cat drawer__cat--sep">Autres</div>
     <button type="button" class="drawer__item" data-tab="tab-essentiel">L'Essentiel TM</button>
     <button type="button" class="drawer__item" data-tab="tab-essentiel-af">L'Essentiel AF</button>
@@ -1069,6 +1070,113 @@
       <div class="copy-row">
         <button type="button" id="eb-copyBtn">Copy HTML</button>
         <span class="status" id="eb-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-ultimate-guide" role="tabpanel">
+    <h2 class="widget-title">Ultimate Guide widget</h2>
+    <p class="subtitle">Country / competition guide card — pick the site, upload an optional screenshot for OCR auto-fill, then fill the country, the four stats, the category and the resume. Branding (header gradient, stats labels, badge) adapts to the selected site.</p>
+
+    <div class="panel">
+      <h2>1. Select your website</h2>
+      <select id="ug-site" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
+        <option value="afrik-foot-fr" selected>Afrik-Foot FR</option>
+        <option value="afrik-foot-za">Afrik-Foot ZA</option>
+        <option value="afrik-foot-ng">Afrik-Foot NG</option>
+        <option value="topmercato">Topmercato</option>
+        <option value="sports-mole">Sports Mole</option>
+        <option value="trivela">Trivela</option>
+        <option value="umdois">UmDoisEsportes</option>
+        <option value="football-whispers">Football Whispers</option>
+        <option value="football-ground-guide">Football Ground Guide</option>
+        <option value="mrfixit">MrFixIt's Tips</option>
+        <option value="al-aire-libre">Al-Aire Libre</option>
+        <option value="soccernet">Soccernet</option>
+        <option value="calciodangolo">Calciodangolo</option>
+      </select>
+    </div>
+
+    <div class="panel">
+      <h2>2. Screenshot upload (optional)</h2>
+      <div class="ocr-zone">
+        <label for="ug-ocrFile" class="ocr-drop">
+          <input type="file" id="ug-ocrFile" accept="image/*" hidden />
+          <span class="ocr-drop__icon">📷</span>
+          <span class="ocr-drop__text">Upload a stat screenshot — auto-fills via OCR</span>
+          <span class="ocr-drop__hint">PNG/JPG. OCR will try to extract country, FIFA Ranking, Participations, Best Result and Our Prediction. Empty fields are filled — existing values are kept.</span>
+        </label>
+        <div id="ug-ocrPreview" class="ocr-preview" hidden>
+          <img id="ug-ocrImg" alt="Preview" />
+          <div class="ocr-side">
+            <div class="status" id="ug-ocrStatus">Waiting…</div>
+            <button type="button" class="secondary" id="ug-ocrClear">Remove image</button>
+          </div>
+        </div>
+        <textarea id="ug-ocrText" readonly placeholder="Recognized text will appear here so you can copy any value the parser missed." style="width:100%;margin-top:12px;padding:10px;border:1px solid var(--border);border-radius:6px;font-family:monospace;font-size:12px;min-height:100px;display:none;"></textarea>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Category</h2>
+      <label for="ug-category">e.g. World Cup 2026, Premier League, Champions League…</label>
+      <input type="text" id="ug-category" maxlength="60" placeholder="World Cup 2026" />
+    </div>
+
+    <div class="panel">
+      <h2>4. Flag image URL</h2>
+      <label for="ug-flag">Round flag — use flagcdn.com (e.g. https://flagcdn.com/w160/tn.png) or any image URL</label>
+      <input type="text" id="ug-flag" placeholder="https://flagcdn.com/w160/tn.png" />
+    </div>
+
+    <div class="panel">
+      <h2>5. Country</h2>
+      <input type="text" id="ug-country" maxlength="40" placeholder="Tunisia" />
+    </div>
+
+    <div class="panel">
+      <h2>6. Stats</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div>
+          <label for="ug-fifa">FIFA Ranking</label>
+          <input type="text" id="ug-fifa" maxlength="6" placeholder="47" />
+        </div>
+        <div>
+          <label for="ug-participations">Participations</label>
+          <input type="text" id="ug-participations" maxlength="6" placeholder="6" />
+        </div>
+        <div>
+          <label for="ug-bestResult">Best Result</label>
+          <input type="text" id="ug-bestResult" maxlength="40" placeholder="1st round" />
+        </div>
+        <div>
+          <label for="ug-prediction">Our Prediction</label>
+          <input type="text" id="ug-prediction" maxlength="40" placeholder="32th" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>7. Resume (max 400 car.)</h2>
+      <label for="ug-resume">Write it</label>
+      <textarea id="ug-resume" maxlength="400" rows="5" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;resize:vertical;" placeholder="Write your resume here"></textarea>
+      <div class="hint"><span id="ug-resume-count">0</span> / 400</div>
+    </div>
+
+    <div class="panel">
+      <h2>Preview</h2>
+      <div class="preview-wrap" id="ug-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML to copy</h2>
+      <div style="margin-bottom:10px;">
+        <button type="button" id="ug-generateBtn">Generate HTML</button>
+      </div>
+      <textarea id="ug-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="ug-copyBtn">Copy HTML</button>
+        <span class="status" id="ug-copyStatus"></span>
       </div>
     </div>
   </div>
@@ -3502,6 +3610,242 @@ function parsePlayerOddsFromText(text) {
   });
 
   ebRender();
+})();
+
+// ========== WIDGET : Ultimate Guide — country / competition card with stats + OCR auto-fill ==========
+(function() {
+  const SITES_UG = SITES_BETTING;
+
+  function getUgTheme() {
+    const slug = $('ug-site').value;
+    const theme = SITES_UG[slug] || SITES_UG["afrik-foot-fr"];
+    return Object.assign({}, theme, { slug });
+  }
+
+  const UG_LABELS = {
+    fr:   { fifaRanking: "Classement FIFA",   participations: "Participations",  bestResult: "Meilleur résultat", prediction: "Notre pronostic" },
+    en:   { fifaRanking: "FIFA Ranking",      participations: "Participations",  bestResult: "Best Result",       prediction: "Our Prediction" },
+    ptBR: { fifaRanking: "Ranking FIFA",      participations: "Participações",   bestResult: "Melhor resultado",  prediction: "Nosso palpite" },
+    es:   { fifaRanking: "Clasificación FIFA", participations: "Participaciones", bestResult: "Mejor resultado",  prediction: "Nuestro pronóstico" },
+    it:   { fifaRanking: "Classifica FIFA",   participations: "Partecipazioni",  bestResult: "Miglior risultato", prediction: "La nostra previsione" }
+  };
+
+  function darkenHex(hex, amt) {
+    let h = (hex || '#000000').replace('#', '');
+    if (h.length === 3) h = h.split('').map(c => c + c).join('');
+    const num = parseInt(h, 16);
+    const r = Math.max(0, ((num >> 16) & 0xff) - amt);
+    const g = Math.max(0, ((num >> 8) & 0xff) - amt);
+    const b = Math.max(0, (num & 0xff) - amt);
+    return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
+  }
+
+  const EMBED_CSS_UG = `<style>
+.ug{max-width:680px;width:100%;font-family:Arial,sans-serif;border-radius:16px !important;background:#fff;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.12);margin:16px auto;box-sizing:border-box;color:#1a1d23}
+.ug__head{padding:18px 22px;color:#fff;display:flex;flex-direction:column;gap:10px}
+.ug__category{align-self:flex-start;background:#fff;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:5px 10px;border-radius:999px}
+.ug__country{display:flex;align-items:center;gap:14px}
+.ug__flag{width:56px !important;height:56px !important;border-radius:50% !important;object-fit:cover !important;border:2px solid rgba(255,255,255,.4);display:block !important;max-width:56px !important;flex-shrink:0}
+.ug__country-name{margin:0 !important;font-size:28px !important;font-weight:800 !important;line-height:1.1 !important;color:#fff !important}
+.ug__stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#e3e6eb}
+.ug__stat{padding:16px 18px;background:#fff;display:flex;flex-direction:column;gap:4px}
+.ug__stat-label{font-size:11px;text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+.ug__stat-value{font-size:24px !important;font-weight:800 !important;color:#1a1d23 !important;margin:0}
+.ug__resume{padding:18px 22px;background:#fafbfc;border-top:1px solid #e3e6eb}
+.ug__resume p{margin:0 !important;font-size:14px !important;color:#3b4250 !important;line-height:1.5 !important}
+.ug a,.ug a:visited,.ug a:hover{text-decoration:none !important}
+@media (max-width:560px){.ug__head{padding:16px 18px}.ug__country-name{font-size:22px !important}.ug__flag{width:48px !important;height:48px !important;max-width:48px !important}.ug__stat-value{font-size:20px !important}.ug__stat{padding:14px 16px}}
+</style>
+`;
+
+  function buildUgHtml({ category, flag, country, fifa, participations, bestResult, prediction, resume, theme }) {
+    const accent = theme.accent;
+    const accentDark = darkenHex(accent, 50);
+    const L = UG_LABELS[theme.lang] || UG_LABELS.en;
+    const safeCategory       = escapeHtml(category       || '');
+    const safeCountry        = escapeHtml(country        || 'Country');
+    const safeFifa           = escapeHtml(fifa           || '-');
+    const safeParticipations = escapeHtml(participations || '-');
+    const safeBestResult     = escapeHtml(bestResult     || '-');
+    const safePrediction     = escapeHtml(prediction     || '-');
+    const safeResume         = escapeHtml(resume         || '');
+    const safeFlag           = escapeHtml(flag           || '');
+    const headBg = `linear-gradient(135deg, ${accent} 0%, ${accentDark} 100%)`;
+    const flagBlock = flag
+      ? `<img class="ug__flag" src="${safeFlag}" alt="${safeCountry}" width="56" height="56" loading="lazy" decoding="async" style="border-radius:50% !important;object-fit:cover !important">`
+      : '';
+    const categoryBlock = category
+      ? `<span class="ug__category" style="color:${accent} !important;background:#fff !important">${safeCategory}</span>`
+      : '';
+    const resumeBlock = resume
+      ? `<div class="ug__resume" style="background:#fafbfc !important;border-top:1px solid #e3e6eb !important"><p style="color:#3b4250 !important">${safeResume}</p></div>`
+      : '';
+    return `<div class="ug ug--${theme.slug}" style="border:2px solid ${accent} !important;border-radius:16px !important">
+  <div class="ug__head" style="background:${headBg} !important;color:#fff !important">
+    ${categoryBlock}
+    <div class="ug__country">
+      ${flagBlock}
+      <h3 class="ug__country-name" style="color:#fff !important">${safeCountry}</h3>
+    </div>
+  </div>
+  <div class="ug__stats">
+    <div class="ug__stat">
+      <span class="ug__stat-label" style="color:${accent} !important">${escapeHtml(L.fifaRanking)}</span>
+      <span class="ug__stat-value">${safeFifa}</span>
+    </div>
+    <div class="ug__stat">
+      <span class="ug__stat-label" style="color:${accent} !important">${escapeHtml(L.participations)}</span>
+      <span class="ug__stat-value">${safeParticipations}</span>
+    </div>
+    <div class="ug__stat">
+      <span class="ug__stat-label" style="color:${accent} !important">${escapeHtml(L.bestResult)}</span>
+      <span class="ug__stat-value">${safeBestResult}</span>
+    </div>
+    <div class="ug__stat">
+      <span class="ug__stat-label" style="color:${accent} !important">${escapeHtml(L.prediction)}</span>
+      <span class="ug__stat-value">${safePrediction}</span>
+    </div>
+  </div>
+  ${resumeBlock}
+</div>`;
+  }
+
+  function ugRender() {
+    const theme = getUgTheme();
+    const data = {
+      category:       $('ug-category').value.trim(),
+      flag:           $('ug-flag').value.trim(),
+      country:        $('ug-country').value.trim(),
+      fifa:           $('ug-fifa').value.trim(),
+      participations: $('ug-participations').value.trim(),
+      bestResult:     $('ug-bestResult').value.trim(),
+      prediction:     $('ug-prediction').value.trim(),
+      resume:         $('ug-resume').value.trim(),
+      theme
+    };
+    const html = buildUgHtml(data);
+    $('ug-preview').innerHTML = EMBED_CSS_UG + html;
+    $('ug-output').value = EMBED_CSS_UG + html;
+    $('ug-resume-count').textContent = $('ug-resume').value.length;
+  }
+
+  $('ug-site').addEventListener('change', ugRender);
+  ['ug-category','ug-flag','ug-country','ug-fifa','ug-participations','ug-bestResult','ug-prediction','ug-resume'].forEach(id => {
+    $(id).addEventListener('input', ugRender);
+  });
+
+  $('ug-generateBtn').addEventListener('click', () => {
+    ugRender();
+    const ta = $('ug-output');
+    ta.focus();
+    ta.select();
+  });
+
+  $('ug-copyBtn').addEventListener('click', async () => {
+    const ta = $('ug-output');
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('ug-copyStatus').textContent = "✓ Copied.";
+      setTimeout(() => $('ug-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('ug-copyStatus').textContent = "✓ Copied.";
+    }
+  });
+
+  // ---------- OCR ----------
+  let ugCurrentBlob = null;
+
+  function ugExtractStats(text) {
+    const out = { country: '', fifa: '', participations: '', bestResult: '', prediction: '' };
+    const cleaned = text.replace(/ /g, ' ');
+    const lines = cleaned.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+
+    const fifaMatch = cleaned.match(/(?:FIFA[^\d\n]{0,30}(?:ranking|classement|rank|classifica|clasificaci[óo]n)?[^\d\n]{0,15})(\d{1,3})/i);
+    if (fifaMatch) out.fifa = fifaMatch[1];
+
+    const partMatch = cleaned.match(/(?:participation[s]?|participaci|participa[cç][õo]es?|partecipazion[ei])[^\d\n]{0,15}(\d{1,3})/i);
+    if (partMatch) out.participations = partMatch[1];
+
+    const bestMatch = cleaned.match(/(?:best\s*result|meilleur[^\n]{0,15}r[ée]sultat|melhor\s*resultado|mejor\s*resultado|miglior[^\n]{0,15}risultato)[\s:]*([^\n]{1,40})/i);
+    if (bestMatch) out.bestResult = bestMatch[1].trim().replace(/^[-–:\s]+/, '');
+
+    const predMatch = cleaned.match(/(?:our\s*prediction|notre\s*pronostic|nosso\s*palpite|nuestro\s*pron[óo]stico|la\s*nostra\s*previsione)[\s:]*([^\n]{1,40})/i);
+    if (predMatch) out.prediction = predMatch[1].trim().replace(/^[-–:\s]+/, '');
+
+    for (const line of lines) {
+      if (line.length < 3 || line.length > 30) continue;
+      if (/\d/.test(line)) continue;
+      if (!/^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\s'-]{2,}$/.test(line)) continue;
+      if (/(fifa|ranking|best|result|prediction|participation|meilleur|notre|nosso|nuestro|miglior)/i.test(line)) continue;
+      out.country = line;
+      break;
+    }
+    return out;
+  }
+
+  async function ugRunOCR(blob) {
+    const status = $('ug-ocrStatus');
+    const textArea = $('ug-ocrText');
+    status.textContent = "Loading OCR engine…";
+    try {
+      if (!window.Tesseract) {
+        status.textContent = "⚠ Tesseract.js not loaded (check your connection).";
+        return;
+      }
+      const worker = await Tesseract.createWorker('eng', 1, {
+        logger: m => {
+          if (m.status === 'recognizing text') status.textContent = `Analysing… ${Math.round(m.progress * 100)}%`;
+          else if (m.status === 'loading tesseract core' || m.status === 'initializing tesseract') status.textContent = "Initialising OCR engine…";
+          else if (m.status === 'loading language traineddata') status.textContent = "Loading model…";
+        }
+      });
+      const { data: { text } } = await worker.recognize(blob);
+      await worker.terminate();
+
+      textArea.value = text;
+      textArea.style.display = 'block';
+
+      const extracted = ugExtractStats(text);
+      let filled = 0;
+      if (extracted.country        && !$('ug-country').value)        { $('ug-country').value = extracted.country; filled++; }
+      if (extracted.fifa           && !$('ug-fifa').value)           { $('ug-fifa').value = extracted.fifa; filled++; }
+      if (extracted.participations && !$('ug-participations').value) { $('ug-participations').value = extracted.participations; filled++; }
+      if (extracted.bestResult     && !$('ug-bestResult').value)     { $('ug-bestResult').value = extracted.bestResult; filled++; }
+      if (extracted.prediction     && !$('ug-prediction').value)     { $('ug-prediction').value = extracted.prediction; filled++; }
+      ugRender();
+
+      if (filled > 0) {
+        status.innerHTML = `✓ ${filled} field(s) auto-filled. Check the recognized text below if a value looks off.`;
+      } else {
+        status.innerHTML = "✓ OCR done. No automatic match — copy values from the recognized text below into the fields.";
+      }
+    } catch (err) {
+      status.textContent = "⚠ OCR error: " + (err.message || err);
+    }
+  }
+
+  $('ug-ocrFile').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    ugCurrentBlob = file;
+    $('ug-ocrImg').src = URL.createObjectURL(file);
+    $('ug-ocrPreview').hidden = false;
+    ugRunOCR(file);
+  });
+
+  $('ug-ocrClear').addEventListener('click', () => {
+    ugCurrentBlob = null;
+    $('ug-ocrFile').value = '';
+    $('ug-ocrImg').src = '';
+    $('ug-ocrPreview').hidden = true;
+    $('ug-ocrText').style.display = 'none';
+    $('ug-ocrText').value = '';
+    $('ug-ocrStatus').textContent = 'Waiting…';
+  });
+
+  ugRender();
 })();
 
 </script>
