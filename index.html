@@ -3961,6 +3961,10 @@ function parsePlayerOddsFromText(text) {
 
   function ugExtractStats(text, lang) {
     const out = { country: '', fifa: '', participations: '', bestResult: '', prediction: '', category: '' };
+    text = text
+      .replace(/\|/g, ' ')
+      .replace(/^[ \t]*by[ \t]+[A-Z][A-Za-z\s.'-]{2,40}[ \t]*$/gim, '')
+      .replace(/\bby[ \t]+[A-Z][A-Za-z\s.'-]{2,40}\b/g, ' ');
     const cleaned = text.replace(/ /g, ' ');
     const lines = cleaned.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
 
@@ -4004,7 +4008,7 @@ function parsePlayerOddsFromText(text) {
       let cur = [];
       for (let i = 0; i < tokens.length; i++) {
         const t = tokens[i];
-        const isNewPhrase = i > 0 && cur.length > 0 && (/^[A-ZÀ-Þ]/.test(t) || /^\d/.test(t));
+        const isNewPhrase = i > 0 && cur.length > 0 && /^[A-ZÀ-Þ]/.test(t);
         if (isNewPhrase) {
           groups.push(cur.join(' '));
           cur = [t];
@@ -4064,6 +4068,11 @@ function parsePlayerOddsFromText(text) {
       }
     }
 
+    const LAST_OR_ROUND = /^(last|round\s+of)\s*\d+$/i;
+    if (LAST_OR_ROUND.test(out.bestResult) && !out.prediction) {
+      out.prediction = out.bestResult;
+      out.bestResult = '';
+    }
     out.bestResult = ugFuzzyPhase(out.bestResult, lang);
     out.prediction = ugFuzzyPhase(out.prediction, lang);
 
