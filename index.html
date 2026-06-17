@@ -3770,14 +3770,22 @@ function parsePlayerOddsFromText(text) {
       out.fifa = posMatch[2];
       out.participations = posMatch[3];
 
-      const sameLineBefore = posMatch[1].trim();
-      if (sameLineBefore && /^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\s'-]{1,28}$/.test(sameLineBefore)) {
+      // Strip ISO flag codes (2-letter standalone token) that may sit next to the
+      // country name in the OCR output — e.g. "ga" for Gabon, "ec" for Equateur.
+      const stripFlagCode = s => s
+        .replace(/\b[A-Za-z]{2}\b/g, ' ')
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+
+      const sameLineRaw = posMatch[1].trim();
+      const sameLineBefore = stripFlagCode(sameLineRaw);
+      if (sameLineBefore.length >= 3 && /^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\s'-]{2,28}$/.test(sameLineBefore)) {
         out.country = sameLineBefore;
       } else {
         const before = cleaned.substring(0, posMatch.index);
         const linesBefore = before.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
         for (let i = linesBefore.length - 1; i >= 0; i--) {
-          const lb = linesBefore[i];
+          const lb = stripFlagCode(linesBefore[i]);
           if (lb.length < 3 || lb.length > 30) continue;
           if (/\d/.test(lb)) continue;
           if (!/^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\s'-]+$/.test(lb)) continue;
