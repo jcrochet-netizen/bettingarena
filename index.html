@@ -4059,14 +4059,22 @@ function parsePlayerOddsFromText(text) {
       if (extracted.bestResult     && !$('ug-bestResult').value)     { $('ug-bestResult').value = extracted.bestResult; filled++; }
       if (extracted.prediction     && !$('ug-prediction').value)     { $('ug-prediction').value = extracted.prediction; filled++; }
       if (extracted.category       && !$('ug-category').value)       { $('ug-category').value = extracted.category; filled++; }
+      const countryForFlag = $('ug-country').value.trim();
       const flagFilled = await ugAutoFillFlag(true);
       if (flagFilled) filled++;
       ugRender();
 
+      let flagLine = '';
+      if (flagFilled) {
+        flagLine = `<br><span style="font-size:11px">🏳 Flag auto-filled from “${escapeHtml(countryForFlag)}”.</span>`;
+      } else if (countryForFlag) {
+        flagLine = `<br><span style="font-size:11px;color:#b06a00">⚠ Flag not auto-filled — country “${escapeHtml(countryForFlag)}” not recognised in dict or Flagpedia translation API. Paste a URL manually if needed.</span>`;
+      }
+
       if (filled > 0) {
-        status.innerHTML = `✓ ${filled} field(s) auto-filled. Check the recognized text below if a value looks off.`;
+        status.innerHTML = `✓ ${filled} field(s) auto-filled. Check the recognized text below if a value looks off.${flagLine}`;
       } else {
-        status.innerHTML = "✓ OCR done. No automatic match — copy values from the recognized text below into the fields.";
+        status.innerHTML = `✓ OCR done. No automatic match — copy values from the recognized text below into the fields.${flagLine}`;
       }
     } catch (err) {
       status.textContent = "⚠ OCR error: " + (err.message || err);
