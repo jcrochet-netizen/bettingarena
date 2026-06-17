@@ -1118,25 +1118,13 @@
     </div>
 
     <div class="panel">
-      <h2>3. Category</h2>
-      <label for="ug-category">e.g. World Cup 2026, Premier League, Champions League…</label>
-      <input type="text" id="ug-category" maxlength="60" placeholder="World Cup 2026" />
-    </div>
-
-    <div class="panel">
-      <h2>4. Flag image URL</h2>
-      <label for="ug-flag">Round flag — use flagcdn.com (e.g. https://flagcdn.com/w160/tn.png) or any image URL</label>
-      <input type="text" id="ug-flag" placeholder="https://flagcdn.com/w160/tn.png" />
-    </div>
-
-    <div class="panel">
-      <h2>5. Country</h2>
-      <input type="text" id="ug-country" maxlength="40" placeholder="Tunisia" />
-    </div>
-
-    <div class="panel">
-      <h2>6. Stats</h2>
+      <h2>3. Stats</h2>
+      <label>Filled automatically by the OCR upload above — edit anything that didn't match.</label>
       <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div>
+          <label for="ug-country">Country</label>
+          <input type="text" id="ug-country" maxlength="40" placeholder="Tunisia" />
+        </div>
         <div>
           <label for="ug-fifa">FIFA Ranking</label>
           <input type="text" id="ug-fifa" maxlength="6" placeholder="47" />
@@ -1157,7 +1145,19 @@
     </div>
 
     <div class="panel">
-      <h2>7. Resume (max 400 car.)</h2>
+      <h2>4. Category</h2>
+      <label for="ug-category">e.g. World Cup 2026, Premier League, Champions League…</label>
+      <input type="text" id="ug-category" maxlength="60" placeholder="World Cup 2026" />
+    </div>
+
+    <div class="panel">
+      <h2>5. Flag image URL</h2>
+      <label for="ug-flag">Round flag — use flagcdn.com (e.g. https://flagcdn.com/w160/tn.png) or any image URL</label>
+      <input type="text" id="ug-flag" placeholder="https://flagcdn.com/w160/tn.png" />
+    </div>
+
+    <div class="panel">
+      <h2>6. Resume (max 400 car.)</h2>
       <label for="ug-resume">Write it</label>
       <textarea id="ug-resume" maxlength="400" rows="5" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;resize:vertical;" placeholder="Write your resume here"></textarea>
       <div class="hint"><span id="ug-resume-count">0</span> / 400</div>
@@ -3758,7 +3758,7 @@ function parsePlayerOddsFromText(text) {
   let ugCurrentBlob = null;
 
   function ugExtractStats(text) {
-    const out = { country: '', fifa: '', participations: '', bestResult: '', prediction: '' };
+    const out = { country: '', fifa: '', participations: '', bestResult: '', prediction: '', category: '' };
     const cleaned = text.replace(/ /g, ' ');
     const lines = cleaned.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
 
@@ -3769,16 +3769,21 @@ function parsePlayerOddsFromText(text) {
     if (partMatch) out.participations = partMatch[1];
 
     const bestMatch = cleaned.match(/(?:best\s*result|meilleur[^\n]{0,15}r[ée]sultat|melhor\s*resultado|mejor\s*resultado|miglior[^\n]{0,15}risultato)[\s:]*([^\n]{1,40})/i);
-    if (bestMatch) out.bestResult = bestMatch[1].trim().replace(/^[-–:\s]+/, '');
+    if (bestMatch) out.bestResult = bestMatch[1].trim().replace(/^[-–:•\s]+/, '').replace(/\s+(FIFA|Participation|Notre|Our|Prediction|Pronostic).*$/i, '').trim();
 
-    const predMatch = cleaned.match(/(?:our\s*prediction|notre\s*pronostic|nosso\s*palpite|nuestro\s*pron[óo]stico|la\s*nostra\s*previsione)[\s:]*([^\n]{1,40})/i);
-    if (predMatch) out.prediction = predMatch[1].trim().replace(/^[-–:\s]+/, '');
+    const predMatch = cleaned.match(/(?:our\s*prediction|notre\s*pronostic|nosso\s*palpite|nuestro\s*pron[óo]stico|la\s*nostra\s*previsione|pronostic)[\s:]*([^\n]{1,40})/i);
+    if (predMatch) out.prediction = predMatch[1].trim().replace(/^[-–:•\s]+/, '').replace(/\s+(FIFA|Participation|Best|Meilleur).*$/i, '').trim();
+
+    const catMatch = cleaned.match(/\b(world\s*cup\s*\d{4}|coupe\s*du\s*monde\s*\d{4}|mondial\s*\d{4}|champions\s*league|europa\s*league|conference\s*league|premier\s*league|la\s*liga|serie\s*a|ligue\s*1|bundesliga|copa\s*am[ée]rica|euro\s*\d{4}|afcon|can\s*\d{4}|nations\s*league|copa\s*libertadores|fa\s*cup|coupe\s*de\s*france|copa\s*del\s*rey)\b/i);
+    if (catMatch) {
+      out.category = catMatch[1].replace(/\s+/g, ' ').trim().replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
+    }
 
     for (const line of lines) {
       if (line.length < 3 || line.length > 30) continue;
       if (/\d/.test(line)) continue;
       if (!/^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\s'-]{2,}$/.test(line)) continue;
-      if (/(fifa|ranking|best|result|prediction|participation|meilleur|notre|nosso|nuestro|miglior)/i.test(line)) continue;
+      if (/(fifa|ranking|classement|best|result|prediction|prono|participation|meilleur|notre|nosso|nuestro|miglior|guide|profile|world|coupe|mondial|cup|league|liga|serie|ligue|bundesliga|euro|afcon)/i.test(line)) continue;
       out.country = line;
       break;
     }
@@ -3814,6 +3819,7 @@ function parsePlayerOddsFromText(text) {
       if (extracted.participations && !$('ug-participations').value) { $('ug-participations').value = extracted.participations; filled++; }
       if (extracted.bestResult     && !$('ug-bestResult').value)     { $('ug-bestResult').value = extracted.bestResult; filled++; }
       if (extracted.prediction     && !$('ug-prediction').value)     { $('ug-prediction').value = extracted.prediction; filled++; }
+      if (extracted.category       && !$('ug-category').value)       { $('ug-category').value = extracted.category; filled++; }
       ugRender();
 
       if (filled > 0) {
