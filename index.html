@@ -4014,13 +4014,20 @@ function parsePlayerOddsFromText(text) {
       out.category = catMatch[1].replace(/\s+/g, ' ').trim().replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
     }
 
-    for (const line of lines) {
-      if (line.length < 3 || line.length > 30) continue;
-      if (/\d/.test(line)) continue;
-      if (!/^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\s'-]{2,}$/.test(line)) continue;
-      if (/(fifa|ranking|classement|best|result|prediction|prono|participation|meilleur|notre|nosso|nuestro|miglior|guide|profile|world|coupe|mondial|cup|league|liga|serie|ligue|bundesliga|euro|afcon)/i.test(line)) continue;
-      out.country = line;
-      break;
+    if (!out.country) {
+      const stripFlagCodeLocal = s => s
+        .replace(/\b[A-Za-z]{2}\b/g, ' ')
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+      for (const line of lines) {
+        const cleanedLine = stripFlagCodeLocal(line);
+        if (cleanedLine.length < 3 || cleanedLine.length > 30) continue;
+        if (/\d/.test(cleanedLine)) continue;
+        if (!/^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\s'-]{2,}$/.test(cleanedLine)) continue;
+        if (/(fifa|ranking|classement|best|result|prediction|prono|participation|meilleur|notre|nosso|nuestro|miglior|guide|profile|world|coupe|mondial|cup|league|liga|serie|ligue|bundesliga|euro|afcon)/i.test(cleanedLine)) continue;
+        out.country = cleanedLine;
+        break;
+      }
     }
 
     out.bestResult = ugFuzzyPhase(out.bestResult, lang);
