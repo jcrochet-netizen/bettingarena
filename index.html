@@ -3757,19 +3757,60 @@ function parsePlayerOddsFromText(text) {
   // ---------- OCR ----------
   let ugCurrentBlob = null;
 
-  const UG_PHASE_DICT = [
-    "Phase de groupe",
-    "Phase de groupes",
-    "Seizièmes",
-    "Seizièmes de finale",
-    "Huitièmes",
-    "Huitièmes de finale",
-    "Quart de finale",
-    "Quarts de finale",
-    "Demi-finale",
-    "Demi-finales",
-    "Finale"
-  ];
+  const UG_PHASE_DICT_BY_LANG = {
+    fr: [
+      "Phase de groupe",
+      "Phase de groupes",
+      "Seizièmes",
+      "Seizièmes de finale",
+      "Huitièmes",
+      "Huitièmes de finale",
+      "Quart de finale",
+      "Quarts de finale",
+      "Demi-finale",
+      "Demi-finales",
+      "Finale"
+    ],
+    en: [
+      "Group stage",
+      "Group phase",
+      "Round of 32",
+      "Round of 16",
+      "Last 32",
+      "Last 16",
+      "Quarter-final",
+      "Quarter-finals",
+      "Semi-final",
+      "Semi-finals",
+      "Final"
+    ],
+    es: [
+      "Fase de grupos",
+      "Dieciseisavos de final",
+      "Octavos de final",
+      "Cuartos de final",
+      "Semifinal",
+      "Semifinales",
+      "Final"
+    ],
+    ptBR: [
+      "Fase de grupos",
+      "Oitavas de final",
+      "Quartas de final",
+      "Semifinal",
+      "Semifinais",
+      "Final"
+    ],
+    it: [
+      "Fase a gironi",
+      "Sedicesimi di finale",
+      "Ottavi di finale",
+      "Quarti di finale",
+      "Semifinale",
+      "Semifinali",
+      "Finale"
+    ]
+  };
 
   function ugNormalizePhase(s) {
     return (s || '')
@@ -3800,15 +3841,16 @@ function parsePlayerOddsFromText(text) {
     return dp[n];
   }
 
-  function ugFuzzyPhase(input) {
+  function ugFuzzyPhase(input, lang) {
     if (!input) return input;
     const trimmed = input.trim();
     if (!trimmed) return input;
     const normIn = ugNormalizePhase(trimmed);
     if (!normIn) return input;
+    const dict = UG_PHASE_DICT_BY_LANG[lang] || UG_PHASE_DICT_BY_LANG.fr;
     let best = null;
     let bestDist = Infinity;
-    for (const canonical of UG_PHASE_DICT) {
+    for (const canonical of dict) {
       const normC = ugNormalizePhase(canonical);
       const d = ugLevenshtein(normIn, normC);
       const threshold = Math.max(1, Math.floor(normC.length * 0.25));
@@ -3820,7 +3862,7 @@ function parsePlayerOddsFromText(text) {
     return best || input;
   }
 
-  function ugExtractStats(text) {
+  function ugExtractStats(text, lang) {
     const out = { country: '', fifa: '', participations: '', bestResult: '', prediction: '', category: '' };
     const cleaned = text.replace(/ /g, ' ');
     const lines = cleaned.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
@@ -3918,8 +3960,8 @@ function parsePlayerOddsFromText(text) {
       break;
     }
 
-    out.bestResult = ugFuzzyPhase(out.bestResult);
-    out.prediction = ugFuzzyPhase(out.prediction);
+    out.bestResult = ugFuzzyPhase(out.bestResult, lang);
+    out.prediction = ugFuzzyPhase(out.prediction, lang);
 
     return out;
   }
@@ -3946,7 +3988,7 @@ function parsePlayerOddsFromText(text) {
       textArea.value = text;
       textArea.style.display = 'block';
 
-      const extracted = ugExtractStats(text);
+      const extracted = ugExtractStats(text, getUgTheme().lang);
       let filled = 0;
       if (extracted.country        && !$('ug-country').value)        { $('ug-country').value = extracted.country; filled++; }
       if (extracted.fifa           && !$('ug-fifa').value)           { $('ug-fifa').value = extracted.fifa; filled++; }
