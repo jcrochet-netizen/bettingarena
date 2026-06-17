@@ -3762,17 +3762,76 @@ function parsePlayerOddsFromText(text) {
     const cleaned = text.replace(/ /g, ' ');
     const lines = cleaned.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
 
-    const fifaMatch = cleaned.match(/(?:FIFA[^\d\n]{0,30}(?:ranking|classement|rank|classifica|clasificaci[óo]n)?[^\d\n]{0,15})(\d{1,3})/i);
-    if (fifaMatch) out.fifa = fifaMatch[1];
+    // ===== Positional parsing (table-style screenshots) =====
+    // Pattern: optional country line, then "[#]FIFA Participations BestResult... Prediction..."
+    // Example: "Suisse\n#19 12 Quart de finale Huitiémes"
+    const posMatch = cleaned.match(/(?:^|\n)([^\n]*?)#?(\d{1,3})\s+(\d{1,3})\s+([^\n]+?)(?:\n|$)/);
+    if (posMatch) {
+      out.fifa = posMatch[2];
+      out.participations = posMatch[3];
 
-    const partMatch = cleaned.match(/(?:participation[s]?|participaci|participa[cç][õo]es?|partecipazion[ei])[^\d\n]{0,15}(\d{1,3})/i);
-    if (partMatch) out.participations = partMatch[1];
+      const sameLineBefore = posMatch[1].trim();
+      if (sameLineBefore && /^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\s'-]{1,28}$/.test(sameLineBefore)) {
+        out.country = sameLineBefore;
+      } else {
+        const before = cleaned.substring(0, posMatch.index);
+        const linesBefore = before.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+        for (let i = linesBefore.length - 1; i >= 0; i--) {
+          const lb = linesBefore[i];
+          if (lb.length < 3 || lb.length > 30) continue;
+          if (/\d/.test(lb)) continue;
+          if (!/^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\s'-]+$/.test(lb)) continue;
+          if (/(fifa|ranking|classement|guide|prediction|prono|participation)/i.test(lb)) continue;
+          out.country = lb;
+          break;
+        }
+      }
 
-    const bestMatch = cleaned.match(/(?:best\s*result|meilleur[^\n]{0,15}r[ée]sultat|melhor\s*resultado|mejor\s*resultado|miglior[^\n]{0,15}risultato)[\s:]*([^\n]{1,40})/i);
-    if (bestMatch) out.bestResult = bestMatch[1].trim().replace(/^[-–:•\s]+/, '').replace(/\s+(FIFA|Participation|Notre|Our|Prediction|Pronostic).*$/i, '').trim();
+      // Split tail into phrases: a new phrase starts at a capitalized word (not first)
+      // or a digit-starting word. Falls back gracefully for 1, 2 or 3+ groups.
+      const tokens = posMatch[4].trim().split(/\s+/);
+      const groups = [];
+      let cur = [];
+      for (let i = 0; i < tokens.length; i++) {
+        const t = tokens[i];
+        const isNewPhrase = i > 0 && cur.length > 0 && (/^[A-ZÀ-Þ]/.test(t) || /^\d/.test(t));
+        if (isNewPhrase) {
+          groups.push(cur.join(' '));
+          cur = [t];
+        } else {
+          cur.push(t);
+        }
+      }
+      if (cur.length > 0) groups.push(cur.join(' '));
 
-    const predMatch = cleaned.match(/(?:our\s*prediction|notre\s*pronostic|nosso\s*palpite|nuestro\s*pron[óo]stico|la\s*nostra\s*previsione|pronostic)[\s:]*([^\n]{1,40})/i);
-    if (predMatch) out.prediction = predMatch[1].trim().replace(/^[-–:•\s]+/, '').replace(/\s+(FIFA|Participation|Best|Meilleur).*$/i, '').trim();
+      if (groups.length === 1) {
+        out.bestResult = groups[0];
+      } else if (groups.length === 2) {
+        out.bestResult = groups[0];
+        out.prediction = groups[1];
+      } else if (groups.length >= 3) {
+        out.bestResult = groups.slice(0, groups.length - 1).join(' ');
+        out.prediction = groups[groups.length - 1];
+      }
+    }
+
+    // ===== Labeled fallback: only fills what positional missed =====
+    if (!out.fifa) {
+      const fifaMatch = cleaned.match(/(?:FIFA[^\d\n]{0,30}(?:ranking|classement|rank|classifica|clasificaci[óo]n)?[^\d\n]{0,15})(\d{1,3})/i);
+      if (fifaMatch) out.fifa = fifaMatch[1];
+    }
+    if (!out.participations) {
+      const partMatch = cleaned.match(/(?:participation[s]?|participaci|participa[cç][õo]es?|partecipazion[ei])[^\d\n]{0,15}(\d{1,3})/i);
+      if (partMatch) out.participations = partMatch[1];
+    }
+    if (!out.bestResult) {
+      const bestMatch = cleaned.match(/(?:best\s*result|meilleur[^\n]{0,15}r[ée]sultat|melhor\s*resultado|mejor\s*resultado|miglior[^\n]{0,15}risultato)[\s:]*([^\n]{1,40})/i);
+      if (bestMatch) out.bestResult = bestMatch[1].trim().replace(/^[-–:•\s]+/, '').replace(/\s+(FIFA|Participation|Notre|Our|Prediction|Pronostic).*$/i, '').trim();
+    }
+    if (!out.prediction) {
+      const predMatch = cleaned.match(/(?:our\s*prediction|notre\s*pronostic|nosso\s*palpite|nuestro\s*pron[óo]stico|la\s*nostra\s*previsione|pronostic)[\s:]*([^\n]{1,40})/i);
+      if (predMatch) out.prediction = predMatch[1].trim().replace(/^[-–:•\s]+/, '').replace(/\s+(FIFA|Participation|Best|Meilleur).*$/i, '').trim();
+    }
 
     const catMatch = cleaned.match(/\b(world\s*cup\s*\d{4}|coupe\s*du\s*monde\s*\d{4}|mondial\s*\d{4}|champions\s*league|europa\s*league|conference\s*league|premier\s*league|la\s*liga|serie\s*a|ligue\s*1|bundesliga|copa\s*am[ée]rica|euro\s*\d{4}|afcon|can\s*\d{4}|nations\s*league|copa\s*libertadores|fa\s*cup|coupe\s*de\s*france|copa\s*del\s*rey)\b/i);
     if (catMatch) {
