@@ -3675,14 +3675,13 @@ function parsePlayerOddsFromText(text) {
       ? `<img class="ug__flag" src="${safeFlag}" alt="${safeCountry}" width="56" height="56" loading="lazy" decoding="async" style="border-radius:50% !important;object-fit:cover !important">`
       : '';
     const categoryBlock = category
-      ? `<span class="ug__category" style="color:${accent} !important;background:#fff !important">${safeCategory}</span>`
+      ? `<span class="ug__category" style="display:inline-block;color:#fff !important;background:${accent} !important;margin-bottom:10px">${safeCategory}</span>`
       : '';
-    const resumeBlock = resume
-      ? `<div class="ug__resume" style="background:#fafbfc !important;border-top:1px solid #e3e6eb !important"><p style="color:#3b4250 !important">${safeResume}</p></div>`
+    const footBlock = (category || resume)
+      ? `<div class="ug__resume" style="background:#fafbfc !important;border-top:1px solid #e3e6eb !important">${categoryBlock}${resume ? `<p style="color:#3b4250 !important">${safeResume}</p>` : ''}</div>`
       : '';
     return `<div class="ug ug--${theme.slug}" style="border:2px solid ${accent} !important;border-radius:16px !important">
   <div class="ug__head" style="background:${headBg} !important;color:#fff !important">
-    ${categoryBlock}
     <div class="ug__country">
       ${flagBlock}
       <h3 class="ug__country-name" style="color:#fff !important">${safeCountry}</h3>
@@ -3706,7 +3705,7 @@ function parsePlayerOddsFromText(text) {
       <span class="ug__stat-value">${safePrediction}</span>
     </div>
   </div>
-  ${resumeBlock}
+  ${footBlock}
 </div>`;
   }
 
