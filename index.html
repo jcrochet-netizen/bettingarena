@@ -3729,8 +3729,13 @@ function parsePlayerOddsFromText(text) {
   }
 
   $('ug-site').addEventListener('change', ugRender);
-  ['ug-category','ug-flag','ug-country','ug-fifa','ug-participations','ug-bestResult','ug-prediction','ug-resume'].forEach(id => {
+  ['ug-category','ug-flag','ug-fifa','ug-participations','ug-bestResult','ug-prediction','ug-resume'].forEach(id => {
     $(id).addEventListener('input', ugRender);
+  });
+
+  $('ug-country').addEventListener('input', () => {
+    ugAutoFillFlag(false);
+    ugRender();
   });
 
   $('ug-generateBtn').addEventListener('click', () => {
@@ -3755,6 +3760,65 @@ function parsePlayerOddsFromText(text) {
 
   // ---------- OCR ----------
   let ugCurrentBlob = null;
+
+  // === Flag lookup: country name (FR/EN/ES/ptBR/IT, normalized lowercase, no accents) -> ISO 3166-1 alpha-2 (or gb-eng / gb-sct / gb-wls for UK constituents) ===
+  const UG_FLAG_CODES = {
+    // Europe — FR
+    "suisse":"ch","allemagne":"de","france":"fr","italie":"it","espagne":"es","portugal":"pt","belgique":"be","pays-bas":"nl","hollande":"nl","angleterre":"gb-eng","ecosse":"gb-sct","pays de galles":"gb-wls","irlande du nord":"gb-nir","irlande":"ie","danemark":"dk","suede":"se","norvege":"no","finlande":"fi","islande":"is","pologne":"pl","russie":"ru","ukraine":"ua","croatie":"hr","serbie":"rs","republique tcheque":"cz","tchequie":"cz","slovaquie":"sk","slovenie":"si","autriche":"at","grece":"gr","turquie":"tr","hongrie":"hu","roumanie":"ro","bulgarie":"bg","albanie":"al","bosnie":"ba","bosnie-herzegovine":"ba","macedoine du nord":"mk","montenegro":"me","kosovo":"xk","estonie":"ee","lettonie":"lv","lituanie":"lt","bielorussie":"by","moldavie":"md","luxembourg":"lu","liechtenstein":"li","malte":"mt","chypre":"cy","andorre":"ad","saint-marin":"sm",
+    // Americas — FR
+    "bresil":"br","argentine":"ar","uruguay":"uy","paraguay":"py","chili":"cl","perou":"pe","bolivie":"bo","colombie":"co","venezuela":"ve","equateur":"ec","guyana":"gy","suriname":"sr","etats-unis":"us","usa":"us","canada":"ca","mexique":"mx","jamaique":"jm","panama":"pa","costa rica":"cr","honduras":"hn","salvador":"sv","el salvador":"sv","guatemala":"gt","nicaragua":"ni","cuba":"cu","haiti":"ht","republique dominicaine":"do","trinite-et-tobago":"tt",
+    // Africa — FR
+    "maroc":"ma","algerie":"dz","tunisie":"tn","egypte":"eg","libye":"ly","soudan":"sd","senegal":"sn","cote d'ivoire":"ci","ghana":"gh","nigeria":"ng","cameroun":"cm","afrique du sud":"za","kenya":"ke","ouganda":"ug","tanzanie":"tz","ethiopie":"et","rwanda":"rw","burkina faso":"bf","mali":"ml","guinee":"gn","guinee equatoriale":"gq","guinee-bissau":"gw","gabon":"ga","togo":"tg","benin":"bj","niger":"ne","mauritanie":"mr","congo":"cg","rd congo":"cd","rdc":"cd","republique democratique du congo":"cd","angola":"ao","mozambique":"mz","zimbabwe":"zw","zambie":"zm","madagascar":"mg","comores":"km","cap-vert":"cv","tchad":"td","djibouti":"dj","somalie":"so","erythree":"er","lesotho":"ls","namibie":"na","botswana":"bw","eswatini":"sz","swaziland":"sz","malawi":"mw","sierra leone":"sl","liberia":"lr",
+    // Asia — FR
+    "japon":"jp","coree du sud":"kr","coree du nord":"kp","chine":"cn","iran":"ir","irak":"iq","arabie saoudite":"sa","emirats arabes unis":"ae","qatar":"qa","koweit":"kw","bahrein":"bh","oman":"om","yemen":"ye","jordanie":"jo","liban":"lb","syrie":"sy","palestine":"ps","israel":"il","inde":"in","pakistan":"pk","bangladesh":"bd","sri lanka":"lk","nepal":"np","afghanistan":"af","ouzbekistan":"uz","kazakhstan":"kz","kirghizistan":"kg","tadjikistan":"tj","turkmenistan":"tm","azerbaidjan":"az","armenie":"am","georgie":"ge","thailande":"th","vietnam":"vn","philippines":"ph","indonesie":"id","malaisie":"my","singapour":"sg","cambodge":"kh","laos":"la","myanmar":"mm","birmanie":"mm","mongolie":"mn","taiwan":"tw","hong kong":"hk",
+    // Oceania — FR
+    "australie":"au","nouvelle-zelande":"nz","fidji":"fj","papouasie-nouvelle-guinee":"pg",
+    // === English ===
+    "switzerland":"ch","germany":"de","italy":"it","spain":"es","belgium":"be","netherlands":"nl","holland":"nl","england":"gb-eng","scotland":"gb-sct","wales":"gb-wls","northern ireland":"gb-nir","ireland":"ie","denmark":"dk","sweden":"se","norway":"no","finland":"fi","iceland":"is","poland":"pl","russia":"ru","croatia":"hr","serbia":"rs","czech republic":"cz","czechia":"cz","slovakia":"sk","slovenia":"si","austria":"at","greece":"gr","turkey":"tr","hungary":"hu","romania":"ro","bulgaria":"bg","albania":"al","bosnia":"ba","bosnia and herzegovina":"ba","north macedonia":"mk","kosovo":"xk","estonia":"ee","latvia":"lv","lithuania":"lt","belarus":"by","moldova":"md","brazil":"br","argentina":"ar","chile":"cl","peru":"pe","bolivia":"bo","colombia":"co","venezuela":"ve","ecuador":"ec","united states":"us","canada":"ca","mexico":"mx","jamaica":"jm","panama":"pa","costa rica":"cr","honduras":"hn","el salvador":"sv","guatemala":"gt","cuba":"cu","haiti":"ht","dominican republic":"do","trinidad and tobago":"tt","morocco":"ma","algeria":"dz","tunisia":"tn","egypt":"eg","libya":"ly","sudan":"sd","senegal":"sn","ivory coast":"ci","cote d'ivoire":"ci","ghana":"gh","nigeria":"ng","cameroon":"cm","south africa":"za","kenya":"ke","uganda":"ug","tanzania":"tz","ethiopia":"et","rwanda":"rw","burkina faso":"bf","mali":"ml","guinea":"gn","equatorial guinea":"gq","guinea-bissau":"gw","gabon":"ga","togo":"tg","benin":"bj","niger":"ne","mauritania":"mr","congo":"cg","dr congo":"cd","democratic republic of the congo":"cd","angola":"ao","mozambique":"mz","zimbabwe":"zw","zambia":"zm","madagascar":"mg","comoros":"km","cape verde":"cv","cabo verde":"cv","chad":"td","djibouti":"dj","somalia":"so","eritrea":"er","lesotho":"ls","namibia":"na","botswana":"bw","eswatini":"sz","swaziland":"sz","malawi":"mw","sierra leone":"sl","liberia":"lr","japan":"jp","south korea":"kr","north korea":"kp","china":"cn","iran":"ir","iraq":"iq","saudi arabia":"sa","united arab emirates":"ae","qatar":"qa","kuwait":"kw","bahrain":"bh","oman":"om","yemen":"ye","jordan":"jo","lebanon":"lb","syria":"sy","palestine":"ps","israel":"il","india":"in","pakistan":"pk","bangladesh":"bd","sri lanka":"lk","nepal":"np","afghanistan":"af","uzbekistan":"uz","kazakhstan":"kz","azerbaijan":"az","armenia":"am","georgia":"ge","thailand":"th","vietnam":"vn","philippines":"ph","indonesia":"id","malaysia":"my","singapore":"sg","cambodia":"kh","myanmar":"mm","burma":"mm","mongolia":"mn","taiwan":"tw","hong kong":"hk","australia":"au","new zealand":"nz","fiji":"fj","papua new guinea":"pg",
+    // === Spanish ===
+    "suiza":"ch","alemania":"de","francia":"fr","italia":"it","espana":"es","belgica":"be","paises bajos":"nl","inglaterra":"gb-eng","escocia":"gb-sct","gales":"gb-wls","irlanda":"ie","dinamarca":"dk","suecia":"se","noruega":"no","finlandia":"fi","islandia":"is","polonia":"pl","rusia":"ru","ucrania":"ua","croacia":"hr","serbia":"rs","republica checa":"cz","austria":"at","grecia":"gr","turquia":"tr","hungria":"hu","rumania":"ro","bulgaria":"bg","brasil":"br","argentina":"ar","uruguay":"uy","paraguay":"py","chile":"cl","peru":"pe","bolivia":"bo","colombia":"co","venezuela":"ve","ecuador":"ec","estados unidos":"us","canada":"ca","mexico":"mx","marruecos":"ma","argelia":"dz","tunez":"tn","egipto":"eg","japon":"jp","corea del sur":"kr","corea del norte":"kp","china":"cn","iran":"ir","arabia saudi":"sa","arabia saudita":"sa","emiratos arabes unidos":"ae","catar":"qa","tailandia":"th","australia":"au","nueva zelanda":"nz",
+    // === Portuguese (BR) ===
+    "suica":"ch","alemanha":"de","franca":"fr","italia":"it","espanha":"es","belgica":"be","holanda":"nl","paises baixos":"nl","inglaterra":"gb-eng","escocia":"gb-sct","pais de gales":"gb-wls","irlanda":"ie","dinamarca":"dk","suecia":"se","noruega":"no","finlandia":"fi","islandia":"is","polonia":"pl","russia":"ru","ucrania":"ua","croacia":"hr","servia":"rs","republica tcheca":"cz","austria":"at","grecia":"gr","turquia":"tr","hungria":"hu","romenia":"ro","bulgaria":"bg","brasil":"br","argentina":"ar","uruguai":"uy","paraguai":"py","chile":"cl","peru":"pe","bolivia":"bo","colombia":"co","venezuela":"ve","equador":"ec","estados unidos":"us","canada":"ca","mexico":"mx","marrocos":"ma","argelia":"dz","tunisia":"tn","egito":"eg","japao":"jp","coreia do sul":"kr","coreia do norte":"kp","china":"cn","ira":"ir","arabia saudita":"sa","emirados arabes unidos":"ae","catar":"qa","australia":"au","nova zelandia":"nz",
+    // === Italian ===
+    "svizzera":"ch","germania":"de","francia":"fr","italia":"it","spagna":"es","portogallo":"pt","belgio":"be","paesi bassi":"nl","olanda":"nl","inghilterra":"gb-eng","scozia":"gb-sct","galles":"gb-wls","irlanda":"ie","danimarca":"dk","svezia":"se","norvegia":"no","finlandia":"fi","islanda":"is","polonia":"pl","russia":"ru","ucraina":"ua","croazia":"hr","serbia":"rs","repubblica ceca":"cz","austria":"at","grecia":"gr","turchia":"tr","ungheria":"hu","romania":"ro","bulgaria":"bg","brasile":"br","argentina":"ar","uruguay":"uy","cile":"cl","peru":"pe","colombia":"co","venezuela":"ve","ecuador":"ec","stati uniti":"us","canada":"ca","messico":"mx","marocco":"ma","algeria":"dz","tunisia":"tn","egitto":"eg","giappone":"jp","corea del sud":"kr","corea del nord":"kp","cina":"cn","arabia saudita":"sa","emirati arabi uniti":"ae","qatar":"qa","australia":"au","nuova zelanda":"nz"
+  };
+
+  function ugNormalizeName(s) {
+    return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s{2,}/g,' ').trim();
+  }
+
+  function ugCountryToCode(name) {
+    if (!name) return null;
+    return UG_FLAG_CODES[ugNormalizeName(name)] || null;
+  }
+
+  async function ugFetchCountryCode(name) {
+    if (!name) return null;
+    try {
+      const url = `https://restcountries.com/v3.1/translation/${encodeURIComponent(name)}?fields=cca2`;
+      const r = await fetch(url);
+      if (!r.ok) return null;
+      const j = await r.json();
+      if (Array.isArray(j) && j[0] && j[0].cca2) return j[0].cca2.toLowerCase();
+      return null;
+    } catch (e) { return null; }
+  }
+
+  async function ugAutoFillFlag(allowApi) {
+    const currentFlag = $('ug-flag').value.trim();
+    if (currentFlag && !/^https?:\/\/flagcdn\.com\//i.test(currentFlag)) return false;
+    const country = $('ug-country').value.trim();
+    if (!country) return false;
+    let code = ugCountryToCode(country);
+    if (!code && allowApi) {
+      code = await ugFetchCountryCode(country);
+    }
+    if (code) {
+      $('ug-flag').value = `https://flagcdn.com/w160/${code}.png`;
+      return true;
+    }
+    return false;
+  }
 
   const UG_PHASE_DICT_BY_LANG = {
     fr: [
@@ -3995,6 +4059,8 @@ function parsePlayerOddsFromText(text) {
       if (extracted.bestResult     && !$('ug-bestResult').value)     { $('ug-bestResult').value = extracted.bestResult; filled++; }
       if (extracted.prediction     && !$('ug-prediction').value)     { $('ug-prediction').value = extracted.prediction; filled++; }
       if (extracted.category       && !$('ug-category').value)       { $('ug-category').value = extracted.category; filled++; }
+      const flagFilled = await ugAutoFillFlag(true);
+      if (flagFilled) filled++;
       ugRender();
 
       if (filled > 0) {
