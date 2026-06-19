@@ -1203,8 +1203,6 @@
 
   <div class="tab-panel" id="tab-wc-rankings" role="tabpanel">
     <h2 class="widget-title">World Cup rankings A-L</h2>
-    <p class="subtitle">12 onglets pour les 12 groupes du Mondial 2026. Choisis le site, optionnellement remplis automatiquement via Sportmonks, édite à la main si besoin, puis copie le HTML pour l'onglet actif.</p>
-
     <div class="panel">
       <h2>1. Select your website</h2>
       <select id="wc-site" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
@@ -1227,7 +1225,6 @@
         <div class="hint" style="margin:0">
           <strong>Auto-refreshed every 15 min</strong> from Sportmonks via GitHub Actions →
           <a href="https://github.com/jcrochet-netizen/bettingarena/actions/workflows/refresh-wc-data.yml" target="_blank" rel="noopener">refresh-wc-data.yml</a>.
-          The token lives in GitHub Secrets, not in this page.
         </div>
         <button type="button" id="wc-fetchBtn">Reload data</button>
       </div>
@@ -1237,7 +1234,6 @@
     <div class="panel">
       <h2>3. Group</h2>
       <div id="wc-tabs" class="wc-tabs" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"></div>
-      <div class="hint" style="margin-bottom:8px">L'ordre du tableau de sortie est calculé automatiquement (points puis goal-average puis BP). Tu n'as qu'à saisir les 4 équipes et leurs statistiques.</div>
       <div id="wc-editor"></div>
     </div>
 
