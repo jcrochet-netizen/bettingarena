@@ -1222,22 +1222,16 @@
     </div>
 
     <div class="panel">
-      <h2>2. Sportmonks (optional auto-fill)</h2>
-      <div class="row" style="grid-template-columns: 2fr 1fr auto;">
-        <div>
-          <label for="wc-token">API token</label>
-          <input type="text" id="wc-token" value="Zvxax5CXCD8UJSh0JvZZ1LBmCWJM0kZyHhGnpXhfSBD4hbvFmVTzUIC156Wf" placeholder="Paste your Sportmonks API token" />
+      <h2>2. Data status</h2>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <div class="hint" style="margin:0">
+          <strong>Auto-refreshed every 15 min</strong> from Sportmonks via GitHub Actions →
+          <a href="https://github.com/jcrochet-netizen/bettingarena/actions/workflows/refresh-wc-data.yml" target="_blank" rel="noopener">refresh-wc-data.yml</a>.
+          The token lives in GitHub Secrets, not in this page.
         </div>
-        <div>
-          <label for="wc-season">Season ID</label>
-          <input type="text" id="wc-season" value="26618" placeholder="e.g. 26618" />
-        </div>
-        <div style="align-self:end">
-          <button type="button" id="wc-fetchBtn">Fetch all groups</button>
-        </div>
+        <button type="button" id="wc-fetchBtn">Reload data</button>
       </div>
       <div class="hint" style="margin-top:8px"><span class="status" id="wc-fetchStatus"></span></div>
-      <div class="hint">Endpoint utilisé : <code>https://api.sportmonks.com/v3/football/standings/seasons/{seasonId}?include=participant;group</code>. Si tu n'as pas le token, remplis le tableau à la main ci-dessous.</div>
     </div>
 
     <div class="panel">
@@ -4458,37 +4452,45 @@ function parsePlayerOddsFromText(text) {
     return out;
   }
 
-  async function wcFetchSportmonks() {
-    const token = $('wc-token').value.trim();
-    const seasonId = $('wc-season').value.trim();
+  function wcFormatRelative(iso) {
+    if (!iso) return '';
+    const then = new Date(iso).getTime();
+    if (isNaN(then)) return '';
+    const diff = Date.now() - then;
+    const m = Math.round(diff / 60000);
+    if (m < 1) return 'just now';
+    if (m < 60) return m + ' min ago';
+    const h = Math.round(m / 60);
+    if (h < 24) return h + ' h ago';
+    return Math.round(h / 24) + ' d ago';
+  }
+
+  async function wcLoadStaticData() {
     const status = $('wc-fetchStatus');
-    if (!token || !seasonId) { status.textContent = "⚠ Provide both API token and Season ID."; return; }
-    status.textContent = "Fetching…";
+    status.textContent = "Loading…";
     try {
-      const url = `https://api.sportmonks.com/v3/football/standings/seasons/${encodeURIComponent(seasonId)}?api_token=${encodeURIComponent(token)}&include=participant;group`;
-      const resp = await fetch(url);
+      const resp = await fetch('wc-data.json', { cache: 'no-cache' });
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
       const json = await resp.json();
-      const parsed = wcParseSportmonks(json);
-      if (!parsed) throw new Error('Could not parse response shape');
+      if (!json.groups) throw new Error('Malformed wc-data.json (missing groups)');
       let totalRows = 0;
-      Object.keys(parsed).forEach(g => {
-        if (parsed[g].length > 0) {
-          while (parsed[g].length < 4) parsed[g].push({ team:'', played:0, points:0, gf:0, ga:0 });
-          wcState[g] = parsed[g];
-          totalRows += parsed[g].length;
-        }
+      WC_GROUPS.forEach(g => {
+        const rows = (json.groups[g] || []).slice(0, 4);
+        while (rows.length < 4) rows.push({ team:'', played:0, points:0, gf:0, ga:0, logo:'' });
+        wcState[g] = rows;
+        totalRows += json.groups[g] ? json.groups[g].length : 0;
       });
       wcBuildEditor();
       wcRender();
-      const groupsLoaded = WC_GROUPS.filter(g => parsed[g] && parsed[g].some(r => r.team)).length;
-      status.innerHTML = `✓ ${groupsLoaded} group(s), ${totalRows} rows loaded from Sportmonks.`;
+      const stamp = wcFormatRelative(json.updated);
+      const groupsLoaded = WC_GROUPS.filter(g => json.groups[g] && json.groups[g].some(r => r.team)).length;
+      status.innerHTML = `✓ ${groupsLoaded}/12 groups, ${totalRows} rows — updated ${stamp ? '<strong>' + stamp + '</strong>' : '(no timestamp)'}.`;
     } catch (e) {
-      status.textContent = "⚠ Fetch failed: " + (e.message || e) + ". Edit values manually below.";
+      status.textContent = "⚠ Load failed: " + (e.message || e) + ". The cron may not have written the file yet — edit values manually below.";
     }
   }
 
-  $('wc-fetchBtn').addEventListener('click', wcFetchSportmonks);
+  $('wc-fetchBtn').addEventListener('click', wcLoadStaticData);
 
   $('wc-generateBtn').addEventListener('click', () => {
     wcRender();
@@ -4511,10 +4513,7 @@ function parsePlayerOddsFromText(text) {
   wcBuildTabs();
   wcBuildEditor();
   wcRender();
-
-  if ($('wc-token').value.trim() && $('wc-season').value.trim()) {
-    wcFetchSportmonks().catch(() => {});
-  }
+  wcLoadStaticData().catch(() => {});
 })();
 
 </script>

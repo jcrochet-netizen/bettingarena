@@ -1,0 +1,415 @@
+{
+  "updated": "2026-06-19T15:14:40.127Z",
+  "source": "Sportmonks v3 /standings/seasons/26618",
+  "season": 2026,
+  "groups": {
+    "A": [
+      {
+        "team": "Mexico",
+        "played": 2,
+        "points": 6,
+        "gf": 3,
+        "ga": 0,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/16/18576.png"
+      },
+      {
+        "team": "Korea Republic",
+        "played": 2,
+        "points": 3,
+        "gf": 2,
+        "ga": 2,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/7/18567.png"
+      },
+      {
+        "team": "Czech Republic",
+        "played": 2,
+        "points": 1,
+        "gf": 2,
+        "ga": 3,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/30/18718.png"
+      },
+      {
+        "team": "South Africa",
+        "played": 2,
+        "points": 1,
+        "gf": 1,
+        "ga": 3,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/27/18555.png"
+      }
+    ],
+    "B": [
+      {
+        "team": "Canada",
+        "played": 2,
+        "points": 4,
+        "gf": 7,
+        "ga": 1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/12/18572.png"
+      },
+      {
+        "team": "Switzerland",
+        "played": 2,
+        "points": 4,
+        "gf": 5,
+        "ga": 2,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/20/18708.png"
+      },
+      {
+        "team": "Bosnia and Herzegovina",
+        "played": 2,
+        "points": 1,
+        "gf": 2,
+        "ga": 5,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/1/18625.png"
+      },
+      {
+        "team": "Qatar",
+        "played": 2,
+        "points": 1,
+        "gf": 1,
+        "ga": 7,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/16/18544.png"
+      }
+    ],
+    "C": [
+      {
+        "team": "Scotland",
+        "played": 1,
+        "points": 3,
+        "gf": 1,
+        "ga": 0,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18706.png"
+      },
+      {
+        "team": "Morocco",
+        "played": 1,
+        "points": 1,
+        "gf": 1,
+        "ga": 1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/23/18551.png"
+      },
+      {
+        "team": "Brazil",
+        "played": 1,
+        "points": 1,
+        "gf": 1,
+        "ga": 1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/16/18704.png"
+      },
+      {
+        "team": "Haiti",
+        "played": 1,
+        "points": 0,
+        "gf": 0,
+        "ga": 1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/20/18804.png"
+      }
+    ],
+    "D": [
+      {
+        "team": "United States",
+        "played": 1,
+        "points": 3,
+        "gf": 4,
+        "ga": 1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/11/18571.png"
+      },
+      {
+        "team": "Australia",
+        "played": 1,
+        "points": 3,
+        "gf": 2,
+        "ga": 0,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/10/18730.png"
+      },
+      {
+        "team": "Türkiye",
+        "played": 1,
+        "points": 0,
+        "gf": 0,
+        "ga": 2,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/28/18716.png"
+      },
+      {
+        "team": "Paraguay",
+        "played": 1,
+        "points": 0,
+        "gf": 1,
+        "ga": 4,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/3/18723.png"
+      }
+    ],
+    "E": [
+      {
+        "team": "Germany",
+        "played": 1,
+        "points": 3,
+        "gf": 7,
+        "ga": 1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/4/18660.png"
+      },
+      {
+        "team": "Côte d'Ivoire",
+        "played": 1,
+        "points": 3,
+        "gf": 1,
+        "ga": 0,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/0/18560.png"
+      },
+      {
+        "team": "Ecuador",
+        "played": 1,
+        "points": 0,
+        "gf": 0,
+        "ga": 1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/13/18573.png"
+      },
+      {
+        "team": "Curacao",
+        "played": 1,
+        "points": 0,
+        "gf": 1,
+        "ga": 7,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/30/18910.png"
+      }
+    ],
+    "F": [
+      {
+        "team": "Sweden",
+        "played": 1,
+        "points": 3,
+        "gf": 5,
+        "ga": 1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/4/18564.png"
+      },
+      {
+        "team": "Japan",
+        "played": 1,
+        "points": 1,
+        "gf": 2,
+        "ga": 2,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/5/18597.png"
+      },
+      {
+        "team": "Netherlands",
+        "played": 1,
+        "points": 1,
+        "gf": 2,
+        "ga": 2,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/6/18694.png"
+      },
+      {
+        "team": "Tunisia",
+        "played": 1,
+        "points": 0,
+        "gf": 1,
+        "ga": 5,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/26/18554.png"
+      }
+    ],
+    "G": [
+      {
+        "team": "New Zealand",
+        "played": 1,
+        "points": 1,
+        "gf": 2,
+        "ga": 2,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/21/18613.png"
+      },
+      {
+        "team": "Iran",
+        "played": 1,
+        "points": 1,
+        "gf": 2,
+        "ga": 2,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/28/18652.png"
+      },
+      {
+        "team": "Egypt",
+        "played": 1,
+        "points": 1,
+        "gf": 1,
+        "ga": 1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18546.png"
+      },
+      {
+        "team": "Belgium",
+        "played": 1,
+        "points": 1,
+        "gf": 1,
+        "ga": 1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/23/18743.png"
+      }
+    ],
+    "H": [
+      {
+        "team": "Uruguay",
+        "played": 1,
+        "points": 1,
+        "gf": 1,
+        "ga": 1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/19/15251.png"
+      },
+      {
+        "team": "Saudi Arabia",
+        "played": 1,
+        "points": 1,
+        "gf": 1,
+        "ga": 1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/2/18562.png"
+      },
+      {
+        "team": "Spain",
+        "played": 1,
+        "points": 1,
+        "gf": 0,
+        "ga": 0,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/22/18710.png"
+      },
+      {
+        "team": "Cape Verde Islands",
+        "played": 1,
+        "points": 1,
+        "gf": 0,
+        "ga": 0,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/7/18823.png"
+      }
+    ],
+    "I": [
+      {
+        "team": "Norway",
+        "played": 1,
+        "points": 3,
+        "gf": 4,
+        "ga": 1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18578.png"
+      },
+      {
+        "team": "France",
+        "played": 1,
+        "points": 3,
+        "gf": 3,
+        "ga": 1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/23/18647.png"
+      },
+      {
+        "team": "Senegal",
+        "played": 1,
+        "points": 0,
+        "gf": 1,
+        "ga": 3,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/30/18558.png"
+      },
+      {
+        "team": "Iraq",
+        "played": 1,
+        "points": 0,
+        "gf": 1,
+        "ga": 4,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/8/18600.png"
+      }
+    ],
+    "J": [
+      {
+        "team": "Argentina",
+        "played": 1,
+        "points": 3,
+        "gf": 3,
+        "ga": 0,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/20/18644.png"
+      },
+      {
+        "team": "Austria",
+        "played": 1,
+        "points": 3,
+        "gf": 3,
+        "ga": 1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/19/18643.png"
+      },
+      {
+        "team": "Jordan",
+        "played": 1,
+        "points": 0,
+        "gf": 1,
+        "ga": 3,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/31/18559.png"
+      },
+      {
+        "team": "Algeria",
+        "played": 1,
+        "points": 0,
+        "gf": 0,
+        "ga": 3,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/28/18620.png"
+      }
+    ],
+    "K": [
+      {
+        "team": "Colombia",
+        "played": 1,
+        "points": 3,
+        "gf": 3,
+        "ga": 1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/0/18720.png"
+      },
+      {
+        "team": "Congo DR",
+        "played": 1,
+        "points": 1,
+        "gf": 1,
+        "ga": 1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/24/18552.png"
+      },
+      {
+        "team": "Portugal",
+        "played": 1,
+        "points": 1,
+        "gf": 1,
+        "ga": 1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/13/18701.png"
+      },
+      {
+        "team": "Uzbekistan",
+        "played": 1,
+        "points": 0,
+        "gf": 1,
+        "ga": 3,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/25/18745.png"
+      }
+    ],
+    "L": [
+      {
+        "team": "England",
+        "played": 1,
+        "points": 3,
+        "gf": 4,
+        "ga": 2,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/21/18645.png"
+      },
+      {
+        "team": "Ghana",
+        "played": 1,
+        "points": 3,
+        "gf": 1,
+        "ga": 0,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/25/18553.png"
+      },
+      {
+        "team": "Panama",
+        "played": 1,
+        "points": 0,
+        "gf": 0,
+        "ga": 1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/29/18717.png"
+      },
+      {
+        "team": "Croatia",
+        "played": 1,
+        "points": 0,
+        "gf": 2,
+        "ga": 4,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/28/18588.png"
+      }
+    ]
+  }
+}
