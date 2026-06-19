@@ -3498,15 +3498,21 @@ function parsePlayerOddsFromText(text) {
     const badgeBg    = (theme.bannerBadge && theme.bannerBadge.bg)    || '#fff';
     const badgeColor = (theme.bannerBadge && theme.bannerBadge.color) || accent;
 
-    // Sports Mole — the previous CSS display:table-cell on <span> approach was
-    // still getting stacked vertically (their editor splits the cells into
-    // separate visual blocks). Fall back to real HTML <table> markup with
-    // <tr>/<td> — wpautop has explicit logic to leave table structure intact,
-    // so this is the most bulletproof horizontal layout available.
+    // Sports Mole — drop the outer <a> wrapping the <table> (their editor
+    // strips it, breaking the link), and replace the <img> with a
+    // <span style="background-image"> so their image-credit plugin (which
+    // scans <img> tags and auto-injects copyright captions like "© Iconsport
+    // / Alamy" underneath) has nothing to hook into. Each <td> now owns its
+    // own inner <a href> wrapping only inline content (spans), which
+    // survives both wpautop and aggressive sanitization.
     if (theme.slug && theme.slug.indexOf('sports-mole') === 0) {
       const fallbackTitle = (theme.lang === 'fr') ? "Titre de l'article" : "Article title";
+      const linkStyle = `text-decoration:none !important;color:inherit !important`;
+      const imgVisualSm = image
+        ? `<span role="img" aria-label="${safeTitle}" style="display:block !important;width:170px !important;height:95px !important;background-image:url('${safeImage}') !important;background-size:cover !important;background-position:center center !important;background-repeat:no-repeat !important;border-radius:12px !important;border:2px solid rgba(255,255,255,.35) !important;box-sizing:border-box !important"></span>`
+        : '';
       const imgCellSm = image
-        ? `<td width="186" valign="middle" style="width:186px !important;padding:16px !important;vertical-align:middle !important;background:${accent} !important;border:0 !important"><img src="${safeImage}" width="170" height="95" alt="${safeTitle}" loading="lazy" decoding="async" style="display:block !important;width:170px !important;height:95px !important;max-width:170px !important;border-radius:12px !important;object-fit:cover !important;border:2px solid rgba(255,255,255,.35) !important"></td>`
+        ? `<td width="186" valign="middle" style="width:186px !important;padding:16px !important;vertical-align:middle !important;background:${accent} !important;border:0 !important"><a href="${safeUrl}" style="display:block !important;${linkStyle}">${imgVisualSm}</a></td>`
         : '';
       const badgeInnerSm = badge
         ? `<span style="display:inline-block !important;background:${badgeBg} !important;color:${badgeColor} !important;font-size:11px !important;font-weight:700 !important;text-transform:uppercase !important;letter-spacing:.3px !important;padding:5px 9px !important;border-radius:999px !important;margin-bottom:8px !important;line-height:1.2 !important">${safeBadge}</span>`
@@ -3516,7 +3522,7 @@ function parsePlayerOddsFromText(text) {
         ? `<span style="display:block !important;font-size:14px !important;color:#fff !important;line-height:1.4 !important;opacity:.92">${safeSummary}</span>`
         : '';
       const ctaInnerSm = `<span style="display:inline-block !important;background:#fff !important;color:${accent} !important;font-size:14px !important;font-weight:700 !important;padding:11px 16px !important;border-radius:9px !important;white-space:nowrap !important;line-height:1.2 !important">${escapeHtml(readCta)} →</span>`;
-      return `<a class="nsnbn nsnbn--${theme.slug}" href="${safeUrl}" style="display:block !important;text-decoration:none !important;color:#fff !important;max-width:800px !important;margin:16px auto !important"><table cellpadding="0" cellspacing="0" border="0" role="presentation" width="100%" style="width:100% !important;max-width:800px !important;background:${accent} !important;border:2px solid #fff !important;border-radius:16px !important;border-collapse:separate !important;border-spacing:0 !important;font-family:Arial,sans-serif !important;box-shadow:0 6px 18px rgba(0,0,0,.12) !important;margin:0 auto !important;table-layout:fixed !important;color:#fff !important;overflow:hidden !important"><tr style="background:${accent} !important">${imgCellSm}<td valign="middle" style="padding:16px 8px !important;vertical-align:middle !important;background:${accent} !important;color:#fff !important;border:0 !important">${badgeInnerSm}${titleInnerSm}${summaryInnerSm}</td><td width="1%" valign="middle" style="padding:16px !important;vertical-align:middle !important;background:${accent} !important;white-space:nowrap !important;width:1% !important;border:0 !important">${ctaInnerSm}</td></tr></table></a>`;
+      return `<table class="nsnbn nsnbn--${theme.slug}" cellpadding="0" cellspacing="0" border="0" role="presentation" width="100%" style="width:100% !important;max-width:800px !important;background:${accent} !important;border:2px solid #fff !important;border-radius:16px !important;border-collapse:separate !important;border-spacing:0 !important;font-family:Arial,sans-serif !important;box-shadow:0 6px 18px rgba(0,0,0,.12) !important;margin:16px auto !important;table-layout:fixed !important;color:#fff !important;overflow:hidden !important"><tr style="background:${accent} !important">${imgCellSm}<td valign="middle" style="padding:16px 8px !important;vertical-align:middle !important;background:${accent} !important;color:#fff !important;border:0 !important"><a href="${safeUrl}" style="display:block !important;${linkStyle}">${badgeInnerSm}${titleInnerSm}${summaryInnerSm}</a></td><td width="1%" valign="middle" style="padding:16px !important;vertical-align:middle !important;background:${accent} !important;white-space:nowrap !important;width:1% !important;border:0 !important"><a href="${safeUrl}" style="display:inline-block !important;${linkStyle}">${ctaInnerSm}</a></td></tr></table>`;
     }
 
     const badgeBlock = badge
