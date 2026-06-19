@@ -3564,6 +3564,18 @@ function parsePlayerOddsFromText(text) {
     $(id).addEventListener('input', ebRender);
   });
 
+  function ebUnwrapTrivelaImage(url) {
+    if (!url) return url;
+    if (!/^https?:\/\/(?:www\.)?trivela\.com\.br\/thumbor\//i.test(url)) return url;
+    const m = url.match(/(https?%3[Aa]%2[Ff]%2[Ff][^?#]+)$/);
+    if (!m) return url;
+    try {
+      const unwrapped = decodeURIComponent(m[1]);
+      if (/^https?:\/\//.test(unwrapped)) return unwrapped;
+    } catch (e) {}
+    return url;
+  }
+
   async function ebFetchMicrolink(url) {
     const r = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}`);
     if (!r.ok) throw new Error('Microlink HTTP ' + r.status);
@@ -3635,7 +3647,7 @@ function parsePlayerOddsFromText(text) {
         return;
       }
       if (title) $('eb-title').value = title;
-      if (image) $('eb-image').value = image;
+      if (image) $('eb-image').value = ebUnwrapTrivelaImage(image);
       ebRender();
       status.innerHTML = `✓ Récupéré (${source}) : <strong>${escapeHtml(title || '(pas de titre)')}</strong>${image ? ' + image' : ''}`;
     } catch (err) {
