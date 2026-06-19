@@ -4296,6 +4296,31 @@ function parsePlayerOddsFromText(text) {
     it:   'Mondiali 2026 — Gruppo'
   };
 
+  // Sportmonks returns English team names — translate to the site's language at render time.
+  // Keys are the Sportmonks canonical English names; missing entries fall back verbatim.
+  const WC_TEAM_NAMES = {
+    fr: {
+      "Argentina":"Argentine","France":"France","Spain":"Espagne","England":"Angleterre","Brazil":"Brésil","Morocco":"Maroc","Portugal":"Portugal","Netherlands":"Pays-Bas","Germany":"Allemagne","Belgium":"Belgique","Croatia":"Croatie","Mexico":"Mexique","Colombia":"Colombie","United States":"États-Unis","USA":"États-Unis","Senegal":"Sénégal","Japan":"Japon","Uruguay":"Uruguay","Switzerland":"Suisse","Austria":"Autriche","Korea Republic":"Corée du Sud","South Korea":"Corée du Sud","Australia":"Australie","Iran":"Iran","Türkiye":"Turquie","Turkey":"Turquie","Norway":"Norvège","Ecuador":"Équateur","Egypt":"Égypte","Côte d'Ivoire":"Côte d'Ivoire","Ivory Coast":"Côte d'Ivoire","Algeria":"Algérie","Canada":"Canada","Panama":"Panama","Sweden":"Suède","Scotland":"Écosse","Paraguay":"Paraguay","Congo DR":"RD Congo","DR Congo":"RD Congo","Czech Republic":"République Tchèque","Czechia":"République Tchèque","Qatar":"Qatar","Uzbekistan":"Ouzbékistan","Tunisia":"Tunisie","Saudi Arabia":"Arabie Saoudite","Iraq":"Irak","South Africa":"Afrique du Sud","Bosnia and Herzegovina":"Bosnie-Herzégovine","Cape Verde Islands":"Cap-Vert","Cape Verde":"Cap-Vert","Jordan":"Jordanie","Ghana":"Ghana","New Zealand":"Nouvelle-Zélande","Curacao":"Curaçao","Haiti":"Haïti"
+    },
+    es: {
+      "Argentina":"Argentina","France":"Francia","Spain":"España","England":"Inglaterra","Brazil":"Brasil","Morocco":"Marruecos","Portugal":"Portugal","Netherlands":"Países Bajos","Germany":"Alemania","Belgium":"Bélgica","Croatia":"Croacia","Mexico":"México","Colombia":"Colombia","United States":"Estados Unidos","USA":"Estados Unidos","Senegal":"Senegal","Japan":"Japón","Uruguay":"Uruguay","Switzerland":"Suiza","Austria":"Austria","Korea Republic":"Corea del Sur","South Korea":"Corea del Sur","Australia":"Australia","Iran":"Irán","Türkiye":"Turquía","Turkey":"Turquía","Norway":"Noruega","Ecuador":"Ecuador","Egypt":"Egipto","Côte d'Ivoire":"Costa de Marfil","Ivory Coast":"Costa de Marfil","Algeria":"Argelia","Canada":"Canadá","Panama":"Panamá","Sweden":"Suecia","Scotland":"Escocia","Paraguay":"Paraguay","Congo DR":"RD del Congo","DR Congo":"RD del Congo","Czech Republic":"República Checa","Czechia":"República Checa","Qatar":"Catar","Uzbekistan":"Uzbekistán","Tunisia":"Túnez","Saudi Arabia":"Arabia Saudí","Iraq":"Irak","South Africa":"Sudáfrica","Bosnia and Herzegovina":"Bosnia y Herzegovina","Cape Verde Islands":"Cabo Verde","Cape Verde":"Cabo Verde","Jordan":"Jordania","Ghana":"Ghana","New Zealand":"Nueva Zelanda","Curacao":"Curazao","Haiti":"Haití"
+    },
+    ptBR: {
+      "Argentina":"Argentina","France":"França","Spain":"Espanha","England":"Inglaterra","Brazil":"Brasil","Morocco":"Marrocos","Portugal":"Portugal","Netherlands":"Países Baixos","Germany":"Alemanha","Belgium":"Bélgica","Croatia":"Croácia","Mexico":"México","Colombia":"Colômbia","United States":"Estados Unidos","USA":"Estados Unidos","Senegal":"Senegal","Japan":"Japão","Uruguay":"Uruguai","Switzerland":"Suíça","Austria":"Áustria","Korea Republic":"Coreia do Sul","South Korea":"Coreia do Sul","Australia":"Austrália","Iran":"Irã","Türkiye":"Turquia","Turkey":"Turquia","Norway":"Noruega","Ecuador":"Equador","Egypt":"Egito","Côte d'Ivoire":"Costa do Marfim","Ivory Coast":"Costa do Marfim","Algeria":"Argélia","Canada":"Canadá","Panama":"Panamá","Sweden":"Suécia","Scotland":"Escócia","Paraguay":"Paraguai","Congo DR":"RD Congo","DR Congo":"RD Congo","Czech Republic":"República Tcheca","Czechia":"República Tcheca","Qatar":"Catar","Uzbekistan":"Uzbequistão","Tunisia":"Tunísia","Saudi Arabia":"Arábia Saudita","Iraq":"Iraque","South Africa":"África do Sul","Bosnia and Herzegovina":"Bósnia e Herzegovina","Cape Verde Islands":"Cabo Verde","Cape Verde":"Cabo Verde","Jordan":"Jordânia","Ghana":"Gana","New Zealand":"Nova Zelândia","Curacao":"Curaçao","Haiti":"Haiti"
+    },
+    it: {
+      "Argentina":"Argentina","France":"Francia","Spain":"Spagna","England":"Inghilterra","Brazil":"Brasile","Morocco":"Marocco","Portugal":"Portogallo","Netherlands":"Paesi Bassi","Germany":"Germania","Belgium":"Belgio","Croatia":"Croazia","Mexico":"Messico","Colombia":"Colombia","United States":"Stati Uniti","USA":"Stati Uniti","Senegal":"Senegal","Japan":"Giappone","Uruguay":"Uruguay","Switzerland":"Svizzera","Austria":"Austria","Korea Republic":"Corea del Sud","South Korea":"Corea del Sud","Australia":"Australia","Iran":"Iran","Türkiye":"Turchia","Turkey":"Turchia","Norway":"Norvegia","Ecuador":"Ecuador","Egypt":"Egitto","Côte d'Ivoire":"Costa d'Avorio","Ivory Coast":"Costa d'Avorio","Algeria":"Algeria","Canada":"Canada","Panama":"Panama","Sweden":"Svezia","Scotland":"Scozia","Paraguay":"Paraguay","Congo DR":"RD del Congo","DR Congo":"RD del Congo","Czech Republic":"Repubblica Ceca","Czechia":"Repubblica Ceca","Qatar":"Qatar","Uzbekistan":"Uzbekistan","Tunisia":"Tunisia","Saudi Arabia":"Arabia Saudita","Iraq":"Iraq","South Africa":"Sudafrica","Bosnia and Herzegovina":"Bosnia ed Erzegovina","Cape Verde Islands":"Capo Verde","Cape Verde":"Capo Verde","Jordan":"Giordania","Ghana":"Ghana","New Zealand":"Nuova Zelanda","Curacao":"Curaçao","Haiti":"Haiti"
+    }
+  };
+
+  function wcLocalizeTeam(name, lang) {
+    if (!name) return name;
+    if (!lang || lang === 'en') return name;
+    const dict = WC_TEAM_NAMES[lang];
+    if (!dict) return name;
+    return dict[name] || name;
+  }
+
   const wcState = {};
   WC_GROUPS.forEach(g => wcState[g] = [
     { team:'', played:0, points:0, gf:0, ga:0, logo:'' },
@@ -4357,7 +4382,7 @@ function parsePlayerOddsFromText(text) {
       else if (pos === 3) bgColor = '#fff4d6';
       const gd = (parseInt(r.gf) || 0) - (parseInt(r.ga) || 0);
       const gdStr = (gd > 0 ? '+' : '') + gd;
-      const teamLabel = escapeHtml(r.team || '-');
+      const teamLabel = escapeHtml(wcLocalizeTeam(r.team, theme.lang) || '-');
       const logoImg = r.logo
         ? `<img src="${escapeHtml(r.logo)}" alt="" width="20" height="20" loading="lazy" decoding="async" style="display:inline-block !important;width:20px !important;height:20px !important;vertical-align:middle !important;margin-right:8px !important;border-radius:50% !important;object-fit:cover !important;background:#fff !important"> `
         : '';
