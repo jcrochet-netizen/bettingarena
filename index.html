@@ -1226,11 +1226,11 @@
       <div class="row" style="grid-template-columns: 2fr 1fr auto;">
         <div>
           <label for="wc-token">API token</label>
-          <input type="text" id="wc-token" placeholder="Paste your Sportmonks API token" />
+          <input type="text" id="wc-token" value="Zvxax5CXCD8UJSh0JvZZ1LBmCWJM0kZyHhGnpXhfSBD4hbvFmVTzUIC156Wf" placeholder="Paste your Sportmonks API token" />
         </div>
         <div>
           <label for="wc-season">Season ID</label>
-          <input type="text" id="wc-season" placeholder="e.g. 25627" />
+          <input type="text" id="wc-season" value="26618" placeholder="e.g. 26618" />
         </div>
         <div style="align-self:end">
           <button type="button" id="wc-fetchBtn">Fetch all groups</button>
@@ -4304,10 +4304,10 @@ function parsePlayerOddsFromText(text) {
 
   const wcState = {};
   WC_GROUPS.forEach(g => wcState[g] = [
-    { team:'', played:0, points:0, gf:0, ga:0 },
-    { team:'', played:0, points:0, gf:0, ga:0 },
-    { team:'', played:0, points:0, gf:0, ga:0 },
-    { team:'', played:0, points:0, gf:0, ga:0 }
+    { team:'', played:0, points:0, gf:0, ga:0, logo:'' },
+    { team:'', played:0, points:0, gf:0, ga:0, logo:'' },
+    { team:'', played:0, points:0, gf:0, ga:0, logo:'' },
+    { team:'', played:0, points:0, gf:0, ga:0, logo:'' }
   ]);
   let wcActiveGroup = 'A';
 
@@ -4364,7 +4364,10 @@ function parsePlayerOddsFromText(text) {
       const gd = (parseInt(r.gf) || 0) - (parseInt(r.ga) || 0);
       const gdStr = (gd > 0 ? '+' : '') + gd;
       const teamLabel = escapeHtml(r.team || '-');
-      return `<tr style="background:${bgColor} !important"><td style="background:${bgColor} !important;color:${accent} !important;font-weight:800">${pos}</td><td class="wc__td-team" style="background:${bgColor} !important">${teamLabel}</td><td style="background:${bgColor} !important">${parseInt(r.played) || 0}</td><td class="wc__td-pts" style="background:${bgColor} !important;color:${accent} !important">${parseInt(r.points) || 0}</td><td style="background:${bgColor} !important">${parseInt(r.gf) || 0}</td><td style="background:${bgColor} !important">${parseInt(r.ga) || 0}</td><td style="background:${bgColor} !important">${gdStr}</td></tr>`;
+      const logoImg = r.logo
+        ? `<img src="${escapeHtml(r.logo)}" alt="" width="20" height="20" loading="lazy" decoding="async" style="display:inline-block !important;width:20px !important;height:20px !important;vertical-align:middle !important;margin-right:8px !important;border-radius:50% !important;object-fit:cover !important;background:#fff !important"> `
+        : '';
+      return `<tr style="background:${bgColor} !important"><td style="background:${bgColor} !important;color:${accent} !important;font-weight:800">${pos}</td><td class="wc__td-team" style="background:${bgColor} !important">${logoImg}${teamLabel}</td><td style="background:${bgColor} !important">${parseInt(r.played) || 0}</td><td class="wc__td-pts" style="background:${bgColor} !important;color:${accent} !important">${parseInt(r.points) || 0}</td><td style="background:${bgColor} !important">${parseInt(r.gf) || 0}</td><td style="background:${bgColor} !important">${parseInt(r.ga) || 0}</td><td style="background:${bgColor} !important">${gdStr}</td></tr>`;
     }).join('');
 
     return `<div class="wc wc--${theme.slug}" style="border:2px solid ${accent} !important;border-radius:14px !important">
@@ -4424,24 +4427,31 @@ function parsePlayerOddsFromText(text) {
 
   $('wc-site').addEventListener('change', wcRender);
 
+  function wcDet(details, code) {
+    if (!Array.isArray(details)) return 0;
+    const d = details.find(x => x && x.type && x.type.code === code);
+    return d ? (Number(d.value) || 0) : 0;
+  }
+
   function wcParseSportmonks(json) {
     if (!json || !json.data || !Array.isArray(json.data)) return null;
     const out = {};
     WC_GROUPS.forEach(g => out[g] = []);
     for (const entry of json.data) {
       const groupName = (entry.group && (entry.group.name || (entry.group.data && entry.group.data.name))) || '';
-      const m = groupName.match(/group\s+([A-Za-z])/i);
+      const m = groupName.match(/group\s+([A-La-l])/i);
       if (!m) continue;
       const letter = m[1].toUpperCase();
       if (!WC_GROUPS.includes(letter)) continue;
       const participant = entry.participant || (entry.participants && entry.participants[0]) || {};
-      const details = entry.details || entry.overall || {};
+      const details = entry.details;
       const row = {
         team: participant.name || participant.short_code || '',
-        played: details.matches_played || details.played || entry.matches_played || 0,
-        points: entry.points || details.points || 0,
-        gf: details.goals_for || details.goals_scored || entry.goals_for || 0,
-        ga: details.goals_against || details.goals_conceded || entry.goals_against || 0
+        played: wcDet(details, 'overall-matches-played'),
+        points: Number(entry.points) || wcDet(details, 'overall-points') || 0,
+        gf: wcDet(details, 'overall-goals-for'),
+        ga: wcDet(details, 'overall-goals-against'),
+        logo: participant.image_path || ''
       };
       if (out[letter].length < 4) out[letter].push(row);
     }
@@ -4501,6 +4511,10 @@ function parsePlayerOddsFromText(text) {
   wcBuildTabs();
   wcBuildEditor();
   wcRender();
+
+  if ($('wc-token').value.trim() && $('wc-season').value.trim()) {
+    wcFetchSportmonks().catch(() => {});
+  }
 })();
 
 </script>
