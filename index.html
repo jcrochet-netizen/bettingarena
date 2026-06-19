@@ -3553,8 +3553,9 @@ function parsePlayerOddsFromText(text) {
       theme
     };
     const html = buildEbHtml(data);
-    $('eb-preview').innerHTML = EMBED_CSS_EB + html;
-    $('eb-output').value = EMBED_CSS_EB + html;
+    const fullHtml = EMBED_CSS_EB + html;
+    $('eb-output').value = fullHtml;
+    $('eb-preview').innerHTML = ebProxyTrivelaForPreview(fullHtml);
     $('eb-summary-count').textContent = $('eb-summary').value.length;
     $('eb-title-count').textContent = $('eb-title').value.length;
   }
@@ -3563,6 +3564,13 @@ function parsePlayerOddsFromText(text) {
   ['eb-badge','eb-url','eb-title','eb-image','eb-summary'].forEach(id => {
     $(id).addEventListener('input', ebRender);
   });
+
+  function ebProxyTrivelaForPreview(html) {
+    return html.replace(
+      /(src=["'])(https?:\/\/(?:[\w-]+\.)?trivela\.com\.br\/[^"']+)(["'])/gi,
+      (_, before, url, after) => before + 'https://images.weserv.nl/?url=' + encodeURIComponent(url.replace(/^https?:\/\//, '')) + after
+    );
+  }
 
   function ebUnwrapTrivelaImage(url) {
     if (!url) return url;
