@@ -1,415 +1,681 @@
 {
-  "updated": "2026-06-19T15:23:11.855Z",
-  "source": "Sportmonks v3 /standings/seasons/26618",
+  "updated": "2026-06-19T15:36:55.901Z",
+  "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
     "A": [
       {
+        "id": 18576,
         "team": "Mexico",
         "played": 2,
         "points": 6,
         "gf": 3,
         "ga": 0,
+        "fair": -5,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/16/18576.png"
       },
       {
+        "id": 18567,
         "team": "Korea Republic",
         "played": 2,
         "points": 3,
         "gf": 2,
         "ga": 2,
+        "fair": -3,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/7/18567.png"
       },
       {
+        "id": 18718,
         "team": "Czech Republic",
         "played": 2,
         "points": 1,
         "gf": 2,
         "ga": 3,
+        "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/30/18718.png"
       },
       {
+        "id": 18555,
         "team": "South Africa",
         "played": 2,
         "points": 1,
         "gf": 1,
         "ga": 3,
+        "fair": -12,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/27/18555.png"
       }
     ],
     "B": [
       {
+        "id": 18572,
         "team": "Canada",
         "played": 2,
         "points": 4,
         "gf": 7,
         "ga": 1,
+        "fair": -3,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/12/18572.png"
       },
       {
+        "id": 18708,
         "team": "Switzerland",
         "played": 2,
         "points": 4,
         "gf": 5,
         "ga": 2,
+        "fair": -2,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/20/18708.png"
       },
       {
+        "id": 18625,
         "team": "Bosnia and Herzegovina",
         "played": 2,
         "points": 1,
         "gf": 2,
         "ga": 5,
+        "fair": -9,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/1/18625.png"
       },
       {
+        "id": 18544,
         "team": "Qatar",
         "played": 2,
         "points": 1,
         "gf": 1,
         "ga": 7,
+        "fair": -11,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/16/18544.png"
       }
     ],
     "C": [
       {
+        "id": 18706,
         "team": "Scotland",
         "played": 1,
         "points": 3,
         "gf": 1,
         "ga": 0,
+        "fair": -3,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18706.png"
       },
       {
+        "id": 18551,
         "team": "Morocco",
         "played": 1,
         "points": 1,
         "gf": 1,
         "ga": 1,
+        "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/23/18551.png"
       },
       {
+        "id": 18704,
         "team": "Brazil",
         "played": 1,
         "points": 1,
         "gf": 1,
         "ga": 1,
+        "fair": -2,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/16/18704.png"
       },
       {
+        "id": 18804,
         "team": "Haiti",
         "played": 1,
         "points": 0,
         "gf": 0,
         "ga": 1,
+        "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/20/18804.png"
       }
     ],
     "D": [
       {
+        "id": 18571,
         "team": "United States",
         "played": 1,
         "points": 3,
         "gf": 4,
         "ga": 1,
+        "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/11/18571.png"
       },
       {
+        "id": 18730,
         "team": "Australia",
         "played": 1,
         "points": 3,
         "gf": 2,
         "ga": 0,
+        "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/10/18730.png"
       },
       {
+        "id": 18716,
         "team": "Türkiye",
         "played": 1,
         "points": 0,
         "gf": 0,
         "ga": 2,
+        "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/28/18716.png"
       },
       {
+        "id": 18723,
         "team": "Paraguay",
         "played": 1,
         "points": 0,
         "gf": 1,
         "ga": 4,
+        "fair": -5,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/3/18723.png"
       }
     ],
     "E": [
       {
+        "id": 18660,
         "team": "Germany",
         "played": 1,
         "points": 3,
         "gf": 7,
         "ga": 1,
+        "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/4/18660.png"
       },
       {
+        "id": 18560,
         "team": "Côte d'Ivoire",
         "played": 1,
         "points": 3,
         "gf": 1,
         "ga": 0,
+        "fair": -3,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/0/18560.png"
       },
       {
+        "id": 18573,
         "team": "Ecuador",
         "played": 1,
         "points": 0,
         "gf": 0,
         "ga": 1,
+        "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/13/18573.png"
       },
       {
+        "id": 18910,
         "team": "Curacao",
         "played": 1,
         "points": 0,
         "gf": 1,
         "ga": 7,
+        "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/30/18910.png"
       }
     ],
     "F": [
       {
+        "id": 18564,
         "team": "Sweden",
         "played": 1,
         "points": 3,
         "gf": 5,
         "ga": 1,
+        "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/4/18564.png"
       },
       {
+        "id": 18597,
         "team": "Japan",
         "played": 1,
         "points": 1,
         "gf": 2,
         "ga": 2,
+        "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/5/18597.png"
       },
       {
+        "id": 18694,
         "team": "Netherlands",
         "played": 1,
         "points": 1,
         "gf": 2,
         "ga": 2,
+        "fair": -3,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/6/18694.png"
       },
       {
+        "id": 18554,
         "team": "Tunisia",
         "played": 1,
         "points": 0,
         "gf": 1,
         "ga": 5,
+        "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/26/18554.png"
       }
     ],
     "G": [
       {
+        "id": 18613,
         "team": "New Zealand",
         "played": 1,
         "points": 1,
         "gf": 2,
         "ga": 2,
+        "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/21/18613.png"
       },
       {
+        "id": 18652,
         "team": "Iran",
         "played": 1,
         "points": 1,
         "gf": 2,
         "ga": 2,
+        "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/28/18652.png"
       },
       {
+        "id": 18546,
         "team": "Egypt",
         "played": 1,
         "points": 1,
         "gf": 1,
         "ga": 1,
+        "fair": -2,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18546.png"
       },
       {
+        "id": 18743,
         "team": "Belgium",
         "played": 1,
         "points": 1,
         "gf": 1,
         "ga": 1,
+        "fair": -2,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/23/18743.png"
       }
     ],
     "H": [
       {
+        "id": 15251,
         "team": "Uruguay",
         "played": 1,
         "points": 1,
         "gf": 1,
         "ga": 1,
+        "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/19/15251.png"
       },
       {
+        "id": 18562,
         "team": "Saudi Arabia",
         "played": 1,
         "points": 1,
         "gf": 1,
         "ga": 1,
+        "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/2/18562.png"
       },
       {
+        "id": 18710,
         "team": "Spain",
         "played": 1,
         "points": 1,
         "gf": 0,
         "ga": 0,
+        "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/22/18710.png"
       },
       {
+        "id": 18823,
         "team": "Cape Verde Islands",
         "played": 1,
         "points": 1,
         "gf": 0,
         "ga": 0,
+        "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/7/18823.png"
       }
     ],
     "I": [
       {
+        "id": 18578,
         "team": "Norway",
         "played": 1,
         "points": 3,
         "gf": 4,
         "ga": 1,
+        "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18578.png"
       },
       {
+        "id": 18647,
         "team": "France",
         "played": 1,
         "points": 3,
         "gf": 3,
         "ga": 1,
+        "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/23/18647.png"
       },
       {
+        "id": 18558,
         "team": "Senegal",
         "played": 1,
         "points": 0,
         "gf": 1,
         "ga": 3,
+        "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/30/18558.png"
       },
       {
+        "id": 18600,
         "team": "Iraq",
         "played": 1,
         "points": 0,
         "gf": 1,
         "ga": 4,
+        "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/8/18600.png"
       }
     ],
     "J": [
       {
+        "id": 18644,
         "team": "Argentina",
         "played": 1,
         "points": 3,
         "gf": 3,
         "ga": 0,
+        "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/20/18644.png"
       },
       {
+        "id": 18643,
         "team": "Austria",
         "played": 1,
         "points": 3,
         "gf": 3,
         "ga": 1,
+        "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/19/18643.png"
       },
       {
+        "id": 18559,
         "team": "Jordan",
         "played": 1,
         "points": 0,
         "gf": 1,
         "ga": 3,
+        "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/31/18559.png"
       },
       {
+        "id": 18620,
         "team": "Algeria",
         "played": 1,
         "points": 0,
         "gf": 0,
         "ga": 3,
+        "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/28/18620.png"
       }
     ],
     "K": [
       {
+        "id": 18720,
         "team": "Colombia",
         "played": 1,
         "points": 3,
         "gf": 3,
         "ga": 1,
+        "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/0/18720.png"
       },
       {
+        "id": 18552,
         "team": "Congo DR",
         "played": 1,
         "points": 1,
         "gf": 1,
         "ga": 1,
+        "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/24/18552.png"
       },
       {
+        "id": 18701,
         "team": "Portugal",
         "played": 1,
         "points": 1,
         "gf": 1,
         "ga": 1,
+        "fair": -3,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/13/18701.png"
       },
       {
+        "id": 18745,
         "team": "Uzbekistan",
         "played": 1,
         "points": 0,
         "gf": 1,
         "ga": 3,
+        "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/25/18745.png"
       }
     ],
     "L": [
       {
+        "id": 18645,
         "team": "England",
         "played": 1,
         "points": 3,
         "gf": 4,
         "ga": 2,
+        "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/21/18645.png"
       },
       {
+        "id": 18553,
         "team": "Ghana",
         "played": 1,
         "points": 3,
         "gf": 1,
         "ga": 0,
+        "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/25/18553.png"
       },
       {
+        "id": 18717,
         "team": "Panama",
         "played": 1,
         "points": 0,
         "gf": 0,
         "ga": 1,
+        "fair": -2,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/29/18717.png"
       },
       {
+        "id": 18588,
         "team": "Croatia",
         "played": 1,
         "points": 0,
         "gf": 2,
         "ga": 4,
+        "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/28/18588.png"
       }
     ]
-  }
+  },
+  "matches": [
+    {
+      "a": 18555,
+      "ga": 0,
+      "b": 18576,
+      "gb": 2
+    },
+    {
+      "a": 18567,
+      "ga": 2,
+      "b": 18718,
+      "gb": 1
+    },
+    {
+      "a": 18572,
+      "ga": 1,
+      "b": 18625,
+      "gb": 1
+    },
+    {
+      "a": 18571,
+      "ga": 4,
+      "b": 18723,
+      "gb": 1
+    },
+    {
+      "a": 18544,
+      "ga": 1,
+      "b": 18708,
+      "gb": 1
+    },
+    {
+      "a": 18551,
+      "ga": 1,
+      "b": 18704,
+      "gb": 1
+    },
+    {
+      "a": 18706,
+      "ga": 1,
+      "b": 18804,
+      "gb": 0
+    },
+    {
+      "a": 18716,
+      "ga": 0,
+      "b": 18730,
+      "gb": 2
+    },
+    {
+      "a": 18660,
+      "ga": 7,
+      "b": 18910,
+      "gb": 1
+    },
+    {
+      "a": 18597,
+      "ga": 2,
+      "b": 18694,
+      "gb": 2
+    },
+    {
+      "a": 18560,
+      "ga": 1,
+      "b": 18573,
+      "gb": 0
+    },
+    {
+      "a": 18554,
+      "ga": 1,
+      "b": 18564,
+      "gb": 5
+    },
+    {
+      "a": 18710,
+      "ga": 0,
+      "b": 18823,
+      "gb": 0
+    },
+    {
+      "a": 18546,
+      "ga": 1,
+      "b": 18743,
+      "gb": 1
+    },
+    {
+      "a": 15251,
+      "ga": 1,
+      "b": 18562,
+      "gb": 1
+    },
+    {
+      "a": 18613,
+      "ga": 2,
+      "b": 18652,
+      "gb": 2
+    },
+    {
+      "a": 18558,
+      "ga": 1,
+      "b": 18647,
+      "gb": 3
+    },
+    {
+      "a": 18578,
+      "ga": 4,
+      "b": 18600,
+      "gb": 1
+    },
+    {
+      "a": 18620,
+      "ga": 0,
+      "b": 18644,
+      "gb": 3
+    },
+    {
+      "a": 18559,
+      "ga": 1,
+      "b": 18643,
+      "gb": 3
+    },
+    {
+      "a": 18552,
+      "ga": 1,
+      "b": 18701,
+      "gb": 1
+    },
+    {
+      "a": 18588,
+      "ga": 2,
+      "b": 18645,
+      "gb": 4
+    },
+    {
+      "a": 18553,
+      "ga": 1,
+      "b": 18717,
+      "gb": 0
+    },
+    {
+      "a": 18720,
+      "ga": 3,
+      "b": 18745,
+      "gb": 1
+    },
+    {
+      "a": 18555,
+      "ga": 1,
+      "b": 18718,
+      "gb": 1
+    },
+    {
+      "a": 18625,
+      "ga": 1,
+      "b": 18708,
+      "gb": 4
+    },
+    {
+      "a": 18544,
+      "ga": 0,
+      "b": 18572,
+      "gb": 6
+    },
+    {
+      "a": 18567,
+      "ga": 0,
+      "b": 18576,
+      "gb": 1
+    }
+  ]
 }

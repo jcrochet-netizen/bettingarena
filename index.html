@@ -4323,11 +4323,12 @@ function parsePlayerOddsFromText(text) {
 
   const wcState = {};
   WC_GROUPS.forEach(g => wcState[g] = [
-    { team:'', played:0, points:0, gf:0, ga:0, logo:'' },
-    { team:'', played:0, points:0, gf:0, ga:0, logo:'' },
-    { team:'', played:0, points:0, gf:0, ga:0, logo:'' },
-    { team:'', played:0, points:0, gf:0, ga:0, logo:'' }
+    { id:0, team:'', played:0, points:0, gf:0, ga:0, fair:0, logo:'' },
+    { id:0, team:'', played:0, points:0, gf:0, ga:0, fair:0, logo:'' },
+    { id:0, team:'', played:0, points:0, gf:0, ga:0, fair:0, logo:'' },
+    { id:0, team:'', played:0, points:0, gf:0, ga:0, fair:0, logo:'' }
   ]);
+  let wcMatches = [];
   let wcActiveGroup = 'A';
 
   function wcDarken(hex, amt) {
@@ -4356,15 +4357,69 @@ function parsePlayerOddsFromText(text) {
 </style>
 `;
 
-  function wcSortRows(rows) {
-    return [...rows].sort((a, b) => {
-      const pa = parseInt(a.points) || 0, pb = parseInt(b.points) || 0;
-      if (pa !== pb) return pb - pa;
-      const ga = (parseInt(a.gf) || 0) - (parseInt(a.ga) || 0);
-      const gb = (parseInt(b.gf) || 0) - (parseInt(b.ga) || 0);
-      if (ga !== gb) return gb - ga;
-      return (parseInt(b.gf) || 0) - (parseInt(a.gf) || 0);
+  // Head-to-head sub-standings among a subset of teams, using only finished
+  // matches played between them. Returns { teamId: { pts, gd, gf } }.
+  function wcH2H(teams, matches) {
+    const st = {};
+    const ids = new Set();
+    teams.forEach(t => {
+      const id = Number(t.id) || 0;
+      if (id > 0) {
+        ids.add(id);
+        st[id] = { pts: 0, gd: 0, gf: 0 };
+      }
     });
+    if (!matches || !matches.length || ids.size < 2) return st;
+    for (const m of matches) {
+      if (!ids.has(m.a) || !ids.has(m.b)) continue;
+      const A = st[m.a], B = st[m.b];
+      const ga = Number(m.ga) || 0, gb = Number(m.gb) || 0;
+      A.gf += ga; A.gd += ga - gb;
+      B.gf += gb; B.gd += gb - ga;
+      if (ga > gb) A.pts += 3;
+      else if (ga < gb) B.pts += 3;
+      else { A.pts++; B.pts++; }
+    }
+    return st;
+  }
+
+  // FIFA art. 12 tiebreaks: points → head-to-head pts/gd/gf among the tied
+  // teams → group-wide gd/gf/fair-play across the three group matches.
+  function wcSortRows(rows) {
+    const teams = rows.slice().sort((a, b) =>
+      (parseInt(b.points) || 0) - (parseInt(a.points) || 0)
+    );
+    const out = [];
+    let i = 0;
+    while (i < teams.length) {
+      let j = i + 1;
+      const pi = parseInt(teams[i].points) || 0;
+      while (j < teams.length && (parseInt(teams[j].points) || 0) === pi) j++;
+      const run = teams.slice(i, j);
+      if (run.length > 1) {
+        const h = wcH2H(run, wcMatches);
+        run.sort((a, b) => {
+          const ha = h[a.id] || { pts: 0, gd: 0, gf: 0 };
+          const hb = h[b.id] || { pts: 0, gd: 0, gf: 0 };
+          // Step 1 — head-to-head
+          if (hb.pts !== ha.pts) return hb.pts - ha.pts;
+          if (hb.gd !== ha.gd) return hb.gd - ha.gd;
+          if (hb.gf !== ha.gf) return hb.gf - ha.gf;
+          // Step 2 — group-wide
+          const agd = (parseInt(a.gf) || 0) - (parseInt(a.ga) || 0);
+          const bgd = (parseInt(b.gf) || 0) - (parseInt(b.ga) || 0);
+          if (bgd !== agd) return bgd - agd;
+          const agf = parseInt(a.gf) || 0;
+          const bgf = parseInt(b.gf) || 0;
+          if (bgf !== agf) return bgf - agf;
+          // Fair-play — higher (less negative) is better
+          return (parseInt(b.fair) || 0) - (parseInt(a.fair) || 0);
+        });
+      }
+      out.push(...run);
+      i = j;
+    }
+    return out;
   }
 
   function buildWcHtml({ group, rows, theme }) {
@@ -4501,10 +4556,11 @@ function parsePlayerOddsFromText(text) {
       let totalRows = 0;
       WC_GROUPS.forEach(g => {
         const rows = (json.groups[g] || []).slice(0, 4);
-        while (rows.length < 4) rows.push({ team:'', played:0, points:0, gf:0, ga:0, logo:'' });
+        while (rows.length < 4) rows.push({ id:0, team:'', played:0, points:0, gf:0, ga:0, fair:0, logo:'' });
         wcState[g] = rows;
         totalRows += json.groups[g] ? json.groups[g].length : 0;
       });
+      wcMatches = Array.isArray(json.matches) ? json.matches : [];
       wcBuildEditor();
       wcRender();
       const stamp = wcFormatRelative(json.updated);
