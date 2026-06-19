@@ -401,6 +401,7 @@
     <div class="drawer__cat drawer__cat--sep">Editorial</div>
     <button type="button" class="drawer__item" data-tab="tab-editorial-banner">Banner article</button>
     <button type="button" class="drawer__item" data-tab="tab-ultimate-guide">Ultimate Guide widget</button>
+    <button type="button" class="drawer__item" data-tab="tab-wc-rankings">World Cup rankings A-L</button>
     <div class="drawer__cat drawer__cat--sep">Autres</div>
     <button type="button" class="drawer__item" data-tab="tab-essentiel">L'Essentiel TM</button>
     <button type="button" class="drawer__item" data-tab="tab-essentiel-af">L'Essentiel AF</button>
@@ -1196,6 +1197,70 @@
       <div class="copy-row">
         <button type="button" id="ug-copyBtn">Copy HTML</button>
         <span class="status" id="ug-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-wc-rankings" role="tabpanel">
+    <h2 class="widget-title">World Cup rankings A-L</h2>
+    <p class="subtitle">12 onglets pour les 12 groupes du Mondial 2026. Choisis le site, optionnellement remplis automatiquement via Sportmonks, édite à la main si besoin, puis copie le HTML pour l'onglet actif.</p>
+
+    <div class="panel">
+      <h2>1. Select your website</h2>
+      <select id="wc-site" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
+        <option value="afrik-foot-fr" selected>Afrik-Foot FR</option>
+        <option value="topmercato">Topmercato</option>
+        <option value="sports-mole">Sports Mole</option>
+        <option value="football-whispers">Football Whispers</option>
+        <option value="football-ground-guide">Football Ground Guide</option>
+        <option value="mrfixit">MrFixIt's Tips</option>
+        <option value="trivela">Trivela</option>
+        <option value="umdois">UmDoisEsportes</option>
+        <option value="al-aire-libre">Al-Aire Libre</option>
+        <option value="calciodangolo">Calciodangolo</option>
+      </select>
+    </div>
+
+    <div class="panel">
+      <h2>2. Sportmonks (optional auto-fill)</h2>
+      <div class="row" style="grid-template-columns: 2fr 1fr auto;">
+        <div>
+          <label for="wc-token">API token</label>
+          <input type="text" id="wc-token" placeholder="Paste your Sportmonks API token" />
+        </div>
+        <div>
+          <label for="wc-season">Season ID</label>
+          <input type="text" id="wc-season" placeholder="e.g. 25627" />
+        </div>
+        <div style="align-self:end">
+          <button type="button" id="wc-fetchBtn">Fetch all groups</button>
+        </div>
+      </div>
+      <div class="hint" style="margin-top:8px"><span class="status" id="wc-fetchStatus"></span></div>
+      <div class="hint">Endpoint utilisé : <code>https://api.sportmonks.com/v3/football/standings/seasons/{seasonId}?include=participant;group</code>. Si tu n'as pas le token, remplis le tableau à la main ci-dessous.</div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Group</h2>
+      <div id="wc-tabs" class="wc-tabs" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"></div>
+      <div class="hint" style="margin-bottom:8px">L'ordre du tableau de sortie est calculé automatiquement (points puis goal-average puis BP). Tu n'as qu'à saisir les 4 équipes et leurs statistiques.</div>
+      <div id="wc-editor"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Preview (active group)</h2>
+      <div class="preview-wrap" id="wc-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML to copy (active group)</h2>
+      <div style="margin-bottom:10px;">
+        <button type="button" id="wc-generateBtn">Generate HTML</button>
+      </div>
+      <textarea id="wc-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="wc-copyBtn">Copy HTML</button>
+        <span class="status" id="wc-copyStatus"></span>
       </div>
     </div>
   </div>
@@ -4199,6 +4264,243 @@ function parsePlayerOddsFromText(text) {
   });
 
   ugRender();
+})();
+
+// ========== WIDGET : World Cup rankings A-L — 12 group standings with Sportmonks fetch ==========
+(function() {
+  const SITES_WC = SITES_BETTING;
+
+  function getWcTheme() {
+    const slug = $('wc-site').value;
+    const theme = SITES_WC[slug] || SITES_WC["afrik-foot-fr"];
+    return Object.assign({}, theme, { slug });
+  }
+
+  const WC_GROUPS = ['A','B','C','D','E','F','G','H','I','J','K','L'];
+
+  const WC_HEADERS = {
+    fr:   { pos:'Pos', team:'Équipe',  played:'J',  points:'Pts', gf:'BP', ga:'BC', gd:'Diff' },
+    en:   { pos:'Pos', team:'Team',    played:'P',  points:'Pts', gf:'GF', ga:'GA', gd:'GD' },
+    ptBR: { pos:'Pos', team:'Time',    played:'J',  points:'Pts', gf:'GP', ga:'GC', gd:'SG' },
+    es:   { pos:'Pos', team:'Equipo',  played:'PJ', points:'Pts', gf:'GF', ga:'GC', gd:'Dif' },
+    it:   { pos:'Pos', team:'Squadra', played:'G',  points:'Pti', gf:'GF', ga:'GS', gd:'DR' }
+  };
+
+  const WC_LEGEND = {
+    fr:   { green:'Qualifiés pour les 1/16es de finale',     yellow:'Possible meilleur 3e' },
+    en:   { green:'Qualified for the round of 32',           yellow:'Possible best third-placed' },
+    ptBR: { green:'Classificados para a fase eliminatória',  yellow:'Possível melhor 3º colocado' },
+    es:   { green:'Clasificados para los 1/16 de final',     yellow:'Posible mejor 3er clasificado' },
+    it:   { green:'Qualificate ai sedicesimi di finale',     yellow:'Possibile miglior terza' }
+  };
+
+  const WC_TITLES = {
+    fr:   'Coupe du monde 2026 — Groupe',
+    en:   'World Cup 2026 — Group',
+    ptBR: 'Copa do Mundo 2026 — Grupo',
+    es:   'Mundial 2026 — Grupo',
+    it:   'Mondiali 2026 — Gruppo'
+  };
+
+  const wcState = {};
+  WC_GROUPS.forEach(g => wcState[g] = [
+    { team:'', played:0, points:0, gf:0, ga:0 },
+    { team:'', played:0, points:0, gf:0, ga:0 },
+    { team:'', played:0, points:0, gf:0, ga:0 },
+    { team:'', played:0, points:0, gf:0, ga:0 }
+  ]);
+  let wcActiveGroup = 'A';
+
+  function wcDarken(hex, amt) {
+    let h = (hex || '#000000').replace('#', '');
+    if (h.length === 3) h = h.split('').map(c => c + c).join('');
+    const num = parseInt(h, 16);
+    const r = Math.max(0, ((num >> 16) & 0xff) - amt);
+    const g = Math.max(0, ((num >> 8) & 0xff) - amt);
+    const b = Math.max(0, (num & 0xff) - amt);
+    return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
+  }
+
+  const EMBED_CSS_WC = `<style>
+.wc{max-width:680px;width:100%;font-family:Arial,sans-serif;border-radius:14px !important;background:#fff;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.10);margin:12px auto;box-sizing:border-box;color:#1a1d23}
+.wc__head{padding:12px 16px;color:#fff !important}
+.wc__head h3{margin:0 !important;color:#fff !important;font-size:18px !important;font-weight:800 !important;line-height:1.2 !important}
+.wc__table{width:100% !important;border-collapse:collapse !important;font-family:Arial,sans-serif !important;font-size:13px !important;margin:0 !important}
+.wc__table th{padding:8px 6px !important;font-size:11px !important;text-transform:uppercase !important;letter-spacing:.3px !important;font-weight:700 !important;background:#f4f6f8 !important;text-align:center !important}
+.wc__table th.wc__th-team{text-align:left !important;padding-left:12px !important}
+.wc__table td{padding:10px 6px !important;text-align:center !important;border-bottom:1px solid #eef0f3 !important;color:#1a1d23 !important}
+.wc__table td.wc__td-team{text-align:left !important;padding-left:12px !important;font-weight:600 !important}
+.wc__table td.wc__td-pts{font-weight:800 !important}
+.wc__legend{padding:10px 16px 12px;font-size:11px;color:#6b7280;line-height:1.6;background:#fafbfc;border-top:1px solid #eef0f3}
+.wc__legend-dot{display:inline-block !important;width:10px !important;height:10px !important;margin-right:6px !important;border-radius:2px !important;vertical-align:middle !important}
+@media (max-width:520px){.wc__head h3{font-size:16px !important}.wc__table{font-size:12px !important}.wc__table th{padding:6px 3px !important;font-size:10px !important}.wc__table td{padding:8px 3px !important}.wc__table td.wc__td-team,.wc__table th.wc__th-team{padding-left:8px !important}}
+</style>
+`;
+
+  function wcSortRows(rows) {
+    return [...rows].sort((a, b) => {
+      const pa = parseInt(a.points) || 0, pb = parseInt(b.points) || 0;
+      if (pa !== pb) return pb - pa;
+      const ga = (parseInt(a.gf) || 0) - (parseInt(a.ga) || 0);
+      const gb = (parseInt(b.gf) || 0) - (parseInt(b.ga) || 0);
+      if (ga !== gb) return gb - ga;
+      return (parseInt(b.gf) || 0) - (parseInt(a.gf) || 0);
+    });
+  }
+
+  function buildWcHtml({ group, rows, theme }) {
+    const accent = theme.accent;
+    const accentDark = wcDarken(accent, 50);
+    const L = WC_HEADERS[theme.lang] || WC_HEADERS.en;
+    const T = WC_TITLES[theme.lang] || WC_TITLES.en;
+    const LEG = WC_LEGEND[theme.lang] || WC_LEGEND.en;
+    const sorted = wcSortRows(rows);
+
+    const rowsHtml = sorted.map((r, i) => {
+      const pos = i + 1;
+      let bgColor = '#ffffff';
+      if (pos <= 2) bgColor = '#e6f4ec';
+      else if (pos === 3) bgColor = '#fff4d6';
+      const gd = (parseInt(r.gf) || 0) - (parseInt(r.ga) || 0);
+      const gdStr = (gd > 0 ? '+' : '') + gd;
+      const teamLabel = escapeHtml(r.team || '-');
+      return `<tr style="background:${bgColor} !important"><td style="background:${bgColor} !important;color:${accent} !important;font-weight:800">${pos}</td><td class="wc__td-team" style="background:${bgColor} !important">${teamLabel}</td><td style="background:${bgColor} !important">${parseInt(r.played) || 0}</td><td class="wc__td-pts" style="background:${bgColor} !important;color:${accent} !important">${parseInt(r.points) || 0}</td><td style="background:${bgColor} !important">${parseInt(r.gf) || 0}</td><td style="background:${bgColor} !important">${parseInt(r.ga) || 0}</td><td style="background:${bgColor} !important">${gdStr}</td></tr>`;
+    }).join('');
+
+    return `<div class="wc wc--${theme.slug}" style="border:2px solid ${accent} !important;border-radius:14px !important">
+  <div class="wc__head" style="background:linear-gradient(135deg, ${accent} 0%, ${accentDark} 100%) !important;color:#fff !important">
+    <h3 style="color:#fff !important">${escapeHtml(T)} ${escapeHtml(group)}</h3>
+  </div>
+  <table class="wc__table">
+    <thead><tr><th style="color:${accent} !important">${escapeHtml(L.pos)}</th><th class="wc__th-team" style="color:${accent} !important">${escapeHtml(L.team)}</th><th style="color:${accent} !important">${escapeHtml(L.played)}</th><th style="color:${accent} !important">${escapeHtml(L.points)}</th><th style="color:${accent} !important">${escapeHtml(L.gf)}</th><th style="color:${accent} !important">${escapeHtml(L.ga)}</th><th style="color:${accent} !important">${escapeHtml(L.gd)}</th></tr></thead>
+    <tbody>${rowsHtml}</tbody>
+  </table>
+  <div class="wc__legend">
+    <div><span class="wc__legend-dot" style="background:#e6f4ec !important;border:1px solid #c8e6d3 !important"></span>${escapeHtml(LEG.green)}</div>
+    <div><span class="wc__legend-dot" style="background:#fff4d6 !important;border:1px solid #f0e0a3 !important"></span>${escapeHtml(LEG.yellow)}</div>
+  </div>
+</div>`;
+  }
+
+  function wcBuildTabs() {
+    const html = WC_GROUPS.map(g => {
+      const active = g === wcActiveGroup ? 'background:var(--primary,#2563eb);color:#fff;border-color:var(--primary,#2563eb)' : 'background:#fff;color:#1a1d23;border-color:var(--border,#e3e6eb)';
+      return `<button type="button" data-group="${g}" style="padding:6px 14px;border:1px solid;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;${active}">${g}</button>`;
+    }).join('');
+    $('wc-tabs').innerHTML = html;
+  }
+
+  function wcBuildEditor() {
+    const rows = wcState[wcActiveGroup];
+    const header = `<div class="row" style="grid-template-columns: 2.2fr .8fr .8fr .8fr .8fr; margin-bottom:8px; font-weight:600; font-size:11px; color:#6b7280; text-transform:uppercase; letter-spacing:.3px"><div>Team</div><div>P</div><div>Pts</div><div>GF</div><div>GA</div></div>`;
+    const body = rows.map((r, i) => `<div class="row" style="grid-template-columns: 2.2fr .8fr .8fr .8fr .8fr; margin-bottom:6px"><input type="text" data-r="${i}" data-f="team" value="${escapeHtml(r.team)}" placeholder="Team ${i + 1}" /><input type="number" min="0" data-r="${i}" data-f="played" value="${r.played}" /><input type="number" min="0" data-r="${i}" data-f="points" value="${r.points}" /><input type="number" min="0" data-r="${i}" data-f="gf" value="${r.gf}" /><input type="number" min="0" data-r="${i}" data-f="ga" value="${r.ga}" /></div>`).join('');
+    $('wc-editor').innerHTML = header + body;
+    $('wc-editor').querySelectorAll('input').forEach(input => {
+      input.addEventListener('input', () => {
+        const r = parseInt(input.dataset.r);
+        const f = input.dataset.f;
+        const raw = input.value;
+        wcState[wcActiveGroup][r][f] = (f === 'team') ? raw : (raw === '' ? 0 : (parseInt(raw) || 0));
+        wcRender();
+      });
+    });
+  }
+
+  function wcRender() {
+    const theme = getWcTheme();
+    const html = buildWcHtml({ group: wcActiveGroup, rows: wcState[wcActiveGroup], theme });
+    $('wc-preview').innerHTML = EMBED_CSS_WC + html;
+    $('wc-output').value = EMBED_CSS_WC + html;
+  }
+
+  $('wc-tabs').addEventListener('click', e => {
+    const btn = e.target.closest('button[data-group]');
+    if (!btn) return;
+    wcActiveGroup = btn.dataset.group;
+    wcBuildTabs();
+    wcBuildEditor();
+    wcRender();
+  });
+
+  $('wc-site').addEventListener('change', wcRender);
+
+  function wcParseSportmonks(json) {
+    if (!json || !json.data || !Array.isArray(json.data)) return null;
+    const out = {};
+    WC_GROUPS.forEach(g => out[g] = []);
+    for (const entry of json.data) {
+      const groupName = (entry.group && (entry.group.name || (entry.group.data && entry.group.data.name))) || '';
+      const m = groupName.match(/group\s+([A-Za-z])/i);
+      if (!m) continue;
+      const letter = m[1].toUpperCase();
+      if (!WC_GROUPS.includes(letter)) continue;
+      const participant = entry.participant || (entry.participants && entry.participants[0]) || {};
+      const details = entry.details || entry.overall || {};
+      const row = {
+        team: participant.name || participant.short_code || '',
+        played: details.matches_played || details.played || entry.matches_played || 0,
+        points: entry.points || details.points || 0,
+        gf: details.goals_for || details.goals_scored || entry.goals_for || 0,
+        ga: details.goals_against || details.goals_conceded || entry.goals_against || 0
+      };
+      if (out[letter].length < 4) out[letter].push(row);
+    }
+    return out;
+  }
+
+  async function wcFetchSportmonks() {
+    const token = $('wc-token').value.trim();
+    const seasonId = $('wc-season').value.trim();
+    const status = $('wc-fetchStatus');
+    if (!token || !seasonId) { status.textContent = "⚠ Provide both API token and Season ID."; return; }
+    status.textContent = "Fetching…";
+    try {
+      const url = `https://api.sportmonks.com/v3/football/standings/seasons/${encodeURIComponent(seasonId)}?api_token=${encodeURIComponent(token)}&include=participant;group`;
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      const json = await resp.json();
+      const parsed = wcParseSportmonks(json);
+      if (!parsed) throw new Error('Could not parse response shape');
+      let totalRows = 0;
+      Object.keys(parsed).forEach(g => {
+        if (parsed[g].length > 0) {
+          while (parsed[g].length < 4) parsed[g].push({ team:'', played:0, points:0, gf:0, ga:0 });
+          wcState[g] = parsed[g];
+          totalRows += parsed[g].length;
+        }
+      });
+      wcBuildEditor();
+      wcRender();
+      const groupsLoaded = WC_GROUPS.filter(g => parsed[g] && parsed[g].some(r => r.team)).length;
+      status.innerHTML = `✓ ${groupsLoaded} group(s), ${totalRows} rows loaded from Sportmonks.`;
+    } catch (e) {
+      status.textContent = "⚠ Fetch failed: " + (e.message || e) + ". Edit values manually below.";
+    }
+  }
+
+  $('wc-fetchBtn').addEventListener('click', wcFetchSportmonks);
+
+  $('wc-generateBtn').addEventListener('click', () => {
+    wcRender();
+    const ta = $('wc-output'); ta.focus(); ta.select();
+  });
+
+  $('wc-copyBtn').addEventListener('click', async () => {
+    const ta = $('wc-output');
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('wc-copyStatus').textContent = "✓ Copied.";
+      setTimeout(() => $('wc-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('wc-copyStatus').textContent = "✓ Copied.";
+    }
+  });
+
+  wcBuildTabs();
+  wcBuildEditor();
+  wcRender();
 })();
 
 </script>
