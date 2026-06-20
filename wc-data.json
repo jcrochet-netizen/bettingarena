@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-20T21:15:10.317Z",
+  "updated": "2026-06-20T22:36:42.090Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -175,20 +175,20 @@
       {
         "id": 18660,
         "team": "Germany",
-        "played": 1,
-        "points": 3,
-        "gf": 7,
-        "ga": 1,
+        "played": 2,
+        "points": 6,
+        "gf": 9,
+        "ga": 2,
         "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/4/18660.png"
       },
       {
         "id": 18560,
         "team": "Côte d'Ivoire",
-        "played": 1,
+        "played": 2,
         "points": 3,
-        "gf": 1,
-        "ga": 0,
+        "gf": 2,
+        "ga": 2,
         "fair": -3,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/0/18560.png"
       },
@@ -706,6 +706,12 @@
       "ga": 1,
       "b": 18694,
       "gb": 5
+    },
+    {
+      "a": 18560,
+      "ga": 1,
+      "b": 18660,
+      "gb": 2
     }
   ]
 }
