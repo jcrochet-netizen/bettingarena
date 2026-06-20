@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-20T18:08:11.750Z",
+  "updated": "2026-06-20T19:55:36.624Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -215,13 +215,23 @@
     ],
     "F": [
       {
+        "id": 18694,
+        "team": "Netherlands",
+        "played": 2,
+        "points": 4,
+        "gf": 7,
+        "ga": 3,
+        "fair": -3,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/6/18694.png"
+      },
+      {
         "id": 18564,
         "team": "Sweden",
-        "played": 1,
+        "played": 2,
         "points": 3,
-        "gf": 5,
-        "ga": 1,
-        "fair": 0,
+        "gf": 6,
+        "ga": 6,
+        "fair": -3,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/4/18564.png"
       },
       {
@@ -233,16 +243,6 @@
         "ga": 2,
         "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/5/18597.png"
-      },
-      {
-        "id": 18694,
-        "team": "Netherlands",
-        "played": 1,
-        "points": 1,
-        "gf": 2,
-        "ga": 2,
-        "fair": -3,
-        "logo": "https://cdn.sportmonks.com/images/soccer/teams/6/18694.png"
       },
       {
         "id": 18554,
@@ -700,6 +700,12 @@
       "ga": 0,
       "b": 18723,
       "gb": 1
+    },
+    {
+      "a": 18564,
+      "ga": 1,
+      "b": 18694,
+      "gb": 5
     }
   ]
 }
