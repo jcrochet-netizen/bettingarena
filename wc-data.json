@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-19T23:13:59.307Z",
+  "updated": "2026-06-20T01:30:36.524Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -89,24 +89,24 @@
     ],
     "C": [
       {
-        "id": 18706,
-        "team": "Scotland",
-        "played": 1,
-        "points": 3,
-        "gf": 1,
-        "ga": 0,
-        "fair": -3,
-        "logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18706.png"
-      },
-      {
         "id": 18551,
         "team": "Morocco",
-        "played": 1,
-        "points": 1,
-        "gf": 1,
+        "played": 2,
+        "points": 4,
+        "gf": 2,
         "ga": 1,
         "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/23/18551.png"
+      },
+      {
+        "id": 18706,
+        "team": "Scotland",
+        "played": 2,
+        "points": 3,
+        "gf": 1,
+        "ga": 1,
+        "fair": -4,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18706.png"
       },
       {
         "id": 18704,
@@ -125,7 +125,7 @@
         "points": 0,
         "gf": 0,
         "ga": 1,
-        "fair": -1,
+        "fair": -3,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/20/18804.png"
       }
     ],
@@ -681,6 +681,12 @@
       "a": 18571,
       "ga": 2,
       "b": 18730,
+      "gb": 0
+    },
+    {
+      "a": 18551,
+      "ga": 1,
+      "b": 18706,
       "gb": 0
     }
   ]
