@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-20T01:30:36.524Z",
+  "updated": "2026-06-20T06:02:46.143Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -89,6 +89,16 @@
     ],
     "C": [
       {
+        "id": 18704,
+        "team": "Brazil",
+        "played": 2,
+        "points": 4,
+        "gf": 4,
+        "ga": 1,
+        "fair": -3,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/16/18704.png"
+      },
+      {
         "id": 18551,
         "team": "Morocco",
         "played": 2,
@@ -109,23 +119,13 @@
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18706.png"
       },
       {
-        "id": 18704,
-        "team": "Brazil",
-        "played": 1,
-        "points": 1,
-        "gf": 1,
-        "ga": 1,
-        "fair": -2,
-        "logo": "https://cdn.sportmonks.com/images/soccer/teams/16/18704.png"
-      },
-      {
         "id": 18804,
         "team": "Haiti",
-        "played": 1,
+        "played": 2,
         "points": 0,
         "gf": 0,
-        "ga": 1,
-        "fair": -3,
+        "ga": 4,
+        "fair": -4,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/20/18804.png"
       }
     ],
@@ -151,24 +151,24 @@
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/10/18730.png"
       },
       {
-        "id": 18716,
-        "team": "Türkiye",
-        "played": 1,
-        "points": 0,
-        "gf": 0,
-        "ga": 2,
-        "fair": -1,
-        "logo": "https://cdn.sportmonks.com/images/soccer/teams/28/18716.png"
-      },
-      {
         "id": 18723,
         "team": "Paraguay",
-        "played": 1,
-        "points": 0,
-        "gf": 1,
+        "played": 2,
+        "points": 3,
+        "gf": 2,
         "ga": 4,
-        "fair": -5,
+        "fair": -10,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/3/18723.png"
+      },
+      {
+        "id": 18716,
+        "team": "Türkiye",
+        "played": 2,
+        "points": 0,
+        "gf": 0,
+        "ga": 3,
+        "fair": -3,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/28/18716.png"
       }
     ],
     "E": [
@@ -688,6 +688,18 @@
       "ga": 1,
       "b": 18706,
       "gb": 0
+    },
+    {
+      "a": 18704,
+      "ga": 3,
+      "b": 18804,
+      "gb": 0
+    },
+    {
+      "a": 18716,
+      "ga": 0,
+      "b": 18723,
+      "gb": 1
     }
   ]
 }
