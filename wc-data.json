@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-21T17:02:54.996Z",
+  "updated": "2026-06-21T18:50:03.684Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -299,6 +299,16 @@
     ],
     "H": [
       {
+        "id": 18710,
+        "team": "Spain",
+        "played": 2,
+        "points": 4,
+        "gf": 4,
+        "ga": 0,
+        "fair": -1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/22/18710.png"
+      },
+      {
         "id": 15251,
         "team": "Uruguay",
         "played": 1,
@@ -311,22 +321,12 @@
       {
         "id": 18562,
         "team": "Saudi Arabia",
-        "played": 1,
+        "played": 2,
         "points": 1,
         "gf": 1,
-        "ga": 1,
-        "fair": -2,
+        "ga": 5,
+        "fair": -3,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/2/18562.png"
-      },
-      {
-        "id": 18710,
-        "team": "Spain",
-        "played": 1,
-        "points": 1,
-        "gf": 0,
-        "ga": 0,
-        "fair": -1,
-        "logo": "https://cdn.sportmonks.com/images/soccer/teams/22/18710.png"
       },
       {
         "id": 18823,
@@ -723,6 +723,12 @@
       "a": 18554,
       "ga": 0,
       "b": 18597,
+      "gb": 4
+    },
+    {
+      "a": 18562,
+      "ga": 0,
+      "b": 18710,
       "gb": 4
     }
   ]
