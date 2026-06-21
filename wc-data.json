@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-20T23:49:27.012Z",
+  "updated": "2026-06-21T03:43:06.306Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -195,21 +195,21 @@
       {
         "id": 18573,
         "team": "Ecuador",
-        "played": 1,
-        "points": 0,
+        "played": 2,
+        "points": 1,
         "gf": 0,
         "ga": 1,
-        "fair": -1,
+        "fair": -2,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/13/18573.png"
       },
       {
         "id": 18910,
         "team": "Curacao",
-        "played": 1,
-        "points": 0,
+        "played": 2,
+        "points": 1,
         "gf": 1,
         "ga": 7,
-        "fair": 0,
+        "fair": -5,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/30/18910.png"
       }
     ],
@@ -712,6 +712,12 @@
       "ga": 1,
       "b": 18660,
       "gb": 2
+    },
+    {
+      "a": 18573,
+      "ga": 0,
+      "b": 18910,
+      "gb": 0
     }
   ]
 }
