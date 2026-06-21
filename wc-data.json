@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-21T20:22:06.967Z",
+  "updated": "2026-06-21T21:52:28.058Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -257,6 +257,26 @@
     ],
     "G": [
       {
+        "id": 18652,
+        "team": "Iran",
+        "played": 2,
+        "points": 2,
+        "gf": 2,
+        "ga": 2,
+        "fair": -2,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/28/18652.png"
+      },
+      {
+        "id": 18743,
+        "team": "Belgium",
+        "played": 2,
+        "points": 2,
+        "gf": 1,
+        "ga": 1,
+        "fair": -7,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/23/18743.png"
+      },
+      {
         "id": 18613,
         "team": "New Zealand",
         "played": 1,
@@ -267,16 +287,6 @@
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/21/18613.png"
       },
       {
-        "id": 18652,
-        "team": "Iran",
-        "played": 1,
-        "points": 1,
-        "gf": 2,
-        "ga": 2,
-        "fair": -2,
-        "logo": "https://cdn.sportmonks.com/images/soccer/teams/28/18652.png"
-      },
-      {
         "id": 18546,
         "team": "Egypt",
         "played": 1,
@@ -285,16 +295,6 @@
         "ga": 1,
         "fair": -2,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18546.png"
-      },
-      {
-        "id": 18743,
-        "team": "Belgium",
-        "played": 1,
-        "points": 1,
-        "gf": 1,
-        "ga": 1,
-        "fair": -3,
-        "logo": "https://cdn.sportmonks.com/images/soccer/teams/23/18743.png"
       }
     ],
     "H": [
@@ -730,6 +730,12 @@
       "ga": 0,
       "b": 18710,
       "gb": 4
+    },
+    {
+      "a": 18652,
+      "ga": 0,
+      "b": 18743,
+      "gb": 0
     }
   ]
 }
