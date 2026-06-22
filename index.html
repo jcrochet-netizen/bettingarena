@@ -4545,7 +4545,7 @@ function parsePlayerOddsFromText(text) {
     const status = $('wc-fetchStatus');
     status.textContent = "Loading…";
     try {
-      const resp = await fetch('wc-data.json', { cache: 'no-cache' });
+      const resp = await fetch('wc-data.json?t=' + Date.now(), { cache: 'no-store' });
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
       const json = await resp.json();
       if (!json.groups) throw new Error('Malformed wc-data.json (missing groups)');
@@ -4561,7 +4561,7 @@ function parsePlayerOddsFromText(text) {
       wcRender();
       const stamp = wcFormatRelative(json.updated);
       const groupsLoaded = WC_GROUPS.filter(g => json.groups[g] && json.groups[g].some(r => r.team)).length;
-      status.innerHTML = `✓ ${groupsLoaded}/12 groups, ${totalRows} rows — updated ${stamp ? '<strong>' + stamp + '</strong>' : '(no timestamp)'}.`;
+      status.innerHTML = `✓ Reloaded just now — ${groupsLoaded}/12 groups, ${totalRows} rows. Sportmonks snapshot from ${stamp ? '<strong>' + stamp + '</strong>' : '(no timestamp)'} (cron only commits when data changes).`;
     } catch (e) {
       status.textContent = "⚠ Load failed: " + (e.message || e) + ". The cron may not have written the file yet — edit values manually below.";
     }
