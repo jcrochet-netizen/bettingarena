@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-22T18:36:03.025Z",
+  "updated": "2026-06-22T21:23:02.357Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -377,7 +377,7 @@
         "points": 0,
         "gf": 1,
         "ga": 4,
-        "fair": -1,
+        "fair": -2,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/8/18600.png"
       }
     ],
@@ -385,21 +385,21 @@
       {
         "id": 18644,
         "team": "Argentina",
-        "played": 1,
-        "points": 3,
-        "gf": 3,
+        "played": 2,
+        "points": 6,
+        "gf": 5,
         "ga": 0,
-        "fair": 0,
+        "fair": -2,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/20/18644.png"
       },
       {
         "id": 18643,
         "team": "Austria",
-        "played": 1,
+        "played": 2,
         "points": 3,
         "gf": 3,
-        "ga": 1,
-        "fair": -2,
+        "ga": 3,
+        "fair": -3,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/19/18643.png"
       },
       {
@@ -748,6 +748,12 @@
       "ga": 3,
       "b": 18613,
       "gb": 1
+    },
+    {
+      "a": 18643,
+      "ga": 0,
+      "b": 18644,
+      "gb": 2
     }
   ]
 }
