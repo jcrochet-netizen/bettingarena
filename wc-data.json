@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-21T23:09:16.735Z",
+  "updated": "2026-06-22T01:40:38.741Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -283,7 +283,7 @@
         "points": 1,
         "gf": 2,
         "ga": 2,
-        "fair": 0,
+        "fair": -2,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/21/18613.png"
       },
       {
@@ -293,7 +293,7 @@
         "points": 1,
         "gf": 1,
         "ga": 1,
-        "fair": -2,
+        "fair": -3,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18546.png"
       }
     ],
@@ -311,12 +311,22 @@
       {
         "id": 15251,
         "team": "Uruguay",
-        "played": 1,
-        "points": 1,
-        "gf": 1,
-        "ga": 1,
-        "fair": -1,
+        "played": 2,
+        "points": 2,
+        "gf": 3,
+        "ga": 3,
+        "fair": -2,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/19/15251.png"
+      },
+      {
+        "id": 18823,
+        "team": "Cape Verde Islands",
+        "played": 2,
+        "points": 2,
+        "gf": 2,
+        "ga": 2,
+        "fair": -3,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/7/18823.png"
       },
       {
         "id": 18562,
@@ -327,16 +337,6 @@
         "ga": 5,
         "fair": -3,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/2/18562.png"
-      },
-      {
-        "id": 18823,
-        "team": "Cape Verde Islands",
-        "played": 1,
-        "points": 1,
-        "gf": 0,
-        "ga": 0,
-        "fair": -2,
-        "logo": "https://cdn.sportmonks.com/images/soccer/teams/7/18823.png"
       }
     ],
     "I": [
@@ -736,6 +736,12 @@
       "ga": 0,
       "b": 18743,
       "gb": 0
+    },
+    {
+      "a": 15251,
+      "ga": 2,
+      "b": 18823,
+      "gb": 2
     }
   ]
 }
