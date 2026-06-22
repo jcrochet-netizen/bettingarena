@@ -2,7 +2,10 @@ name: Refresh WC26 group standings
 
 on:
   schedule:
-    - cron: "*/15 * * * *"
+    # Two parallel schedules, each every 15 min, offset off the rounded
+    # quarter-hours where GitHub Actions cron is heavily throttled.
+    - cron: "3,18,33,48 * * * *"
+    - cron: "10,25,40,55 * * * *"
   workflow_dispatch: {}
 
 permissions:
