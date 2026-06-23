@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-23T04:37:19.224Z",
+  "updated": "2026-06-23T08:05:37.593Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -403,24 +403,24 @@
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/19/18643.png"
       },
       {
-        "id": 18559,
-        "team": "Jordan",
-        "played": 1,
-        "points": 0,
-        "gf": 1,
-        "ga": 3,
-        "fair": -1,
-        "logo": "https://cdn.sportmonks.com/images/soccer/teams/31/18559.png"
-      },
-      {
         "id": 18620,
         "team": "Algeria",
-        "played": 1,
-        "points": 0,
-        "gf": 0,
-        "ga": 3,
+        "played": 2,
+        "points": 3,
+        "gf": 2,
+        "ga": 4,
         "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/28/18620.png"
+      },
+      {
+        "id": 18559,
+        "team": "Jordan",
+        "played": 2,
+        "points": 0,
+        "gf": 2,
+        "ga": 5,
+        "fair": -1,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/31/18559.png"
       }
     ],
     "K": [
@@ -766,6 +766,12 @@
       "ga": 2,
       "b": 18578,
       "gb": 3
+    },
+    {
+      "a": 18559,
+      "ga": 1,
+      "b": 18620,
+      "gb": 2
     }
   ]
 }
