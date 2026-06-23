@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-23T00:19:29.302Z",
+  "updated": "2026-06-23T04:32:42.798Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -341,42 +341,42 @@
     ],
     "I": [
       {
-        "id": 18578,
-        "team": "Norway",
-        "played": 1,
-        "points": 3,
-        "gf": 4,
-        "ga": 1,
-        "fair": 0,
-        "logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18578.png"
-      },
-      {
         "id": 18647,
         "team": "France",
-        "played": 1,
-        "points": 3,
-        "gf": 3,
+        "played": 2,
+        "points": 6,
+        "gf": 6,
         "ga": 1,
         "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/23/18647.png"
       },
       {
+        "id": 18578,
+        "team": "Norway",
+        "played": 2,
+        "points": 6,
+        "gf": 7,
+        "ga": 3,
+        "fair": 0,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18578.png"
+      },
+      {
         "id": 18558,
         "team": "Senegal",
-        "played": 1,
+        "played": 2,
         "points": 0,
-        "gf": 1,
-        "ga": 3,
+        "gf": 3,
+        "ga": 6,
         "fair": 0,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/30/18558.png"
       },
       {
         "id": 18600,
         "team": "Iraq",
-        "played": 1,
+        "played": 2,
         "points": 0,
         "gf": 1,
-        "ga": 4,
+        "ga": 7,
         "fair": -2,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/8/18600.png"
       }
@@ -409,7 +409,7 @@
         "points": 0,
         "gf": 1,
         "ga": 3,
-        "fair": 0,
+        "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/31/18559.png"
       },
       {
@@ -419,7 +419,7 @@
         "points": 0,
         "gf": 0,
         "ga": 3,
-        "fair": 0,
+        "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/28/18620.png"
       }
     ],
@@ -754,6 +754,18 @@
       "ga": 0,
       "b": 18644,
       "gb": 2
+    },
+    {
+      "a": 18600,
+      "ga": 0,
+      "b": 18647,
+      "gb": 3
+    },
+    {
+      "a": 18558,
+      "ga": 2,
+      "b": 18578,
+      "gb": 3
     }
   ]
 }
