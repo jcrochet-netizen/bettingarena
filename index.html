@@ -1228,7 +1228,8 @@
         </div>
         <button type="button" id="wc-fetchBtn">Reload data</button>
       </div>
-      <div class="hint" style="margin-top:8px"><span class="status" id="wc-fetchStatus"></span></div>
+      <div class="hint" style="margin-top:8px">Last run: <strong><span id="wc-lastRun">loading…</span></strong></div>
+      <div class="hint" style="margin-top:4px"><span class="status" id="wc-fetchStatus"></span></div>
     </div>
 
     <div class="panel">
@@ -4561,7 +4562,14 @@ function parsePlayerOddsFromText(text) {
       wcRender();
       const stamp = wcFormatRelative(json.updated);
       const groupsLoaded = WC_GROUPS.filter(g => json.groups[g] && json.groups[g].some(r => r.team)).length;
-      status.innerHTML = `✓ Reloaded just now — ${groupsLoaded}/12 groups, ${totalRows} rows. Sportmonks snapshot from ${stamp ? '<strong>' + stamp + '</strong>' : '(no timestamp)'} (cron only commits when data changes).`;
+      let abs = '(no timestamp)';
+      if (json.updated) {
+        try {
+          abs = new Date(json.updated).toLocaleString('fr-FR', { dateStyle: 'long', timeStyle: 'short' });
+        } catch (e) { abs = json.updated; }
+      }
+      $('wc-lastRun').textContent = abs + (stamp ? ' (' + stamp + ')' : '');
+      status.innerHTML = `✓ Reloaded just now — ${groupsLoaded}/12 groups, ${totalRows} rows. (Cron only commits when Sportmonks data changes.)`;
     } catch (e) {
       status.textContent = "⚠ Load failed: " + (e.message || e) + ". The cron may not have written the file yet — edit values manually below.";
     }
