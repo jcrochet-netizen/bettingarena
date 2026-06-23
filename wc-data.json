@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-23T18:45:43.755Z",
+  "updated": "2026-06-23T19:01:07.839Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -425,6 +425,16 @@
     ],
     "K": [
       {
+        "id": 18701,
+        "team": "Portugal",
+        "played": 2,
+        "points": 4,
+        "gf": 6,
+        "ga": 1,
+        "fair": -4,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/13/18701.png"
+      },
+      {
         "id": 18720,
         "team": "Colombia",
         "played": 1,
@@ -445,22 +455,12 @@
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/24/18552.png"
       },
       {
-        "id": 18701,
-        "team": "Portugal",
-        "played": 1,
-        "points": 1,
-        "gf": 1,
-        "ga": 1,
-        "fair": -4,
-        "logo": "https://cdn.sportmonks.com/images/soccer/teams/13/18701.png"
-      },
-      {
         "id": 18745,
         "team": "Uzbekistan",
-        "played": 1,
+        "played": 2,
         "points": 0,
         "gf": 1,
-        "ga": 3,
+        "ga": 8,
         "fair": -2,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/25/18745.png"
       }
@@ -772,6 +772,12 @@
       "ga": 1,
       "b": 18620,
       "gb": 2
+    },
+    {
+      "a": 18701,
+      "ga": 5,
+      "b": 18745,
+      "gb": 0
     }
   ]
 }
