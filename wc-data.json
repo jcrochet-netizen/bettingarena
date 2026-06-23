@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-23T22:01:02.959Z",
+  "updated": "2026-06-23T22:04:52.262Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -469,8 +469,8 @@
       {
         "id": 18645,
         "team": "England",
-        "played": 1,
-        "points": 3,
+        "played": 2,
+        "points": 4,
         "gf": 4,
         "ga": 2,
         "fair": -1,
@@ -479,8 +479,8 @@
       {
         "id": 18553,
         "team": "Ghana",
-        "played": 1,
-        "points": 3,
+        "played": 2,
+        "points": 4,
         "gf": 1,
         "ga": 0,
         "fair": -2,
