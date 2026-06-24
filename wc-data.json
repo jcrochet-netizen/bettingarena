@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-24T03:45:34.406Z",
+  "updated": "2026-06-24T04:00:56.254Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -425,6 +425,16 @@
     ],
     "K": [
       {
+        "id": 18720,
+        "team": "Colombia",
+        "played": 2,
+        "points": 6,
+        "gf": 4,
+        "ga": 1,
+        "fair": -3,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/0/18720.png"
+      },
+      {
         "id": 18701,
         "team": "Portugal",
         "played": 2,
@@ -435,23 +445,13 @@
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/13/18701.png"
       },
       {
-        "id": 18720,
-        "team": "Colombia",
-        "played": 1,
-        "points": 3,
-        "gf": 3,
-        "ga": 1,
-        "fair": -2,
-        "logo": "https://cdn.sportmonks.com/images/soccer/teams/0/18720.png"
-      },
-      {
         "id": 18552,
         "team": "Congo DR",
-        "played": 1,
+        "played": 2,
         "points": 1,
         "gf": 1,
-        "ga": 1,
-        "fair": -1,
+        "ga": 2,
+        "fair": -2,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/24/18552.png"
       },
       {
@@ -790,6 +790,12 @@
       "ga": 1,
       "b": 18717,
       "gb": 0
+    },
+    {
+      "a": 18552,
+      "ga": 0,
+      "b": 18720,
+      "gb": 1
     }
   ]
 }
