@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-24T21:46:04.183Z",
+  "updated": "2026-06-24T21:51:53.658Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -47,42 +47,42 @@
     ],
     "B": [
       {
-        "id": 18572,
-        "team": "Canada",
-        "played": 2,
-        "points": 4,
-        "gf": 7,
-        "ga": 1,
-        "fair": -5,
-        "logo": "https://cdn.sportmonks.com/images/soccer/teams/12/18572.png"
-      },
-      {
         "id": 18708,
         "team": "Switzerland",
-        "played": 2,
-        "points": 4,
-        "gf": 5,
-        "ga": 2,
+        "played": 3,
+        "points": 7,
+        "gf": 7,
+        "ga": 3,
         "fair": -3,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/20/18708.png"
       },
       {
+        "id": 18572,
+        "team": "Canada",
+        "played": 3,
+        "points": 4,
+        "gf": 8,
+        "ga": 3,
+        "fair": -5,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/12/18572.png"
+      },
+      {
         "id": 18625,
         "team": "Bosnia and Herzegovina",
-        "played": 2,
-        "points": 1,
-        "gf": 2,
-        "ga": 5,
+        "played": 3,
+        "points": 4,
+        "gf": 5,
+        "ga": 6,
         "fair": -10,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/1/18625.png"
       },
       {
         "id": 18544,
         "team": "Qatar",
-        "played": 2,
+        "played": 3,
         "points": 1,
-        "gf": 1,
-        "ga": 7,
+        "gf": 2,
+        "ga": 10,
         "fair": -12,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/16/18544.png"
       }
