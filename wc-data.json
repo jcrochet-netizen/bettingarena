@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-24T00:45:35.468Z",
+  "updated": "2026-06-24T01:00:56.795Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -487,24 +487,24 @@
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/25/18553.png"
       },
       {
-        "id": 18717,
-        "team": "Panama",
-        "played": 1,
-        "points": 0,
-        "gf": 0,
-        "ga": 1,
-        "fair": -3,
-        "logo": "https://cdn.sportmonks.com/images/soccer/teams/29/18717.png"
-      },
-      {
         "id": 18588,
         "team": "Croatia",
-        "played": 1,
-        "points": 0,
-        "gf": 2,
+        "played": 2,
+        "points": 3,
+        "gf": 3,
         "ga": 4,
-        "fair": 0,
+        "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/28/18588.png"
+      },
+      {
+        "id": 18717,
+        "team": "Panama",
+        "played": 2,
+        "points": 0,
+        "gf": 0,
+        "ga": 2,
+        "fair": -3,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/29/18717.png"
       }
     ]
   },
@@ -783,6 +783,12 @@
       "a": 18553,
       "ga": 0,
       "b": 18645,
+      "gb": 0
+    },
+    {
+      "a": 18588,
+      "ga": 1,
+      "b": 18717,
       "gb": 0
     }
   ]
