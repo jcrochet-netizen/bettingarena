@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-25T00:01:01.508Z",
+  "updated": "2026-06-25T00:15:13.318Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -91,9 +91,9 @@
       {
         "id": 18704,
         "team": "Brazil",
-        "played": 2,
-        "points": 4,
-        "gf": 4,
+        "played": 3,
+        "points": 7,
+        "gf": 7,
         "ga": 1,
         "fair": -5,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/16/18704.png"
@@ -101,30 +101,30 @@
       {
         "id": 18551,
         "team": "Morocco",
-        "played": 2,
-        "points": 4,
-        "gf": 2,
-        "ga": 1,
+        "played": 3,
+        "points": 7,
+        "gf": 6,
+        "ga": 3,
         "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/23/18551.png"
       },
       {
         "id": 18706,
         "team": "Scotland",
-        "played": 2,
+        "played": 3,
         "points": 3,
         "gf": 1,
-        "ga": 1,
+        "ga": 4,
         "fair": -5,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18706.png"
       },
       {
         "id": 18804,
         "team": "Haiti",
-        "played": 2,
+        "played": 3,
         "points": 0,
-        "gf": 0,
-        "ga": 4,
+        "gf": 2,
+        "ga": 8,
         "fair": -7,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/20/18804.png"
       }
@@ -808,6 +808,18 @@
       "ga": 1,
       "b": 18625,
       "gb": 3
+    },
+    {
+      "a": 18704,
+      "ga": 3,
+      "b": 18706,
+      "gb": 0
+    },
+    {
+      "a": 18551,
+      "ga": 4,
+      "b": 18804,
+      "gb": 2
     }
   ]
 }
