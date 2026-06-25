@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-25T21:45:33.959Z",
+  "updated": "2026-06-25T22:00:56.308Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -175,19 +175,19 @@
       {
         "id": 18660,
         "team": "Germany",
-        "played": 2,
+        "played": 3,
         "points": 6,
-        "gf": 9,
-        "ga": 2,
+        "gf": 10,
+        "ga": 4,
         "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/4/18660.png"
       },
       {
         "id": 18560,
         "team": "Côte d'Ivoire",
-        "played": 2,
-        "points": 3,
-        "gf": 2,
+        "played": 3,
+        "points": 6,
+        "gf": 4,
         "ga": 2,
         "fair": -4,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/0/18560.png"
@@ -195,20 +195,20 @@
       {
         "id": 18573,
         "team": "Ecuador",
-        "played": 2,
-        "points": 1,
-        "gf": 0,
-        "ga": 1,
-        "fair": -4,
+        "played": 3,
+        "points": 4,
+        "gf": 2,
+        "ga": 2,
+        "fair": -5,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/13/18573.png"
       },
       {
         "id": 18910,
         "team": "Curacao",
-        "played": 2,
+        "played": 3,
         "points": 1,
         "gf": 1,
-        "ga": 7,
+        "ga": 9,
         "fair": -7,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/30/18910.png"
       }
@@ -831,6 +831,18 @@
       "a": 18576,
       "ga": 3,
       "b": 18718,
+      "gb": 0
+    },
+    {
+      "a": 18573,
+      "ga": 2,
+      "b": 18660,
+      "gb": 1
+    },
+    {
+      "a": 18560,
+      "ga": 2,
+      "b": 18910,
       "gb": 0
     }
   ]
