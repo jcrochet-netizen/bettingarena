@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-25T02:45:34.215Z",
+  "updated": "2026-06-25T03:00:56.345Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -7,42 +7,42 @@
       {
         "id": 18576,
         "team": "Mexico",
-        "played": 2,
-        "points": 6,
-        "gf": 3,
+        "played": 3,
+        "points": 9,
+        "gf": 6,
         "ga": 0,
         "fair": -6,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/16/18576.png"
       },
       {
+        "id": 18555,
+        "team": "South Africa",
+        "played": 3,
+        "points": 4,
+        "gf": 2,
+        "ga": 3,
+        "fair": -13,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/27/18555.png"
+      },
+      {
         "id": 18567,
         "team": "Korea Republic",
-        "played": 2,
+        "played": 3,
         "points": 3,
         "gf": 2,
-        "ga": 2,
+        "ga": 3,
         "fair": -4,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/7/18567.png"
       },
       {
         "id": 18718,
         "team": "Czech Republic",
-        "played": 2,
+        "played": 3,
         "points": 1,
         "gf": 2,
-        "ga": 3,
+        "ga": 6,
         "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/30/18718.png"
-      },
-      {
-        "id": 18555,
-        "team": "South Africa",
-        "played": 2,
-        "points": 1,
-        "gf": 1,
-        "ga": 3,
-        "fair": -13,
-        "logo": "https://cdn.sportmonks.com/images/soccer/teams/27/18555.png"
       }
     ],
     "B": [
@@ -820,6 +820,18 @@
       "ga": 4,
       "b": 18804,
       "gb": 2
+    },
+    {
+      "a": 18555,
+      "ga": 1,
+      "b": 18567,
+      "gb": 0
+    },
+    {
+      "a": 18576,
+      "ga": 3,
+      "b": 18718,
+      "gb": 0
     }
   ]
 }
