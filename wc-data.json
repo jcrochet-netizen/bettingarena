@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-24T23:45:35.222Z",
+  "updated": "2026-06-25T00:01:01.508Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -95,7 +95,7 @@
         "points": 4,
         "gf": 4,
         "ga": 1,
-        "fair": -4,
+        "fair": -5,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/16/18704.png"
       },
       {
@@ -115,7 +115,7 @@
         "points": 3,
         "gf": 1,
         "ga": 1,
-        "fair": -4,
+        "fair": -5,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18706.png"
       },
       {
@@ -125,7 +125,7 @@
         "points": 0,
         "gf": 0,
         "ga": 4,
-        "fair": -5,
+        "fair": -7,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/20/18804.png"
       }
     ],
