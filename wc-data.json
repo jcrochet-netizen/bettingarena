@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-25T21:30:46.017Z",
+  "updated": "2026-06-25T21:45:33.959Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -209,7 +209,7 @@
         "points": 1,
         "gf": 1,
         "ga": 7,
-        "fair": -5,
+        "fair": -7,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/30/18910.png"
       }
     ],
