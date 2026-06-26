@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-26T04:00:55.094Z",
+  "updated": "2026-06-26T04:15:33.035Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -133,18 +133,18 @@
       {
         "id": 18571,
         "team": "United States",
-        "played": 2,
+        "played": 3,
         "points": 6,
-        "gf": 6,
-        "ga": 1,
+        "gf": 8,
+        "ga": 4,
         "fair": -5,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/11/18571.png"
       },
       {
         "id": 18730,
         "team": "Australia",
-        "played": 2,
-        "points": 3,
+        "played": 3,
+        "points": 4,
         "gf": 2,
         "ga": 2,
         "fair": -5,
@@ -153,8 +153,8 @@
       {
         "id": 18723,
         "team": "Paraguay",
-        "played": 2,
-        "points": 3,
+        "played": 3,
+        "points": 4,
         "gf": 2,
         "ga": 4,
         "fair": -11,
@@ -163,10 +163,10 @@
       {
         "id": 18716,
         "team": "Türkiye",
-        "played": 2,
-        "points": 0,
-        "gf": 0,
-        "ga": 3,
+        "played": 3,
+        "points": 3,
+        "gf": 3,
+        "ga": 5,
         "fair": -3,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/28/18716.png"
       }
@@ -862,6 +862,12 @@
       "ga": 0,
       "b": 18730,
       "gb": 0
+    },
+    {
+      "a": 18571,
+      "ga": 2,
+      "b": 18716,
+      "gb": 3
     }
   ]
 }
