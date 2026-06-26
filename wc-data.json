@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-26T00:45:35.816Z",
+  "updated": "2026-06-26T01:00:53.394Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -217,40 +217,40 @@
       {
         "id": 18694,
         "team": "Netherlands",
-        "played": 2,
-        "points": 4,
-        "gf": 7,
-        "ga": 3,
+        "played": 3,
+        "points": 7,
+        "gf": 10,
+        "ga": 4,
         "fair": -3,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/6/18694.png"
       },
       {
         "id": 18597,
         "team": "Japan",
-        "played": 2,
-        "points": 4,
-        "gf": 6,
-        "ga": 2,
+        "played": 3,
+        "points": 5,
+        "gf": 7,
+        "ga": 3,
         "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/5/18597.png"
       },
       {
         "id": 18564,
         "team": "Sweden",
-        "played": 2,
-        "points": 3,
-        "gf": 6,
-        "ga": 6,
+        "played": 3,
+        "points": 4,
+        "gf": 7,
+        "ga": 7,
         "fair": -5,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/4/18564.png"
       },
       {
         "id": 18554,
         "team": "Tunisia",
-        "played": 2,
+        "played": 3,
         "points": 0,
-        "gf": 1,
-        "ga": 9,
+        "gf": 2,
+        "ga": 12,
         "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/26/18554.png"
       }
@@ -844,6 +844,18 @@
       "ga": 2,
       "b": 18910,
       "gb": 0
+    },
+    {
+      "a": 18554,
+      "ga": 1,
+      "b": 18694,
+      "gb": 3
+    },
+    {
+      "a": 18564,
+      "ga": 1,
+      "b": 18597,
+      "gb": 1
     }
   ]
 }
