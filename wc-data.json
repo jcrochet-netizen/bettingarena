@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-26T21:02:34.800Z",
+  "updated": "2026-06-26T21:15:32.139Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -343,29 +343,29 @@
       {
         "id": 18647,
         "team": "France",
-        "played": 2,
-        "points": 6,
-        "gf": 6,
-        "ga": 1,
+        "played": 3,
+        "points": 9,
+        "gf": 10,
+        "ga": 2,
         "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/23/18647.png"
       },
       {
         "id": 18578,
         "team": "Norway",
-        "played": 2,
+        "played": 3,
         "points": 6,
-        "gf": 7,
-        "ga": 3,
+        "gf": 8,
+        "ga": 7,
         "fair": -1,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18578.png"
       },
       {
         "id": 18558,
         "team": "Senegal",
-        "played": 2,
-        "points": 0,
-        "gf": 3,
+        "played": 3,
+        "points": 3,
+        "gf": 8,
         "ga": 6,
         "fair": -2,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/30/18558.png"
@@ -373,10 +373,10 @@
       {
         "id": 18600,
         "team": "Iraq",
-        "played": 2,
+        "played": 3,
         "points": 0,
         "gf": 1,
-        "ga": 7,
+        "ga": 12,
         "fair": -8,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/8/18600.png"
       }
@@ -874,6 +874,12 @@
       "ga": 1,
       "b": 18647,
       "gb": 4
+    },
+    {
+      "a": 18558,
+      "ga": 5,
+      "b": 18600,
+      "gb": 0
     }
   ]
 }
