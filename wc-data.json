@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-26T03:45:32.233Z",
+  "updated": "2026-06-26T04:00:55.094Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -856,6 +856,12 @@
       "ga": 1,
       "b": 18597,
       "gb": 1
+    },
+    {
+      "a": 18723,
+      "ga": 0,
+      "b": 18730,
+      "gb": 0
     }
   ]
 }
