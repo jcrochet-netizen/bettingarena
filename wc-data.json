@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-27T02:00:51.507Z",
+  "updated": "2026-06-27T02:11:31.759Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -301,38 +301,38 @@
       {
         "id": 18710,
         "team": "Spain",
-        "played": 2,
-        "points": 4,
-        "gf": 4,
+        "played": 3,
+        "points": 7,
+        "gf": 5,
         "ga": 0,
         "fair": -2,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/22/18710.png"
       },
       {
-        "id": 15251,
-        "team": "Uruguay",
-        "played": 2,
-        "points": 2,
-        "gf": 3,
-        "ga": 3,
-        "fair": -9,
-        "logo": "https://cdn.sportmonks.com/images/soccer/teams/19/15251.png"
-      },
-      {
         "id": 18823,
         "team": "Cape Verde Islands",
-        "played": 2,
-        "points": 2,
+        "played": 3,
+        "points": 3,
         "gf": 2,
         "ga": 2,
         "fair": -4,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/7/18823.png"
       },
       {
+        "id": 15251,
+        "team": "Uruguay",
+        "played": 3,
+        "points": 2,
+        "gf": 3,
+        "ga": 4,
+        "fair": -9,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/19/15251.png"
+      },
+      {
         "id": 18562,
         "team": "Saudi Arabia",
-        "played": 2,
-        "points": 1,
+        "played": 3,
+        "points": 2,
         "gf": 1,
         "ga": 5,
         "fair": -6,
@@ -880,6 +880,12 @@
       "ga": 5,
       "b": 18600,
       "gb": 0
+    },
+    {
+      "a": 15251,
+      "ga": 0,
+      "b": 18710,
+      "gb": 1
     },
     {
       "a": 18562,
