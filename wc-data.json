@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-27T04:45:34.088Z",
+  "updated": "2026-06-27T05:00:57.084Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -257,13 +257,23 @@
     ],
     "G": [
       {
+        "id": 18743,
+        "team": "Belgium",
+        "played": 3,
+        "points": 5,
+        "gf": 6,
+        "ga": 2,
+        "fair": -7,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/23/18743.png"
+      },
+      {
         "id": 18546,
         "team": "Egypt",
         "played": 2,
         "points": 4,
         "gf": 4,
         "ga": 2,
-        "fair": -5,
+        "fair": -6,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18546.png"
       },
       {
@@ -273,26 +283,16 @@
         "points": 2,
         "gf": 2,
         "ga": 2,
-        "fair": -5,
+        "fair": -6,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/28/18652.png"
-      },
-      {
-        "id": 18743,
-        "team": "Belgium",
-        "played": 2,
-        "points": 2,
-        "gf": 1,
-        "ga": 1,
-        "fair": -7,
-        "logo": "https://cdn.sportmonks.com/images/soccer/teams/23/18743.png"
       },
       {
         "id": 18613,
         "team": "New Zealand",
-        "played": 2,
+        "played": 3,
         "points": 1,
-        "gf": 3,
-        "ga": 5,
+        "gf": 4,
+        "ga": 10,
         "fair": -4,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/21/18613.png"
       }
@@ -892,6 +892,12 @@
       "ga": 0,
       "b": 18823,
       "gb": 0
+    },
+    {
+      "a": 18613,
+      "ga": 1,
+      "b": 18743,
+      "gb": 5
     }
   ]
 }
