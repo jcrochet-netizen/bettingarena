@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-27T05:00:57.084Z",
+  "updated": "2026-06-27T05:15:34.923Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -269,20 +269,20 @@
       {
         "id": 18546,
         "team": "Egypt",
-        "played": 2,
-        "points": 4,
-        "gf": 4,
-        "ga": 2,
+        "played": 3,
+        "points": 5,
+        "gf": 5,
+        "ga": 3,
         "fair": -6,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18546.png"
       },
       {
         "id": 18652,
         "team": "Iran",
-        "played": 2,
-        "points": 2,
-        "gf": 2,
-        "ga": 2,
+        "played": 3,
+        "points": 3,
+        "gf": 3,
+        "ga": 3,
         "fair": -6,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/28/18652.png"
       },
@@ -898,6 +898,12 @@
       "ga": 1,
       "b": 18743,
       "gb": 5
+    },
+    {
+      "a": 18546,
+      "ga": 1,
+      "b": 18652,
+      "gb": 1
     }
   ]
 }
