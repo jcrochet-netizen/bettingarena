@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-27T22:45:34.334Z",
+  "updated": "2026-06-27T23:00:53.615Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -469,40 +469,40 @@
       {
         "id": 18645,
         "team": "England",
-        "played": 2,
-        "points": 4,
-        "gf": 4,
+        "played": 3,
+        "points": 7,
+        "gf": 6,
         "ga": 2,
         "fair": -2,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/21/18645.png"
       },
       {
-        "id": 18553,
-        "team": "Ghana",
-        "played": 2,
-        "points": 4,
-        "gf": 1,
-        "ga": 0,
-        "fair": -2,
-        "logo": "https://cdn.sportmonks.com/images/soccer/teams/25/18553.png"
-      },
-      {
         "id": 18588,
         "team": "Croatia",
-        "played": 2,
-        "points": 3,
-        "gf": 3,
-        "ga": 4,
+        "played": 3,
+        "points": 6,
+        "gf": 5,
+        "ga": 5,
         "fair": -2,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/28/18588.png"
       },
       {
+        "id": 18553,
+        "team": "Ghana",
+        "played": 3,
+        "points": 4,
+        "gf": 2,
+        "ga": 2,
+        "fair": -3,
+        "logo": "https://cdn.sportmonks.com/images/soccer/teams/25/18553.png"
+      },
+      {
         "id": 18717,
         "team": "Panama",
-        "played": 2,
+        "played": 3,
         "points": 0,
         "gf": 0,
-        "ga": 2,
+        "ga": 4,
         "fair": -5,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/29/18717.png"
       }
@@ -904,6 +904,18 @@
       "ga": 1,
       "b": 18652,
       "gb": 1
+    },
+    {
+      "a": 18553,
+      "ga": 1,
+      "b": 18588,
+      "gb": 2
+    },
+    {
+      "a": 18645,
+      "ga": 2,
+      "b": 18717,
+      "gb": 0
     }
   ]
 }
