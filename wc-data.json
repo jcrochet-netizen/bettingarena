@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-28T01:30:43.829Z",
+  "updated": "2026-06-28T01:45:31.003Z",
   "source": "Sportmonks v3 /standings/seasons/26618 + fixtures.between/2026-06-11/2026-06-27",
   "season": 2026,
   "groups": {
@@ -427,8 +427,8 @@
       {
         "id": 18720,
         "team": "Colombia",
-        "played": 2,
-        "points": 6,
+        "played": 3,
+        "points": 7,
         "gf": 4,
         "ga": 1,
         "fair": -4,
@@ -437,8 +437,8 @@
       {
         "id": 18701,
         "team": "Portugal",
-        "played": 2,
-        "points": 4,
+        "played": 3,
+        "points": 5,
         "gf": 6,
         "ga": 1,
         "fair": -4,
@@ -447,20 +447,20 @@
       {
         "id": 18552,
         "team": "Congo DR",
-        "played": 2,
-        "points": 1,
-        "gf": 1,
-        "ga": 2,
+        "played": 3,
+        "points": 4,
+        "gf": 4,
+        "ga": 3,
         "fair": -5,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/24/18552.png"
       },
       {
         "id": 18745,
         "team": "Uzbekistan",
-        "played": 2,
+        "played": 3,
         "points": 0,
-        "gf": 1,
-        "ga": 8,
+        "gf": 2,
+        "ga": 11,
         "fair": -4,
         "logo": "https://cdn.sportmonks.com/images/soccer/teams/25/18745.png"
       }
@@ -922,6 +922,12 @@
       "ga": 0,
       "b": 18720,
       "gb": 0
+    },
+    {
+      "a": 18552,
+      "ga": 3,
+      "b": 18745,
+      "gb": 1
     }
   ]
 }
