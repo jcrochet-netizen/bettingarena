@@ -402,6 +402,7 @@
     <button type="button" class="drawer__item" data-tab="tab-editorial-banner">Banner article</button>
     <button type="button" class="drawer__item" data-tab="tab-ultimate-guide">Ultimate Guide widget</button>
     <button type="button" class="drawer__item" data-tab="tab-wc-rankings">World Cup rankings A-L</button>
+    <button type="button" class="drawer__item" data-tab="tab-formation-options">Formation options</button>
     <div class="drawer__cat drawer__cat--sep">Autres</div>
     <button type="button" class="drawer__item" data-tab="tab-essentiel">L'Essentiel TM</button>
     <button type="button" class="drawer__item" data-tab="tab-essentiel-af">L'Essentiel AF</button>
@@ -1276,6 +1277,82 @@
       <div class="copy-row">
         <button type="button" id="wc-copyBtn">Copy HTML</button>
         <span class="status" id="wc-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-formation-options" role="tabpanel">
+    <h2 class="widget-title">Formation options</h2>
+    <p class="subtitle">Same concept as Choose Formation 2, but each spot on the pitch accepts up to 4 candidates. On the pitch, the first pick renders larger; the alternates appear below it in a smaller stack at 80% opacity.</p>
+
+    <div class="panel">
+      <h2>1. Select your website</h2>
+      <label for="fo-site">Site (palette applied to the widget header, badge, dots and names)</label>
+      <select id="fo-site" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
+        <option value="default">Generic (navy + gold)</option>
+        <option value="sports-mole">Sports Mole</option>
+        <option value="trivela">Trivela</option>
+        <option value="afrik-foot-fr">Afrik-Foot FR</option>
+        <option value="afrik-foot-en">Afrik-Foot ZA &amp; NG</option>
+        <option value="topmercato">TopMercato</option>
+        <option value="umdois">UmDoisEsportes</option>
+        <option value="football-whispers">Football Whispers</option>
+        <option value="football-ground-guide">Football Ground Guide</option>
+        <option value="mrfixit">MrFixIt's Tips</option>
+        <option value="al-aire-libre">Al-Aire Libre</option>
+        <option value="soccernet">Soccernet</option>
+      </select>
+    </div>
+
+    <div class="panel">
+      <h2>2. Team &amp; formation</h2>
+      <div class="row">
+        <div>
+          <label for="fo-team">Team name</label>
+          <input type="text" id="fo-team" maxlength="80" />
+        </div>
+        <div>
+          <label for="fo-formation">Formation</label>
+          <select id="fo-formation" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
+            <option value="4-4-2">4-4-2</option>
+            <option value="4-3-3">4-3-3</option>
+            <option value="4-2-3-1">4-2-3-1</option>
+            <option value="4-1-2-1-2">4-1-2-1-2 (Diamond)</option>
+            <option value="4-3-2-1">4-3-2-1 (Christmas tree)</option>
+            <option value="4-2-4">4-2-4</option>
+            <option value="4-5-1">4-5-1</option>
+            <option value="3-5-2">3-5-2</option>
+            <option value="3-4-3">3-4-3</option>
+            <option value="3-4-2-1">3-4-2-1</option>
+            <option value="5-3-2">5-3-2</option>
+            <option value="5-4-1">5-4-1</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Options per position</h2>
+      <div class="hint" style="margin-bottom:10px">Up to 4 names per slot. The first one renders larger at 100 % opacity on the pitch; the others sit below at 80 % opacity.</div>
+      <div id="fo-players-container"></div>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <button type="button" id="fo-genBtn">Generate HTML</button>
+      <span class="status" id="fo-genStatus" style="margin-left: 10px;"></span>
+    </div>
+
+    <div class="panel">
+      <h2>Preview</h2>
+      <div class="preview-wrap" id="fo-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Code HTML generated</h2>
+      <textarea id="fo-output" readonly placeholder="Click « Generate HTML » to produce the code." style="min-height: 320px;"></textarea>
+      <div class="copy-row">
+        <button type="button" id="fo-copyBtn">Copy full code</button>
+        <span class="status" id="fo-copyStatus"></span>
       </div>
     </div>
   </div>
@@ -2835,6 +2912,331 @@ function parsePlayerOddsFromText(text) {
     } catch (e) {
       document.execCommand('copy');
       $('cf2-copyStatus').textContent = "✓ Copied.";
+    }
+  });
+})();
+
+// ========== WIDGET : Formation options (catégorie Editorial) — up to 4 candidates per position ==========
+(function() {
+  // Data duplicated from Choose Formation 2 so both widgets stay self-contained.
+  const FORMATIONS = {
+    "4-4-2": [
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "LB", label: "Left-back",             x: 18, y: 70 }, { code: "CB", label: "Left centre-back",      x: 37, y: 74 }, { code: "CB", label: "Right centre-back",      x: 63, y: 74 }, { code: "RB", label: "Right-back",            x: 82, y: 70 }],
+      [{ code: "LM", label: "Left midfielder",       x: 18, y: 38 }, { code: "CM", label: "Left central midfielder", x: 38, y: 45 }, { code: "CM", label: "Right central midfielder", x: 62, y: 45 }, { code: "RM", label: "Right midfielder",      x: 82, y: 38 }],
+      [{ code: "ST", label: "Left striker",          x: 37, y: 13 }, { code: "ST", label: "Right striker",         x: 63, y: 13 }]
+    ],
+    "4-3-3": [
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "LB", label: "Left-back",             x: 18, y: 70 }, { code: "CB", label: "Left centre-back",      x: 37, y: 74 }, { code: "CB", label: "Right centre-back",      x: 63, y: 74 }, { code: "RB", label: "Right-back",            x: 82, y: 70 }],
+      [{ code: "CM", label: "Left central midfielder", x: 32, y: 42 }, { code: "CM", label: "Central midfielder", x: 50, y: 46 }, { code: "CM", label: "Right central midfielder", x: 68, y: 42 }],
+      [{ code: "LW", label: "Left winger",           x: 18, y: 15 }, { code: "ST", label: "Striker",              x: 50, y: 12 }, { code: "RW", label: "Right winger",          x: 82, y: 15 }]
+    ],
+    "4-2-3-1": [
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "LB", label: "Left-back",             x: 18, y: 70 }, { code: "CB", label: "Left centre-back",      x: 37, y: 74 }, { code: "CB", label: "Right centre-back",      x: 63, y: 74 }, { code: "RB", label: "Right-back",            x: 82, y: 70 }],
+      [{ code: "DM", label: "Left defensive midfielder", x: 37, y: 50 }, { code: "DM", label: "Right defensive midfielder", x: 63, y: 50 }],
+      [{ code: "LM", label: "Left attacking midfielder", x: 20, y: 28 }, { code: "CAM", label: "Attacking midfielder", x: 50, y: 30 }, { code: "RM", label: "Right attacking midfielder", x: 80, y: 28 }],
+      [{ code: "ST", label: "Striker",               x: 50, y: 12 }]
+    ],
+    "3-5-2": [
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "CB", label: "Left centre-back",      x: 25, y: 73 }, { code: "CB", label: "Central centre-back",   x: 50, y: 75 }, { code: "CB", label: "Right centre-back",     x: 75, y: 73 }],
+      [{ code: "LWB", label: "Left wing-back",       x: 12, y: 40 }, { code: "CM", label: "Left central midfielder", x: 33, y: 52 }, { code: "CM", label: "Central midfielder", x: 50, y: 42 }, { code: "CM", label: "Right central midfielder", x: 67, y: 52 }, { code: "RWB", label: "Right wing-back",     x: 88, y: 40 }],
+      [{ code: "ST", label: "Left striker",          x: 37, y: 13 }, { code: "ST", label: "Right striker",         x: 63, y: 13 }]
+    ],
+    "3-4-3": [
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "CB", label: "Left centre-back",      x: 25, y: 73 }, { code: "CB", label: "Central centre-back",   x: 50, y: 75 }, { code: "CB", label: "Right centre-back",     x: 75, y: 73 }],
+      [{ code: "LM", label: "Left midfielder",       x: 15, y: 42 }, { code: "CM", label: "Left central midfielder", x: 37, y: 45 }, { code: "CM", label: "Right central midfielder", x: 63, y: 45 }, { code: "RM", label: "Right midfielder",     x: 85, y: 42 }],
+      [{ code: "LW", label: "Left winger",           x: 18, y: 15 }, { code: "ST", label: "Striker",              x: 50, y: 12 }, { code: "RW", label: "Right winger",          x: 82, y: 15 }]
+    ],
+    "4-5-1": [
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "LB", label: "Left-back",             x: 18, y: 70 }, { code: "CB", label: "Left centre-back",      x: 37, y: 74 }, { code: "CB", label: "Right centre-back",      x: 63, y: 74 }, { code: "RB", label: "Right-back",            x: 82, y: 70 }],
+      [{ code: "LM", label: "Left midfielder",       x: 15, y: 35 }, { code: "CM", label: "Left central midfielder", x: 35, y: 42 }, { code: "CM", label: "Central midfielder", x: 50, y: 38 }, { code: "CM", label: "Right central midfielder", x: 65, y: 42 }, { code: "RM", label: "Right midfielder",     x: 85, y: 35 }],
+      [{ code: "ST", label: "Striker",               x: 50, y: 12 }]
+    ],
+    "5-3-2": [
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "LWB", label: "Left wing-back",       x: 12, y: 65 }, { code: "CB", label: "Left centre-back",      x: 32, y: 75 }, { code: "CB", label: "Central centre-back", x: 50, y: 73 }, { code: "CB", label: "Right centre-back",      x: 68, y: 75 }, { code: "RWB", label: "Right wing-back",      x: 88, y: 65 }],
+      [{ code: "CM", label: "Left central midfielder", x: 30, y: 42 }, { code: "CM", label: "Central midfielder", x: 50, y: 40 }, { code: "CM", label: "Right central midfielder", x: 70, y: 42 }],
+      [{ code: "ST", label: "Left striker",          x: 37, y: 13 }, { code: "ST", label: "Right striker",         x: 63, y: 13 }]
+    ],
+    "5-4-1": [
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "LWB", label: "Left wing-back",       x: 12, y: 65 }, { code: "CB", label: "Left centre-back",      x: 32, y: 75 }, { code: "CB", label: "Central centre-back", x: 50, y: 73 }, { code: "CB", label: "Right centre-back",      x: 68, y: 75 }, { code: "RWB", label: "Right wing-back",      x: 88, y: 65 }],
+      [{ code: "LM", label: "Left midfielder",       x: 15, y: 38 }, { code: "CM", label: "Left central midfielder", x: 38, y: 42 }, { code: "CM", label: "Right central midfielder", x: 62, y: 42 }, { code: "RM", label: "Right midfielder",     x: 85, y: 38 }],
+      [{ code: "ST", label: "Striker",               x: 50, y: 12 }]
+    ],
+    "4-3-2-1": [
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "LB", label: "Left-back",             x: 18, y: 72 }, { code: "CB", label: "Left centre-back",      x: 37, y: 76 }, { code: "CB", label: "Right centre-back",      x: 63, y: 76 }, { code: "RB", label: "Right-back",            x: 82, y: 72 }],
+      [{ code: "CM", label: "Left central midfielder", x: 28, y: 48 }, { code: "CM", label: "Central midfielder", x: 50, y: 46 }, { code: "CM", label: "Right central midfielder", x: 72, y: 48 }],
+      [{ code: "CAM", label: "Left attacking midfielder", x: 35, y: 28 }, { code: "CAM", label: "Right attacking midfielder", x: 65, y: 28 }],
+      [{ code: "ST", label: "Striker",               x: 50, y: 11 }]
+    ],
+    "4-1-2-1-2": [
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "LB", label: "Left-back",             x: 18, y: 73 }, { code: "CB", label: "Left centre-back",      x: 37, y: 76 }, { code: "CB", label: "Right centre-back",      x: 63, y: 76 }, { code: "RB", label: "Right-back",            x: 82, y: 73 }],
+      [{ code: "DM", label: "Defensive midfielder",  x: 50, y: 58 }],
+      [{ code: "CM", label: "Left central midfielder", x: 22, y: 46 }, { code: "CM", label: "Right central midfielder", x: 78, y: 46 }],
+      [{ code: "CAM", label: "Attacking midfielder", x: 50, y: 28 }],
+      [{ code: "ST", label: "Left striker",          x: 40, y: 12 }, { code: "ST", label: "Right striker",         x: 60, y: 12 }]
+    ],
+    "4-2-4": [
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "LB", label: "Left-back",             x: 18, y: 70 }, { code: "CB", label: "Left centre-back",      x: 37, y: 74 }, { code: "CB", label: "Right centre-back",      x: 63, y: 74 }, { code: "RB", label: "Right-back",            x: 82, y: 70 }],
+      [{ code: "CM", label: "Left central midfielder", x: 37, y: 45 }, { code: "CM", label: "Right central midfielder", x: 63, y: 45 }],
+      [{ code: "LW", label: "Left winger",           x: 15, y: 14 }, { code: "ST", label: "Left striker",          x: 38, y: 12 }, { code: "ST", label: "Right striker",         x: 62, y: 12 }, { code: "RW", label: "Right winger",          x: 85, y: 14 }]
+    ],
+    "3-4-2-1": [
+      [{ code: "GK", label: "Goalkeeper",            x: 50, y: 90 }],
+      [{ code: "CB", label: "Left centre-back",      x: 25, y: 73 }, { code: "CB", label: "Central centre-back",   x: 50, y: 75 }, { code: "CB", label: "Right centre-back",     x: 75, y: 73 }],
+      [{ code: "LM", label: "Left midfielder",       x: 15, y: 47 }, { code: "CM", label: "Left central midfielder", x: 37, y: 50 }, { code: "CM", label: "Right central midfielder", x: 63, y: 50 }, { code: "RM", label: "Right midfielder",     x: 85, y: 47 }],
+      [{ code: "CAM", label: "Left attacking midfielder", x: 35, y: 28 }, { code: "CAM", label: "Right attacking midfielder", x: 65, y: 28 }],
+      [{ code: "ST", label: "Striker",               x: 50, y: 11 }]
+    ]
+  };
+
+  const SITES = {
+    "default":               { label: "Générique",            sublabel: "XI probable",     headerStart: "#1a3a5a", headerEnd: "#0e2138", headerTeam: "#ffffff", headerSub: "rgba(255,255,255,0.55)", badgeBg: "#f8c548", badgeText: "#1a3a5a", dotOut: "#1a3a5a", dotGk: "#f8c548", nameOut: "#ffffff", nameGk: "#f8c548", pitch: "#1e7d3a" },
+    "sports-mole":           { label: "Sports Mole",          sublabel: "Probable lineup", headerStart: "#003300", headerEnd: "#001900", headerTeam: "#ffffff", headerSub: "#ffffff",                badgeBg: "#FFCC00", badgeText: "#003300", dotOut: "#003300", dotGk: "#FFCC00", nameOut: "#ffffff", nameGk: "#FFCC00", pitch: "#1B7302" },
+    "trivela":               { label: "Trivela",              sublabel: "Provável escalação", headerStart: "#BE0022", headerEnd: "#8a0019", headerTeam: "#ffffff", headerSub: "rgba(255,255,255,0.55)", badgeBg: "#2C2F34", badgeText: "#ffffff", dotOut: "#BE0022", dotGk: "#2C2F34", nameOut: "#ffffff", nameGk: "#ffffff", pitch: "#1e7d3a" },
+    "afrik-foot-fr":         { label: "Afrik-Foot FR",        sublabel: "Compo probable",  headerStart: "#86AE61", headerEnd: "#4a6a2a", headerTeam: "#ffffff", headerSub: "#ffffff",                badgeBg: "#191919", badgeText: "#86AE61", dotOut: "#191919", dotGk: "#86AE61", nameOut: "#ffffff", nameGk: "#cde6a8", pitch: "#1e7d3a" },
+    "afrik-foot-en":         { label: "Afrik-Foot ZA & NG",   sublabel: "Probable lineup", headerStart: "#86AE61", headerEnd: "#4a6a2a", headerTeam: "#ffffff", headerSub: "#ffffff",                badgeBg: "#191919", badgeText: "#86AE61", dotOut: "#191919", dotGk: "#86AE61", nameOut: "#ffffff", nameGk: "#cde6a8", pitch: "#1e7d3a" },
+    "topmercato":            { label: "TopMercato",           sublabel: "Compo probable",  headerStart: "#EE0000", headerEnd: "#a00000", headerTeam: "#ffffff", headerSub: "#ffffff",                badgeBg: "#F5F5F5", badgeText: "#EE0000", dotOut: "#EE0000", dotGk: "#222222", nameOut: "#ffffff", nameGk: "#F5F5F5", pitch: "#1e7d3a" },
+    "umdois":                { label: "UmDoisEsportes",       sublabel: "Provável escalação", headerStart: "#000000", headerEnd: "#2B2B2B", headerTeam: "#ffffff", headerSub: "rgba(254,217,55,0.55)", badgeBg: "#FED937", badgeText: "#000000", dotOut: "#000000", dotGk: "#FED937", nameOut: "#ffffff", nameGk: "#FED937", pitch: "#1e7d3a" },
+    "football-whispers":     { label: "Football Whispers",    sublabel: "Probable lineup", headerStart: "#44BD32", headerEnd: "#2a7d20", headerTeam: "#ffffff", headerSub: "rgba(12,12,12,0.65)", badgeBg: "#0C0C0C", badgeText: "#44BD32", dotOut: "#0C0C0C", dotGk: "#44BD32", nameOut: "#ffffff", nameGk: "#cdebc6", pitch: "#1e7d3a" },
+    "football-ground-guide": { label: "Football Ground Guide", sublabel: "Probable lineup", headerStart: "#1D2A41", headerEnd: "#0c1322", headerTeam: "#ffffff", headerSub: "rgba(255,255,255,0.55)", badgeBg: "#44CCAB", badgeText: "#1D2A41", dotOut: "#1D2A41", dotGk: "#44CCAB", nameOut: "#ffffff", nameGk: "#44CCAB", pitch: "#1e7d3a" },
+    "mrfixit":               { label: "MrFixIt's Tips",       sublabel: "Probable lineup", headerStart: "#EE0000", headerEnd: "#a00000", headerTeam: "#ffffff", headerSub: "rgba(34,34,34,0.7)",   badgeBg: "#222222", badgeText: "#ffffff", dotOut: "#222222", dotGk: "#EE0000", nameOut: "#ffffff", nameGk: "#ff8888", pitch: "#1e7d3a" },
+    "al-aire-libre":         { label: "Al-Aire Libre",        sublabel: "Formaciones probables", headerStart: "#005CB9", headerEnd: "#003e7a", headerTeam: "#ffffff", headerSub: "rgba(255,255,255,0.55)", badgeBg: "#00B2E6", badgeText: "#ffffff", dotOut: "#005CB9", dotGk: "#00B2E6", nameOut: "#ffffff", nameGk: "#aae3f6", pitch: "#1e7d3a" },
+    "soccernet":             { label: "Soccernet",            sublabel: "Probable lineup", headerStart: "#66923d", headerEnd: "#3d5825", headerTeam: "#ffffff", headerSub: "rgba(255,255,255,0.55)", badgeBg: "#92c47a", badgeText: "#090D0F", dotOut: "#090D0F", dotGk: "#92c47a", nameOut: "#ffffff", nameGk: "#d4e7c4", pitch: "#1e7d3a" }
+  };
+
+  const OPTIONS_PER_POSITION = 4;
+
+  function flatPositions(name) {
+    return (FORMATIONS[name] || []).flat();
+  }
+
+  function jsonStringEscape(s) {
+    return JSON.stringify(String(s)).slice(1, -1);
+  }
+
+  function foEscapeName(name) {
+    if (!name) return '';
+    return escapeHtml(name);
+  }
+
+  function getTheme() {
+    const id = $('fo-site').value;
+    return SITES[id] || SITES["default"];
+  }
+
+  function buildPlayerFields(formationName) {
+    const container = $('fo-players-container');
+    container.innerHTML = '';
+    const rows = FORMATIONS[formationName] || [];
+    let idx = 0;
+    rows.forEach((row) => {
+      row.forEach((pos) => {
+        idx++;
+        const wrap = document.createElement('div');
+        wrap.style.marginBottom = '14px';
+        wrap.style.padding = '10px 12px';
+        wrap.style.border = '1px solid var(--border)';
+        wrap.style.borderRadius = '6px';
+        wrap.style.background = '#fafbfc';
+        let inputs = '';
+        for (let k = 0; k < OPTIONS_PER_POSITION; k++) {
+          const label = k === 0 ? 'Primary' : ('Option ' + (k + 1));
+          inputs +=
+            '<div>' +
+              '<label for="fo-p' + idx + '-' + (k + 1) + '" style="font-size:11px;color:' + (k === 0 ? '#1a1d23' : '#6b7280') + ';font-weight:' + (k === 0 ? '600' : '500') + '">' + label + '</label>' +
+              '<input type="text" id="fo-p' + idx + '-' + (k + 1) + '" maxlength="60"' + (k === 0 ? '' : ' placeholder="(optional)"') + ' />' +
+            '</div>';
+        }
+        wrap.innerHTML =
+          '<div style="margin-bottom:8px;font-weight:600;font-size:13px">' + idx + ' — ' + escapeHtml(pos.label) +
+            ' <span style="color:#9ca3af;font-weight:400;font-size:11px">[' + pos.code + ']</span></div>' +
+          '<div class="row" style="grid-template-columns:repeat(4, 1fr);gap:8px">' + inputs + '</div>';
+        container.appendChild(wrap);
+      });
+    });
+  }
+
+  function readPlayerOptions(formationName) {
+    const positions = flatPositions(formationName);
+    const out = [];
+    for (let i = 0; i < positions.length; i++) {
+      const arr = [];
+      for (let k = 0; k < OPTIONS_PER_POSITION; k++) {
+        const el = $('fo-p' + (i + 1) + '-' + (k + 1));
+        const v = el ? el.value.trim() : '';
+        if (v) arr.push(v);
+      }
+      out.push(arr);
+    }
+    return out;
+  }
+
+  function makeFoStyle(theme) {
+    return '<style>' +
+      '.fo-wrap{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}' +
+      '.fo-article{max-width:420px;margin:24px auto;border-radius:10px;overflow:hidden;border:1px solid rgba(0,0,0,0.2);box-sizing:border-box}' +
+      '.fo-header{background:linear-gradient(90deg,' + theme.headerStart + ',' + theme.headerEnd + ');padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px}' +
+      '.fo-sublabel{color:' + theme.headerSub + ';font-size:10px;text-transform:uppercase;letter-spacing:2px;margin-bottom:2px}' +
+      '.fo-article .fo-team{color:' + theme.headerTeam + ';font-size:18px;font-weight:700;margin:0;line-height:1.2;text-transform:none;letter-spacing:normal}' +
+      '.fo-badge{background:' + theme.badgeBg + ';color:' + theme.badgeText + ';font-size:13px;font-weight:700;padding:5px 12px;border-radius:6px;letter-spacing:0.5px;flex-shrink:0}' +
+      '.fo-pitch{position:relative;width:100%;aspect-ratio:6/7;overflow:hidden;background:repeating-linear-gradient(180deg,rgba(0,0,0,0.04) 0px,rgba(0,0,0,0.04) 34px,transparent 34px,transparent 68px) ' + theme.pitch + '}' +
+      '.fo-line{position:absolute}' +
+      '.fo-outline{inset:0;margin:5%;border:2px solid rgba(255,255,255,0.45);box-sizing:border-box}' +
+      '.fo-halfway{left:5%;right:5%;top:50%;height:2px;background:rgba(255,255,255,0.45)}' +
+      '.fo-ccircle{left:50%;top:50%;transform:translate(-50%,-50%);width:72px;height:72px;border-radius:50%;border:2px solid rgba(255,255,255,0.45)}' +
+      '.fo-cspot{left:50%;top:50%;transform:translate(-50%,-50%);width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.55)}' +
+      '.fo-box{left:50%;transform:translateX(-50%);border:2px solid rgba(255,255,255,0.45);box-sizing:border-box}' +
+      '.fo-box-t{top:5%;width:52%;height:17%;border-top:none}' +
+      '.fo-box-gt{top:5%;width:28%;height:7%;border-top:none}' +
+      '.fo-box-b{bottom:5%;width:52%;height:17%;border-bottom:none}' +
+      '.fo-box-gb{bottom:5%;width:28%;height:7%;border-bottom:none}' +
+      '.fo-player{position:absolute;transform:translate(-50%,-50%);text-align:center;min-width:80px}' +
+      '.fo-dot{width:22px;height:22px;border-radius:50%;margin:0 auto;box-shadow:0 1px 5px rgba(0,0,0,0.5)}' +
+      '.fo-dot-out{background:' + theme.dotOut + ';border:2px solid rgba(255,255,255,0.7)}' +
+      '.fo-dot-gk{background:' + theme.dotGk + ';border:2px solid rgba(255,255,255,0.7)}' +
+      '.fo-names{margin-top:4px;line-height:1.15;text-shadow:0 1px 3px rgba(0,0,0,0.9)}' +
+      '.fo-name-primary{display:block;font-size:14px;font-weight:600;line-height:1.15}' +
+      '.fo-name-alt{display:block;font-size:10px;font-weight:500;opacity:0.8;line-height:1.15;margin-top:1px}' +
+      '.fo-name-out .fo-name-primary,.fo-name-out .fo-name-alt{color:' + theme.nameOut + '}' +
+      '.fo-name-gk .fo-name-primary,.fo-name-gk .fo-name-alt{color:' + theme.nameGk + '}' +
+      '.fo-dl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}' +
+      '</style>';
+  }
+
+  function buildHtml(team, formationName, playerOptions, theme) {
+    const positions = flatPositions(formationName);
+    const safeTeam = escapeHtml(team || 'Team');
+    const safeForm = escapeHtml(formationName);
+    const teamJson = jsonStringEscape(team || '');
+    const formJson = jsonStringEscape(formationName);
+    const foStyle = makeFoStyle(theme || SITES["default"]);
+
+    const members = positions.map((pos, i) => {
+      const opts = playerOptions[i] || [];
+      const n = opts[0] || '';
+      return '      {"@type": "Person", "name": "' + jsonStringEscape(n) + '", "jobTitle": "' + pos.code + '"}';
+    }).join(',\n');
+
+    const playerDivs = positions.map((pos, i) => {
+      const isGK = pos.code === 'GK';
+      const dotClass = isGK ? 'fo-dot-gk' : 'fo-dot-out';
+      const nameClass = isGK ? 'fo-name-gk' : 'fo-name-out';
+      const opts = (playerOptions[i] || []).filter(n => n);
+      let nameHtml;
+      if (opts.length === 0) {
+        nameHtml = '<span class="fo-name-primary"></span>';
+      } else {
+        nameHtml = '<span class="fo-name-primary">' + foEscapeName(opts[0]) + '</span>';
+        for (let k = 1; k < opts.length; k++) {
+          nameHtml += '<span class="fo-name-alt">' + foEscapeName(opts[k]) + '</span>';
+        }
+      }
+      return '      <div class="fo-player" style="left:' + pos.x + '%;top:' + pos.y + '%">' +
+        '<div class="fo-dot ' + dotClass + '"></div>' +
+        '<div class="fo-names ' + nameClass + '">' + nameHtml + '</div></div>';
+    }).join('\n');
+
+    const dlItems = positions.map((pos, i) => {
+      const opts = (playerOptions[i] || []).filter(n => n);
+      const joined = opts.length ? opts.map(escapeHtml).join(' / ') : '';
+      return '      <dt>' + pos.code + '</dt><dd>' + joined + '</dd>';
+    }).join('\n');
+
+    return foStyle + '\n\n' +
+      '<div class="fo-wrap">\n\n' +
+      '  <script type="application/ld+json">\n' +
+      '  {\n' +
+      '    "@context": "https://schema.org",\n' +
+      '    "@type": "SportsTeam",\n' +
+      '    "name": "' + teamJson + '",\n' +
+      '    "sport": "Football",\n' +
+      '    "description": "Probable options — ' + formJson + '",\n' +
+      '    "member": [\n' +
+      members + '\n' +
+      '    ]\n' +
+      '  }\n' +
+      '  <\/script>\n\n' +
+      '  <article class="fo-article" aria-label="Formation options — ' + safeTeam + ' — ' + safeForm + '">\n' +
+      '    <header class="fo-header">\n' +
+      '      <div>\n' +
+      '        <div class="fo-sublabel">' + escapeHtml((theme || SITES["default"]).sublabel || 'Probable lineup') + '</div>\n' +
+      '        <h2 class="fo-team">' + safeTeam + '</h2>\n' +
+      '      </div>\n' +
+      '      <div class="fo-badge">' + safeForm + '</div>\n' +
+      '    </header>\n\n' +
+      '    <div class="fo-pitch">\n' +
+      '      <div class="fo-line fo-outline"></div>\n' +
+      '      <div class="fo-line fo-halfway"></div>\n' +
+      '      <div class="fo-line fo-ccircle"></div>\n' +
+      '      <div class="fo-line fo-cspot"></div>\n' +
+      '      <div class="fo-line fo-box fo-box-t"></div>\n' +
+      '      <div class="fo-line fo-box fo-box-gt"></div>\n' +
+      '      <div class="fo-line fo-box fo-box-b"></div>\n' +
+      '      <div class="fo-line fo-box fo-box-gb"></div>\n\n' +
+      playerDivs + '\n' +
+      '    </div>\n\n' +
+      '    <dl class="fo-dl" aria-label="' + safeTeam + ' — options ' + safeForm + '">\n' +
+      dlItems + '\n' +
+      '    </dl>\n\n' +
+      '  </article>\n\n' +
+      '</div>';
+  }
+
+  buildPlayerFields($('fo-formation').value);
+
+  $('fo-formation').addEventListener('change', () => {
+    buildPlayerFields($('fo-formation').value);
+  });
+
+  function regenerateFo() {
+    const formationName = $('fo-formation').value;
+    const team = $('fo-team').value.trim();
+    const options = readPlayerOptions(formationName);
+    const html = buildHtml(team, formationName, options, getTheme());
+    $('fo-output').value = html;
+    $('fo-preview').innerHTML = html;
+    return { team, options };
+  }
+
+  $('fo-site').addEventListener('change', () => {
+    if ($('fo-output').value) regenerateFo();
+  });
+
+  $('fo-genBtn').addEventListener('click', () => {
+    const status = $('fo-genStatus');
+    const { team, options } = regenerateFo();
+    const missingPrimary = options.filter(arr => !arr[0]).length;
+    if (!team || missingPrimary > 0) {
+      const bits = [];
+      if (!team) bits.push('team empty');
+      if (missingPrimary > 0) bits.push(missingPrimary + ' primary slot(s) empty');
+      status.innerHTML = '⚠ Code generated, but ' + bits.join(' and ') + '.';
+    } else {
+      status.innerHTML = "✓ Code generated.";
+    }
+  });
+
+  $('fo-copyBtn').addEventListener('click', async () => {
+    const ta = $('fo-output');
+    if (!ta.value) { $('fo-copyStatus').textContent = "Generate the code first."; return; }
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('fo-copyStatus').textContent = "✓ Copied.";
+      setTimeout(() => $('fo-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('fo-copyStatus').textContent = "✓ Copied.";
     }
   });
 })();
