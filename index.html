@@ -401,7 +401,7 @@
     <div class="drawer__cat drawer__cat--sep">Editorial</div>
     <button type="button" class="drawer__item" data-tab="tab-editorial-banner">Banner article</button>
     <button type="button" class="drawer__item" data-tab="tab-ultimate-guide">Ultimate Guide widget</button>
-    <button type="button" class="drawer__item" data-tab="tab-wc-rankings">World Cup rankings A-L</button>
+    <!-- <button type="button" class="drawer__item" data-tab="tab-wc-rankings">World Cup rankings A-L</button> -->
     <button type="button" class="drawer__item" data-tab="tab-formation-options">Formation options</button>
     <div class="drawer__cat drawer__cat--sep">Autres</div>
     <button type="button" class="drawer__item" data-tab="tab-essentiel">L'Essentiel TM</button>
@@ -5016,7 +5016,9 @@ function parsePlayerOddsFromText(text) {
   wcBuildTabs();
   wcBuildEditor();
   wcRender();
-  wcLoadStaticData().catch(() => {});
+  // Widget disabled — drawer button commented out and static-data auto-fetch skipped.
+  // Re-enable by uncommenting the drawer button and the wcLoadStaticData() call below.
+  // wcLoadStaticData().catch(() => {});
 })();
 
 </script>
