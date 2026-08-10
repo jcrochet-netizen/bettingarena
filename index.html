@@ -407,6 +407,7 @@
     <button type="button" class="drawer__item" data-tab="tab-botf-af-ng">BOTF AF NG</button>
     <button type="button" class="drawer__item" data-tab="tab-others-bofd">Others BOFD</button>
     <button type="button" class="drawer__item" data-tab="tab-yesterday-bofd">Yesterday BOFD</button>
+    <button type="button" class="drawer__item" data-tab="tab-correct-score-double">Correct Score Double</button>
     <div class="drawer__cat drawer__cat--sep">Autres</div>
     <button type="button" class="drawer__item" data-tab="tab-essentiel">L'Essentiel TM</button>
     <button type="button" class="drawer__item" data-tab="tab-essentiel-af">L'Essentiel AF</button>
@@ -1280,6 +1281,118 @@
       <div class="copy-row">
         <button type="button" id="wc-copyBtn">Copy HTML</button>
         <span class="status" id="wc-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-correct-score-double" role="tabpanel">
+    <h2 class="widget-title">Correct Score Double</h2>
+    <p class="subtitle">Combined Correct Score double card with an interactive stake calculator. Note: the calculator won't animate in this preview (inline &lt;script&gt; tags don't run when injected via innerHTML) — the copied HTML runs fine once pasted in your WP article.</p>
+
+    <div class="panel">
+      <h2>1. Header</h2>
+      <label for="csd-header">Header label</label>
+      <input type="text" id="csd-header" value="Correct Score Double" maxlength="50" />
+    </div>
+
+    <div class="panel">
+      <h2>2. Pick 1</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div>
+          <label for="csd-p1-comp">Competition</label>
+          <input type="text" id="csd-p1-comp" placeholder="2026 WAFCON Group C" maxlength="50" />
+        </div>
+        <div>
+          <label for="csd-p1-time">Kick-off time</label>
+          <input type="text" id="csd-p1-time" placeholder="18:00 WAT" maxlength="20" />
+        </div>
+      </div>
+      <div style="margin-top:10px">
+        <label for="csd-p1-fix">Fixture</label>
+        <input type="text" id="csd-p1-fix" placeholder="Nigeria vs Zambia" maxlength="80" />
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 2fr;margin-top:10px">
+        <div>
+          <label for="csd-p1-lbl">Score label</label>
+          <input type="text" id="csd-p1-lbl" value="Our tip" maxlength="20" />
+        </div>
+        <div>
+          <label for="csd-p1-val">Score value</label>
+          <input type="text" id="csd-p1-val" placeholder="Draw 2-2" maxlength="40" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Pick 2</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div>
+          <label for="csd-p2-comp">Competition</label>
+          <input type="text" id="csd-p2-comp" placeholder="2026 WAFCON Group C" maxlength="50" />
+        </div>
+        <div>
+          <label for="csd-p2-time">Kick-off time</label>
+          <input type="text" id="csd-p2-time" placeholder="21:00 WAT" maxlength="20" />
+        </div>
+      </div>
+      <div style="margin-top:10px">
+        <label for="csd-p2-fix">Fixture</label>
+        <input type="text" id="csd-p2-fix" placeholder="Egypt vs Malawi" maxlength="80" />
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 2fr;margin-top:10px">
+        <div>
+          <label for="csd-p2-lbl">Score label</label>
+          <input type="text" id="csd-p2-lbl" value="Our tip" maxlength="20" />
+        </div>
+        <div>
+          <label for="csd-p2-val">Score value</label>
+          <input type="text" id="csd-p2-val" placeholder="Malawi to win 2-0" maxlength="40" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>4. Combined odds</h2>
+      <label for="csd-odds">The calculator reads this number automatically to compute return + profit.</label>
+      <input type="text" id="csd-odds" placeholder="75.23" maxlength="10" inputmode="decimal" />
+    </div>
+
+    <div class="panel">
+      <h2>5. Currency symbol</h2>
+      <label for="csd-curr">Prefix used in the stake input and the return / profit line. Default ₦ (Naira).</label>
+      <input type="text" id="csd-curr" value="₦" maxlength="4" />
+    </div>
+
+    <div class="panel">
+      <h2>6. CTA</h2>
+      <div class="row" style="grid-template-columns: 1fr 2fr;">
+        <div>
+          <label for="csd-ctaTxt">Button text</label>
+          <input type="text" id="csd-ctaTxt" value="Bet the Double at Bet9ja" maxlength="50" />
+        </div>
+        <div>
+          <label for="csd-ctaUrl">Button URL</label>
+          <input type="text" id="csd-ctaUrl" value="https://www.afrik-foot.com/go-bet9ja-ng" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>7. Small print</h2>
+      <input type="text" id="csd-note" value="Odds correct at time of publication." maxlength="120" />
+    </div>
+
+    <div class="panel">
+      <h2>Preview</h2>
+      <div class="preview-wrap" id="csd-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML to copy</h2>
+      <textarea id="csd-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="csd-copyBtn">Copy HTML</button>
+        <span class="status" id="csd-copyStatus"></span>
       </div>
     </div>
   </div>
@@ -5577,6 +5690,167 @@ function parsePlayerOddsFromText(text) {
   });
 
   ybofdRender();
+})();
+
+// ========== WIDGET : Correct Score Double (catégorie Bet AF) — 2 picks combined with stake calculator ==========
+(function() {
+  const EMBED_CSS_CSD =
+    '<style>\n' +
+    '.af-csd{--t:#e2e8da;--tm:#ffffff;--card:#1e2516;--gl:rgba(134,174,97,.13);--glb:rgba(134,174,97,.26);--brd:rgba(134,174,97,.18);--g:#86AE61;--gd:#9dc870;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Arial,sans-serif;max-width:700px;margin:0 auto;}\n' +
+    '.af-csd *{box-sizing:border-box;}\n' +
+    '.af-csd .csd-card{border:2px solid var(--g);border-radius:8px;overflow:hidden;}\n' +
+    '.af-csd .csd-hdr{background:var(--g);padding:9px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;}\n' +
+    '.af-csd .csd-hdr-l{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:#fff;}\n' +
+    '.af-csd .csd-body{background:var(--card);padding:14px 15px 0;text-align:center;}\n' +
+    '.af-csd .csd-pick{padding-bottom:12px;margin-bottom:0;border-bottom:1px solid var(--brd);}\n' +
+    '.af-csd .csd-pick-meta{font-size:12px;color:var(--gd);margin-bottom:2px;}\n' +
+    '.af-csd .csd-pick-fix{font-size:17px;font-weight:700;color:var(--t);margin-bottom:7px;line-height:1.2;}\n' +
+    '.af-csd .csd-score-lbl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--gd);display:block;margin-bottom:4px;}\n' +
+    '.af-csd .csd-score-val{font-size:18px;font-weight:800;color:var(--t);line-height:1.1;}\n' +
+    '.af-csd .csd-connector{font-size:20px;font-weight:800;color:var(--g);padding:10px 0;}\n' +
+    '.af-csd .csd-odds-box{background:var(--gl);border:1px solid var(--glb);border-radius:7px;padding:12px 14px;margin-bottom:12px;}\n' +
+    '.af-csd .csd-odds-lbl{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--gd);display:block;margin-bottom:5px;}\n' +
+    '.af-csd .csd-odds-val{font-size:34px;font-weight:800;color:var(--g);line-height:1;}\n' +
+    '.af-csd .csd-calc{margin-bottom:14px;}\n' +
+    '.af-csd .csd-calc-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gd);margin-bottom:8px;}\n' +
+    '.af-csd .csd-calc-row{display:flex;align-items:center;border:1px solid var(--brd);border-radius:6px;overflow:hidden;background:rgba(0,0,0,.2);}\n' +
+    '.af-csd .csd-curr{padding:0 10px;font-size:16px;font-weight:700;color:var(--g);flex-shrink:0;}\n' +
+    '.af-csd .csd-calc-row input{flex:1;background:transparent;border:none;color:var(--t);font-size:17px;font-family:inherit;padding:11px 10px 11px 0;outline:none;min-width:0;}\n' +
+    '.af-csd .csd-calc-row input::placeholder{color:rgba(255,255,255,.28);font-size:15px;}\n' +
+    '.af-csd .csd-calc-out{font-size:13.5px;color:var(--tm);margin-top:8px;line-height:1.6;}\n' +
+    '.af-csd .csd-calc-out .ret{font-size:18px;font-weight:800;color:var(--g);}\n' +
+    '.af-csd .csd-calc-out .prof{font-weight:700;color:var(--t);}\n' +
+    '.af-csd .csd-cta{display:block;background:var(--g);color:#fff!important;text-align:center;padding:13px 16px;font-weight:800;font-size:14px;text-decoration:none;letter-spacing:.2px;}\n' +
+    '.af-csd .csd-note{display:block;font-size:11.5px;color:var(--gd);font-style:italic;margin:6px 0 0;text-align:center;}\n' +
+    '</style>';
+
+  // The closing script tag literal is split so the outer script wrapper
+  // containing this JS is not closed prematurely by the HTML parser.
+  const CLOSE_SCRIPT = '<' + '/script>';
+
+  function buildCsdHtml(d) {
+    const curr = d.curr || '₦';
+    const currJs = JSON.stringify(curr);
+    const p1meta = [d.p1comp, d.p1time].filter(s => s && s.trim()).map(escapeHtml).join(' &middot; ');
+    const p2meta = [d.p2comp, d.p2time].filter(s => s && s.trim()).map(escapeHtml).join(' &middot; ');
+    const safeUrl = d.ctaUrl || '#';
+
+    const cardHtml =
+      '<div class="af-csd">\n' +
+      '  <div class="csd-card">\n' +
+      '    <div class="csd-hdr">\n' +
+      '      <span class="csd-hdr-l">' + escapeHtml(d.header || 'Correct Score Double') + '</span>\n' +
+      '    </div>\n' +
+      '    <div class="csd-body">\n' +
+      '      <div class="csd-pick">\n' +
+      '        <div class="csd-pick-meta">' + (p1meta || '&nbsp;') + '</div>\n' +
+      '        <div class="csd-pick-fix">' + escapeHtml(d.p1fix || 'Team A vs Team B') + '</div>\n' +
+      '        <span class="csd-score-lbl">' + escapeHtml(d.p1lbl || 'Our tip') + '</span>\n' +
+      '        <div class="csd-score-val">' + escapeHtml(d.p1val || '') + '</div>\n' +
+      '      </div>\n' +
+      '      <div class="csd-connector" aria-hidden="true">+</div>\n' +
+      '      <div class="csd-pick" style="border-bottom:none;">\n' +
+      '        <div class="csd-pick-meta">' + (p2meta || '&nbsp;') + '</div>\n' +
+      '        <div class="csd-pick-fix">' + escapeHtml(d.p2fix || 'Team C vs Team D') + '</div>\n' +
+      '        <span class="csd-score-lbl">' + escapeHtml(d.p2lbl || 'Our tip') + '</span>\n' +
+      '        <div class="csd-score-val">' + escapeHtml(d.p2val || '') + '</div>\n' +
+      '      </div>\n' +
+      '      <div style="height:12px;"></div>\n' +
+      '      <div class="csd-odds-box">\n' +
+      '        <span class="csd-odds-lbl">Combined odds</span>\n' +
+      '        <div class="csd-odds-val">' + escapeHtml(d.odds || '') + '</div>\n' +
+      '      </div>\n' +
+      '      <div class="csd-calc">\n' +
+      '        <div class="csd-calc-lbl">How much could you win?</div>\n' +
+      '        <div class="csd-calc-row">\n' +
+      '          <span class="csd-curr">' + escapeHtml(curr) + '</span>\n' +
+      '          <input type="number" placeholder="Enter your stake" min="0" step="100" aria-label="Stake">\n' +
+      '        </div>\n' +
+      '        <div class="csd-calc-out" aria-live="polite">Enter your stake above to see your potential return.</div>\n' +
+      '      </div>\n' +
+      '    </div>\n' +
+      '    <a href="' + escapeHtml(safeUrl) + '" class="csd-cta" target="_blank" rel="nofollow sponsored noopener">' + escapeHtml(d.ctaTxt || 'Bet Now') + '</a>\n' +
+      '  </div>\n' +
+      '  <span class="csd-note">' + escapeHtml(d.note || '') + '</span>\n' +
+      '</div>';
+
+    const calcScript =
+      '\n\n<script>\n' +
+      '(function(){\n' +
+      '  var wrap = document.querySelector(".af-csd");\n' +
+      '  if(!wrap) return;\n' +
+      '  var oddsEl = wrap.querySelector(".csd-odds-val");\n' +
+      '  var inp = wrap.querySelector(".csd-calc-row input");\n' +
+      '  var out = wrap.querySelector(".csd-calc-out");\n' +
+      '  if(!oddsEl || !inp || !out) return;\n' +
+      '  var curr = ' + currJs + ';\n' +
+      '  inp.addEventListener("input", function(){\n' +
+      '    var stake = parseFloat(this.value);\n' +
+      '    var odds = parseFloat(oddsEl.textContent);\n' +
+      '    if(!stake || stake <= 0 || !odds){\n' +
+      '      out.innerHTML = "Enter your stake above to see your potential return.";\n' +
+      '      return;\n' +
+      '    }\n' +
+      '    var ret = Math.round(stake * odds);\n' +
+      '    var profit = Math.round(ret - stake);\n' +
+      '    out.innerHTML = "Return: <span class=\\"ret\\">" + curr + ret.toLocaleString() + "</span>&nbsp;&nbsp;Profit: <span class=\\"prof\\">" + curr + profit.toLocaleString() + "</span>";\n' +
+      '  });\n' +
+      '})();\n' +
+      CLOSE_SCRIPT;
+
+    return EMBED_CSS_CSD + '\n\n' + cardHtml + calcScript;
+  }
+
+  function csdRender() {
+    const data = {
+      header:  $('csd-header').value.trim(),
+      p1comp:  $('csd-p1-comp').value.trim(),
+      p1time:  $('csd-p1-time').value.trim(),
+      p1fix:   $('csd-p1-fix').value.trim(),
+      p1lbl:   $('csd-p1-lbl').value.trim(),
+      p1val:   $('csd-p1-val').value.trim(),
+      p2comp:  $('csd-p2-comp').value.trim(),
+      p2time:  $('csd-p2-time').value.trim(),
+      p2fix:   $('csd-p2-fix').value.trim(),
+      p2lbl:   $('csd-p2-lbl').value.trim(),
+      p2val:   $('csd-p2-val').value.trim(),
+      odds:    $('csd-odds').value.trim(),
+      curr:    $('csd-curr').value.trim(),
+      ctaTxt:  $('csd-ctaTxt').value.trim(),
+      ctaUrl:  $('csd-ctaUrl').value.trim(),
+      note:    $('csd-note').value.trim()
+    };
+    const html = buildCsdHtml(data);
+    $('csd-preview').innerHTML = html;
+    $('csd-output').value = html;
+  }
+
+  [
+    'csd-header',
+    'csd-p1-comp','csd-p1-time','csd-p1-fix','csd-p1-lbl','csd-p1-val',
+    'csd-p2-comp','csd-p2-time','csd-p2-fix','csd-p2-lbl','csd-p2-val',
+    'csd-odds','csd-curr',
+    'csd-ctaTxt','csd-ctaUrl','csd-note'
+  ].forEach(id => {
+    const el = $(id);
+    if (!el) return;
+    el.addEventListener('input', csdRender);
+  });
+
+  $('csd-copyBtn').addEventListener('click', async () => {
+    const ta = $('csd-output');
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('csd-copyStatus').textContent = "✓ Copied.";
+      setTimeout(() => $('csd-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('csd-copyStatus').textContent = "✓ Copied.";
+    }
+  });
+
+  csdRender();
 })();
 
 </script>
