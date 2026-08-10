@@ -403,6 +403,8 @@
     <button type="button" class="drawer__item" data-tab="tab-ultimate-guide">Ultimate Guide widget</button>
     <!-- <button type="button" class="drawer__item" data-tab="tab-wc-rankings">World Cup rankings A-L</button> -->
     <button type="button" class="drawer__item" data-tab="tab-formation-options">Formation options</button>
+    <div class="drawer__cat drawer__cat--sep">Bet AF</div>
+    <button type="button" class="drawer__item" data-tab="tab-botf-af-ng">BOTF AF NG</button>
     <div class="drawer__cat drawer__cat--sep">Autres</div>
     <button type="button" class="drawer__item" data-tab="tab-essentiel">L'Essentiel TM</button>
     <button type="button" class="drawer__item" data-tab="tab-essentiel-af">L'Essentiel AF</button>
@@ -1276,6 +1278,114 @@
       <div class="copy-row">
         <button type="button" id="wc-copyBtn">Copy HTML</button>
         <span class="status" id="wc-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-botf-af-ng" role="tabpanel">
+    <h2 class="widget-title">BOTF AF NG</h2>
+    <p class="subtitle">Bet of the Day card for Afrik-Foot NG (dark background, green header). Fill in the fields below — everything is manual, no auto-fill.</p>
+
+    <div class="panel">
+      <h2>1. Header</h2>
+      <label for="botfng-header">Header label (you can append the date, e.g. « Bet of the Day — 15 Nov 2026 »)</label>
+      <input type="text" id="botfng-header" value="Bet of the Day" maxlength="60" />
+    </div>
+
+    <div class="panel">
+      <h2>2. Confidence</h2>
+      <label for="botfng-conf">Confidence tier — drives the dots (3 / 2 / 1) and the label on the right of the header</label>
+      <select id="botfng-conf" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
+        <option value="high" selected>High (3 dots on)</option>
+        <option value="medium">Medium (2 dots on)</option>
+        <option value="speculative">Speculative (1 dot on)</option>
+      </select>
+    </div>
+
+    <div class="panel">
+      <h2>3. Fixture</h2>
+      <label for="botfng-fixture">Match — e.g. Liverpool vs Man United</label>
+      <input type="text" id="botfng-fixture" placeholder="Liverpool vs Man United" maxlength="80" />
+    </div>
+
+    <div class="panel">
+      <h2>4. Match meta</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr 1fr;">
+        <div>
+          <label for="botfng-comp">Competition</label>
+          <input type="text" id="botfng-comp" placeholder="Premier League" maxlength="40" />
+        </div>
+        <div>
+          <label for="botfng-venue">Stadium / venue</label>
+          <input type="text" id="botfng-venue" placeholder="Anfield" maxlength="40" />
+        </div>
+        <div>
+          <label for="botfng-time">Kick-off time</label>
+          <input type="text" id="botfng-time" placeholder="15:00 WAT" maxlength="20" />
+        </div>
+      </div>
+      <div class="hint" style="margin-top:6px">Rendered as: <code>Competition &middot; Stadium &middot; Kick-off</code></div>
+    </div>
+
+    <div class="panel">
+      <h2>5. Tip</h2>
+      <div class="row" style="grid-template-columns: 1fr 2fr;">
+        <div>
+          <label for="botfng-tipLbl">Label</label>
+          <input type="text" id="botfng-tipLbl" value="Our tip" maxlength="30" />
+        </div>
+        <div>
+          <label for="botfng-tipVal">Tip value — e.g. Correct score: 7-0</label>
+          <input type="text" id="botfng-tipVal" placeholder="Correct score: 7-0" maxlength="60" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>6. Odds</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div>
+          <label for="botfng-odds">Odds</label>
+          <input type="text" id="botfng-odds" placeholder="1.90" maxlength="10" inputmode="decimal" />
+        </div>
+        <div>
+          <label for="botfng-book">Bookmaker</label>
+          <input type="text" id="botfng-book" placeholder="Bet9ja" maxlength="30" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>7. CTA</h2>
+      <div class="row" style="grid-template-columns: 1fr 2fr;">
+        <div>
+          <label for="botfng-ctaTxt">Button text</label>
+          <input type="text" id="botfng-ctaTxt" value="Bet Now at Bet9ja" maxlength="40" />
+        </div>
+        <div>
+          <label for="botfng-ctaUrl">Button URL</label>
+          <input type="text" id="botfng-ctaUrl" value="https://www.afrik-foot.com/go-bet9ja-ng" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>8. Small print</h2>
+      <label for="botfng-note">Note under the card</label>
+      <input type="text" id="botfng-note" value="Odds correct at time of publication." maxlength="120" />
+    </div>
+
+    <div class="panel">
+      <h2>Preview</h2>
+      <div class="preview-wrap" id="botfng-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML to copy</h2>
+      <textarea id="botfng-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="botfng-copyBtn">Copy HTML</button>
+        <span class="status" id="botfng-copyStatus"></span>
       </div>
     </div>
   </div>
@@ -5019,6 +5129,123 @@ function parsePlayerOddsFromText(text) {
   // Widget disabled — drawer button commented out and static-data auto-fetch skipped.
   // Re-enable by uncommenting the drawer button and the wcLoadStaticData() call below.
   // wcLoadStaticData().catch(() => {});
+})();
+
+// ========== WIDGET : BOTF AF NG (catégorie Bet AF) — Bet of the Day card for Afrik-Foot NG ==========
+(function() {
+  const CONF_TIERS = {
+    high:        { label: 'High',        dots: 3 },
+    medium:      { label: 'Medium',      dots: 2 },
+    speculative: { label: 'Speculative', dots: 1 }
+  };
+
+  const EMBED_CSS_BOTFNG =
+    '<style>\n' +
+    '.af-mbc{--t:#e2e8da;--tm:#ffffff;--card:#1e2516;--gl:rgba(134,174,97,.13);--glb:rgba(134,174,97,.26);--g:#86AE61;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Arial,sans-serif;max-width:700px;margin:0 auto;}\n' +
+    '.af-mbc *{box-sizing:border-box;}\n' +
+    '.af-mbc .mbc{border:1px solid rgba(134,174,97,.25);border-radius:8px;overflow:hidden;}\n' +
+    '.af-mbc .mbc-hdr{background:var(--g);padding:9px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;}\n' +
+    '.af-mbc .mbc-hdr-l{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:#fff;}\n' +
+    '.af-mbc .mbc-conf{display:flex;align-items:center;gap:4px;white-space:nowrap;}\n' +
+    '.af-mbc .mbc-conf-lbl{font-size:10.5px;color:rgba(255,255,255,.92);font-weight:600;}\n' +
+    '.af-mbc .mbc-conf-dots{display:flex;gap:3px;margin:0 1px;}\n' +
+    '.af-mbc .mbc-conf-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);}\n' +
+    '.af-mbc .mbc-conf-dot.on{background:#fff;}\n' +
+    '.af-mbc .mbc-conf-tier{font-size:10.5px;color:#fff;font-weight:700;text-transform:uppercase;}\n' +
+    '.af-mbc .mbc-body{background:var(--card);padding:15px;text-align:center;}\n' +
+    '.af-mbc .mbc-fix{font-size:19px;font-weight:700;color:var(--t);margin:0 0 3px;line-height:1.2;}\n' +
+    '.af-mbc .mbc-meta{font-size:12.5px;color:var(--tm);margin:0 0 13px;}\n' +
+    '.af-mbc .mbc-tip{background:var(--gl);border:1px solid var(--glb);border-radius:7px;padding:13px 14px;}\n' +
+    '.af-mbc .mbc-tip-lbl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.3px;color:#9dc870;display:block;margin-bottom:5px;}\n' +
+    '.af-mbc .mbc-tip-val{font-size:26px;font-weight:800;color:var(--t);line-height:1.1;margin-bottom:5px;}\n' +
+    '.af-mbc .mbc-tip-odds{font-size:13px;color:var(--tm);}\n' +
+    '.af-mbc .mbc-tip-odds strong{color:var(--t);}\n' +
+    '.af-mbc .mbc-cta{display:block;background:var(--g);color:#fff!important;text-align:center;padding:13px 16px;font-weight:800;font-size:14px;text-decoration:none;letter-spacing:.2px;}\n' +
+    '.af-mbc .mbc-note{display:block;font-size:11.5px;color:var(--tm);font-style:italic;margin:6px 0 0;}\n' +
+    '</style>';
+
+  function buildBotfNgHtml(d) {
+    const tier = CONF_TIERS[d.conf] || CONF_TIERS.high;
+    const dots = [0, 1, 2].map(i =>
+      '          <span class="mbc-conf-dot' + (i < tier.dots ? ' on' : '') + '"></span>'
+    ).join('\n');
+    const metaParts = [d.comp, d.venue, d.time].filter(s => s && s.trim()).map(escapeHtml);
+    const meta = metaParts.join(' &middot; ');
+    const safeUrl = d.ctaUrl || '#';
+    return EMBED_CSS_BOTFNG + '\n\n' +
+      '<div class="af-mbc">\n' +
+      '  <div class="mbc">\n' +
+      '    <div class="mbc-hdr">\n' +
+      '      <span class="mbc-hdr-l">' + escapeHtml(d.header || 'Bet of the Day') + '</span>\n' +
+      '      <div class="mbc-conf" aria-label="Confidence: ' + escapeHtml(tier.label) + '">\n' +
+      '        <span class="mbc-conf-lbl">Confidence:</span>\n' +
+      '        <div class="mbc-conf-dots">\n' +
+      dots + '\n' +
+      '        </div>\n' +
+      '        <span class="mbc-conf-tier">' + escapeHtml(tier.label) + '</span>\n' +
+      '      </div>\n' +
+      '    </div>\n' +
+      '    <div class="mbc-body">\n' +
+      '      <div class="mbc-fix">' + escapeHtml(d.fixture || 'Team A vs Team B') + '</div>\n' +
+      '      <div class="mbc-meta">' + (meta || '&nbsp;') + '</div>\n' +
+      '      <div class="mbc-tip">\n' +
+      '        <span class="mbc-tip-lbl">' + escapeHtml(d.tipLbl || 'Our tip') + '</span>\n' +
+      '        <div class="mbc-tip-val">' + escapeHtml(d.tipVal || '') + '</div>\n' +
+      '        <div class="mbc-tip-odds">Odds: <strong>' + escapeHtml(d.odds || '') + '</strong> at ' + escapeHtml(d.book || '') + '</div>\n' +
+      '      </div>\n' +
+      '    </div>\n' +
+      '    <a href="' + escapeHtml(safeUrl) + '" class="mbc-cta" target="_blank" rel="nofollow sponsored noopener">' + escapeHtml(d.ctaTxt || 'Bet Now') + '</a>\n' +
+      '  </div>\n' +
+      '  <span class="mbc-note">' + escapeHtml(d.note || '') + '</span>\n' +
+      '</div>';
+  }
+
+  function botfNgRender() {
+    const data = {
+      header:  $('botfng-header').value.trim(),
+      conf:    $('botfng-conf').value,
+      fixture: $('botfng-fixture').value.trim(),
+      comp:    $('botfng-comp').value.trim(),
+      venue:   $('botfng-venue').value.trim(),
+      time:    $('botfng-time').value.trim(),
+      tipLbl:  $('botfng-tipLbl').value.trim(),
+      tipVal:  $('botfng-tipVal').value.trim(),
+      odds:    $('botfng-odds').value.trim(),
+      book:    $('botfng-book').value.trim(),
+      ctaTxt:  $('botfng-ctaTxt').value.trim(),
+      ctaUrl:  $('botfng-ctaUrl').value.trim(),
+      note:    $('botfng-note').value.trim()
+    };
+    const html = buildBotfNgHtml(data);
+    $('botfng-preview').innerHTML = html;
+    $('botfng-output').value = html;
+  }
+
+  [
+    'botfng-header','botfng-conf','botfng-fixture','botfng-comp','botfng-venue','botfng-time',
+    'botfng-tipLbl','botfng-tipVal','botfng-odds','botfng-book',
+    'botfng-ctaTxt','botfng-ctaUrl','botfng-note'
+  ].forEach(id => {
+    const el = $(id);
+    if (!el) return;
+    const ev = el.tagName === 'SELECT' ? 'change' : 'input';
+    el.addEventListener(ev, botfNgRender);
+  });
+
+  $('botfng-copyBtn').addEventListener('click', async () => {
+    const ta = $('botfng-output');
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('botfng-copyStatus').textContent = "✓ Copied.";
+      setTimeout(() => $('botfng-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('botfng-copyStatus').textContent = "✓ Copied.";
+    }
+  });
+
+  botfNgRender();
 })();
 
 </script>
