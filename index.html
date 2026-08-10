@@ -406,6 +406,7 @@
     <div class="drawer__cat drawer__cat--sep">Bet AF</div>
     <button type="button" class="drawer__item" data-tab="tab-botf-af-ng">BOTF AF NG</button>
     <button type="button" class="drawer__item" data-tab="tab-others-bofd">Others BOFD</button>
+    <button type="button" class="drawer__item" data-tab="tab-yesterday-bofd">Yesterday BOFD</button>
     <div class="drawer__cat drawer__cat--sep">Autres</div>
     <button type="button" class="drawer__item" data-tab="tab-essentiel">L'Essentiel TM</button>
     <button type="button" class="drawer__item" data-tab="tab-essentiel-af">L'Essentiel AF</button>
@@ -1279,6 +1280,63 @@
       <div class="copy-row">
         <button type="button" id="wc-copyBtn">Copy HTML</button>
         <span class="status" id="wc-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-yesterday-bofd" role="tabpanel">
+    <h2 class="widget-title">Yesterday BOFD</h2>
+    <p class="subtitle">Yesterday's Bet of the Day result banner for Afrik-Foot NG. Pick the result (win / loss / void) — it drives the wrapper class, the badge, and switches the sentence to « Match not played » on void.</p>
+
+    <div class="panel">
+      <h2>1. Result status</h2>
+      <label for="ybofd-status">Drives the wrapper class, the badge colour and the badge label</label>
+      <select id="ybofd-status" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
+        <option value="win">WIN (green)</option>
+        <option value="loss" selected>LOSS (red)</option>
+        <option value="void">VOID — match not played (grey)</option>
+      </select>
+    </div>
+
+    <div class="panel">
+      <h2>2. Prefix (any language)</h2>
+      <label for="ybofd-prefix">The bold text at the start of the sentence — e.g. « Yesterday's bet: », « Pari d'hier : »</label>
+      <input type="text" id="ybofd-prefix" value="Yesterday's bet:" maxlength="40" />
+    </div>
+
+    <div class="panel">
+      <h2>3. Match</h2>
+      <input type="text" id="ybofd-match" placeholder="Liverpool vs Man United" maxlength="80" />
+    </div>
+
+    <div class="panel">
+      <h2>4. Prediction</h2>
+      <input type="text" id="ybofd-prediction" placeholder="Correct Score 7-0" maxlength="60" />
+    </div>
+
+    <div class="panel">
+      <h2>5. Final score</h2>
+      <label for="ybofd-score">Ignored when the result is VOID</label>
+      <input type="text" id="ybofd-score" placeholder="8-0" maxlength="20" />
+    </div>
+
+    <div class="panel">
+      <h2>6. Odds</h2>
+      <label for="ybofd-odds">Ignored when the result is VOID</label>
+      <input type="text" id="ybofd-odds" placeholder="1.90" maxlength="10" inputmode="decimal" />
+    </div>
+
+    <div class="panel">
+      <h2>Preview</h2>
+      <div class="preview-wrap" id="ybofd-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML to copy</h2>
+      <textarea id="ybofd-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="ybofd-copyBtn">Copy HTML</button>
+        <span class="status" id="ybofd-copyStatus"></span>
       </div>
     </div>
   </div>
@@ -5432,6 +5490,93 @@ function parsePlayerOddsFromText(text) {
   });
 
   obfdRender();
+})();
+
+// ========== WIDGET : Yesterday BOFD (catégorie Bet AF) — yesterday's result banner for Afrik-Foot NG ==========
+(function() {
+  const YB_STATUSES = {
+    win:  { klass: 'win',  badge: 'WIN' },
+    loss: { klass: 'loss', badge: 'LOSS' },
+    void: { klass: 'void', badge: 'VOID' }
+  };
+
+  const EMBED_CSS_YBOFD =
+    '<style>\n' +
+    '.af-yday{font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Arial,sans-serif;max-width:700px;}\n' +
+    '.af-yday *{box-sizing:border-box;}\n' +
+    '.af-yday .yd-wrap{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-radius:6px;font-size:13.5px;line-height:1.55;}\n' +
+    '.af-yday .yd-wrap.win{background:rgba(92,191,96,.1);border:1px solid rgba(92,191,96,.38);color:#5cbf60;}\n' +
+    '.af-yday .yd-wrap.loss{background:rgba(239,83,80,.1);border:1px solid rgba(239,83,80,.38);color:#e06060;}\n' +
+    '.af-yday .yd-wrap.void{background:rgba(158,158,158,.1);border:1px solid rgba(158,158,158,.3);color:#9e9e9e;}\n' +
+    '.af-yday .yd-badge{font-weight:800;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;padding:3px 9px;border-radius:4px;color:#fff;flex-shrink:0;margin-top:2px;}\n' +
+    '.af-yday .yd-wrap.win  .yd-badge{background:#5cbf60;}\n' +
+    '.af-yday .yd-wrap.loss .yd-badge{background:#e06060;}\n' +
+    '.af-yday .yd-wrap.void .yd-badge{background:#9e9e9e;}\n' +
+    '.af-yday .yd-text strong{font-weight:700;}\n' +
+    '</style>';
+
+  function buildYbofdHtml(d) {
+    const tier = YB_STATUSES[d.status] || YB_STATUSES.loss;
+    const isVoid = tier.klass === 'void';
+    const parts = [];
+    if (d.match)      parts.push(escapeHtml(d.match));
+    if (d.prediction) parts.push(escapeHtml(d.prediction));
+    if (isVoid) {
+      parts.push('Match not played');
+    } else {
+      if (d.score) parts.push('Final score: ' + escapeHtml(d.score));
+      if (d.odds)  parts.push('Odds: ' + escapeHtml(d.odds));
+    }
+    const sentence = parts.join(' &middot; ');
+    const prefix = escapeHtml(d.prefix || "Yesterday's bet:");
+    return EMBED_CSS_YBOFD + '\n\n' +
+      '<div class="af-yday">\n' +
+      '  <div class="yd-wrap ' + tier.klass + '" role="region" aria-label="Yesterday\'s bet of the day result">\n' +
+      '    <span class="yd-badge">' + tier.badge + '</span>\n' +
+      '    <div class="yd-text">\n' +
+      '      <strong>' + prefix + '</strong> ' + sentence + '\n' +
+      '    </div>\n' +
+      '  </div>\n' +
+      '</div>';
+  }
+
+  function ybofdRender() {
+    const data = {
+      status:     $('ybofd-status').value,
+      prefix:     $('ybofd-prefix').value.trim(),
+      match:      $('ybofd-match').value.trim(),
+      prediction: $('ybofd-prediction').value.trim(),
+      score:      $('ybofd-score').value.trim(),
+      odds:       $('ybofd-odds').value.trim()
+    };
+    const html = buildYbofdHtml(data);
+    $('ybofd-preview').innerHTML = html;
+    $('ybofd-output').value = html;
+  }
+
+  [
+    'ybofd-status','ybofd-prefix','ybofd-match','ybofd-prediction','ybofd-score','ybofd-odds'
+  ].forEach(id => {
+    const el = $(id);
+    if (!el) return;
+    const ev = el.tagName === 'SELECT' ? 'change' : 'input';
+    el.addEventListener(ev, ybofdRender);
+  });
+
+  $('ybofd-copyBtn').addEventListener('click', async () => {
+    const ta = $('ybofd-output');
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('ybofd-copyStatus').textContent = "✓ Copied.";
+      setTimeout(() => $('ybofd-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('ybofd-copyStatus').textContent = "✓ Copied.";
+    }
+  });
+
+  ybofdRender();
 })();
 
 </script>
