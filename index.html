@@ -405,6 +405,7 @@
     <button type="button" class="drawer__item" data-tab="tab-formation-options">Formation options</button>
     <div class="drawer__cat drawer__cat--sep">Bet AF</div>
     <button type="button" class="drawer__item" data-tab="tab-botf-af-ng">BOTF AF NG</button>
+    <button type="button" class="drawer__item" data-tab="tab-others-bofd">Others BOFD</button>
     <div class="drawer__cat drawer__cat--sep">Autres</div>
     <button type="button" class="drawer__item" data-tab="tab-essentiel">L'Essentiel TM</button>
     <button type="button" class="drawer__item" data-tab="tab-essentiel-af">L'Essentiel AF</button>
@@ -1278,6 +1279,74 @@
       <div class="copy-row">
         <button type="button" id="wc-copyBtn">Copy HTML</button>
         <span class="status" id="wc-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-others-bofd" role="tabpanel">
+    <h2 class="widget-title">Others BOFD</h2>
+    <p class="subtitle">Compact secondary Bet of the Day card for Afrik-Foot NG (no header banner, no confidence tier — just fixture / meta / tip / odds / CTA). All fields are manual.</p>
+
+    <div class="panel">
+      <h2>1. Fixture</h2>
+      <label for="obfd-fixture">Match — e.g. Liverpool vs Man United</label>
+      <input type="text" id="obfd-fixture" placeholder="Liverpool vs Man United" maxlength="80" />
+    </div>
+
+    <div class="panel">
+      <h2>2. Match meta</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div>
+          <label for="obfd-comp">Competition</label>
+          <input type="text" id="obfd-comp" placeholder="Premier League" maxlength="40" />
+        </div>
+        <div>
+          <label for="obfd-time">Kick-off time</label>
+          <input type="text" id="obfd-time" placeholder="15:00 WAT" maxlength="20" />
+        </div>
+      </div>
+      <div class="hint" style="margin-top:6px">Rendered as: <code>Competition &middot; Kick-off</code></div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Tip</h2>
+      <div class="row" style="grid-template-columns: 2fr 1fr;">
+        <div>
+          <label for="obfd-tipVal">Tip value — e.g. BTTS – Yes</label>
+          <input type="text" id="obfd-tipVal" placeholder="BTTS – Yes" maxlength="60" />
+        </div>
+        <div>
+          <label for="obfd-odds">Odds</label>
+          <input type="text" id="obfd-odds" placeholder="1.40" maxlength="10" inputmode="decimal" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>4. CTA</h2>
+      <div class="row" style="grid-template-columns: 1fr 2fr;">
+        <div>
+          <label for="obfd-ctaTxt">Button text</label>
+          <input type="text" id="obfd-ctaTxt" value="Bet Now at Bet9ja" maxlength="40" />
+        </div>
+        <div>
+          <label for="obfd-ctaUrl">Button URL</label>
+          <input type="text" id="obfd-ctaUrl" value="https://www.afrik-foot.com/go-bet9ja-ng" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Preview</h2>
+      <div class="preview-wrap" id="obfd-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML to copy</h2>
+      <textarea id="obfd-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="obfd-copyBtn">Copy HTML</button>
+        <span class="status" id="obfd-copyStatus"></span>
       </div>
     </div>
   </div>
@@ -5286,6 +5355,83 @@ function parsePlayerOddsFromText(text) {
   });
 
   botfNgRender();
+})();
+
+// ========== WIDGET : Others BOFD (catégorie Bet AF) — compact secondary card for Afrik-Foot NG ==========
+(function() {
+  const EMBED_CSS_OBFD =
+    '<style>\n' +
+    '.af-ob{--t:#e2e8da;--tm:#ffffff;--card:#1e2516;--brd:rgba(134,174,97,.22);--gl:rgba(134,174,97,.13);--glb:rgba(134,174,97,.26);--g:#86AE61;--gd:#9dc870;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Arial,sans-serif;max-width:700px;margin:0 auto;}\n' +
+    '.af-ob *{box-sizing:border-box;}\n' +
+    '.af-ob .obc{border:1px solid var(--brd);border-radius:8px;overflow:hidden;}\n' +
+    '.af-ob .obc-top{padding:12px 14px 8px;background:var(--card);text-align:center;}\n' +
+    '.af-ob .obc h3{font-size:15px;font-weight:700;color:var(--t);margin:0 0 2px;line-height:1.3;}\n' +
+    '.af-ob .obc-meta{font-size:12px;color:var(--gd);}\n' +
+    '.af-ob .obc-tip{background:var(--gl);border-top:1px solid var(--glb);border-bottom:1px solid var(--glb);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px;}\n' +
+    '.af-ob .obc-tip-val{font-size:18px;font-weight:800;color:var(--t);line-height:1.2;}\n' +
+    '.af-ob .obc-tip-odds{font-size:18px;font-weight:800;color:var(--g);white-space:nowrap;}\n' +
+    '.af-ob .obc-cta{display:block;background:var(--g);color:#fff!important;text-align:center;padding:11px 14px;font-weight:800;font-size:13.5px;text-decoration:none;letter-spacing:.2px;}\n' +
+    '</style>';
+
+  function buildObfdHtml(d) {
+    const metaParts = [d.comp, d.time].filter(s => s && s.trim()).map(escapeHtml);
+    const meta = metaParts.join(' &middot; ');
+    const safeUrl = d.ctaUrl || '#';
+    return EMBED_CSS_OBFD + '\n' +
+      '<div class="af-ob">\n' +
+      '  <div class="obc">\n' +
+      '    <div class="obc-top">\n' +
+      '      <h3>' + escapeHtml(d.fixture || 'Team A vs Team B') + '</h3>\n' +
+      '      <div class="obc-meta">' + (meta || '&nbsp;') + '</div>\n' +
+      '    </div>\n' +
+      '    <div class="obc-tip">\n' +
+      '      <span class="obc-tip-val">' + escapeHtml(d.tipVal || '') + '</span>\n' +
+      '      <span class="obc-tip-odds">' + escapeHtml(d.odds || '') + '</span>\n' +
+      '    </div>\n' +
+      '    <a href="' + escapeHtml(safeUrl) + '" class="obc-cta" target="_blank" rel="nofollow sponsored noopener">' + escapeHtml(d.ctaTxt || 'Bet Now') + '</a>\n' +
+      '  </div>\n' +
+      '</div>';
+  }
+
+  function obfdRender() {
+    const data = {
+      fixture: $('obfd-fixture').value.trim(),
+      comp:    $('obfd-comp').value.trim(),
+      time:    $('obfd-time').value.trim(),
+      tipVal:  $('obfd-tipVal').value.trim(),
+      odds:    $('obfd-odds').value.trim(),
+      ctaTxt:  $('obfd-ctaTxt').value.trim(),
+      ctaUrl:  $('obfd-ctaUrl').value.trim()
+    };
+    const html = buildObfdHtml(data);
+    $('obfd-preview').innerHTML = html;
+    $('obfd-output').value = html;
+  }
+
+  [
+    'obfd-fixture','obfd-comp','obfd-time',
+    'obfd-tipVal','obfd-odds',
+    'obfd-ctaTxt','obfd-ctaUrl'
+  ].forEach(id => {
+    const el = $(id);
+    if (!el) return;
+    el.addEventListener('input', obfdRender);
+  });
+
+  $('obfd-copyBtn').addEventListener('click', async () => {
+    const ta = $('obfd-output');
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('obfd-copyStatus').textContent = "✓ Copied.";
+      setTimeout(() => $('obfd-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('obfd-copyStatus').textContent = "✓ Copied.";
+    }
+  });
+
+  obfdRender();
 })();
 
 </script>
