@@ -409,6 +409,7 @@
     <button type="button" class="drawer__item" data-tab="tab-yesterday-bofd">Yesterday BOFD</button>
     <button type="button" class="drawer__item" data-tab="tab-correct-score-double">Correct Score Double</button>
     <button type="button" class="drawer__item" data-tab="tab-other-correct-score">Other correct score</button>
+    <button type="button" class="drawer__item" data-tab="tab-high-risk-acca">High Risk Accumulator</button>
     <div class="drawer__cat drawer__cat--sep">Autres</div>
     <button type="button" class="drawer__item" data-tab="tab-essentiel">L'Essentiel TM</button>
     <button type="button" class="drawer__item" data-tab="tab-essentiel-af">L'Essentiel AF</button>
@@ -1451,6 +1452,134 @@
       <div class="copy-row">
         <button type="button" id="ybofd-copyBtn">Copy HTML</button>
         <span class="status" id="ybofd-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-high-risk-acca" role="tabpanel">
+    <h2 class="widget-title">High Risk Accumulator</h2>
+    <p class="subtitle">Multi-pick accumulator card (up to 4 matches) with per-pick odds and an auto-calculated combined odds field. Leave a pick empty to skip it. The stake calculator won't animate in the tool preview — the copied HTML runs fine in your WP article.</p>
+
+    <div class="panel">
+      <h2>1. Header</h2>
+      <label for="hra-header">Header label</label>
+      <input type="text" id="hra-header" value="HIGH RISK ACCUMULATOR" maxlength="60" />
+    </div>
+
+    <div class="panel">
+      <h2>2. Pick 1</h2>
+      <div>
+        <label for="hra-p1-fix">Fixture</label>
+        <input type="text" id="hra-p1-fix" placeholder="Senegal vs Kenya" maxlength="80" />
+      </div>
+      <div class="row" style="grid-template-columns: 2fr 1fr;margin-top:10px">
+        <div>
+          <label for="hra-p1-pred">Prediction</label>
+          <input type="text" id="hra-p1-pred" placeholder="Exact goals: 2" maxlength="60" />
+        </div>
+        <div>
+          <label for="hra-p1-odds">Odds</label>
+          <input type="text" id="hra-p1-odds" placeholder="3.40" maxlength="10" inputmode="decimal" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Pick 2</h2>
+      <div>
+        <label for="hra-p2-fix">Fixture</label>
+        <input type="text" id="hra-p2-fix" placeholder="Morocco vs Algeria" maxlength="80" />
+      </div>
+      <div class="row" style="grid-template-columns: 2fr 1fr;margin-top:10px">
+        <div>
+          <label for="hra-p2-pred">Prediction</label>
+          <input type="text" id="hra-p2-pred" placeholder="CS: Morocco to win 2-0" maxlength="60" />
+        </div>
+        <div>
+          <label for="hra-p2-odds">Odds</label>
+          <input type="text" id="hra-p2-odds" placeholder="6.50" maxlength="10" inputmode="decimal" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>4. Pick 3 (optional)</h2>
+      <div>
+        <label for="hra-p3-fix">Fixture</label>
+        <input type="text" id="hra-p3-fix" placeholder="Midtjylland vs Besiktas" maxlength="80" />
+      </div>
+      <div class="row" style="grid-template-columns: 2fr 1fr;margin-top:10px">
+        <div>
+          <label for="hra-p3-pred">Prediction</label>
+          <input type="text" id="hra-p3-pred" placeholder="CS: 1-1 draw" maxlength="60" />
+        </div>
+        <div>
+          <label for="hra-p3-odds">Odds</label>
+          <input type="text" id="hra-p3-odds" placeholder="7.40" maxlength="10" inputmode="decimal" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>5. Pick 4 (optional)</h2>
+      <div>
+        <label for="hra-p4-fix">Fixture</label>
+        <input type="text" id="hra-p4-fix" placeholder="Team A vs Team B" maxlength="80" />
+      </div>
+      <div class="row" style="grid-template-columns: 2fr 1fr;margin-top:10px">
+        <div>
+          <label for="hra-p4-pred">Prediction</label>
+          <input type="text" id="hra-p4-pred" placeholder="Prediction" maxlength="60" />
+        </div>
+        <div>
+          <label for="hra-p4-odds">Odds</label>
+          <input type="text" id="hra-p4-odds" placeholder="2.10" maxlength="10" inputmode="decimal" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>6. Combined odds</h2>
+      <div class="hint">Auto-calculated as the product of all picks that have an odds value. Read-only.</div>
+      <input type="text" id="hra-combined" readonly style="background:#f4f6f8;font-weight:700" />
+    </div>
+
+    <div class="panel">
+      <h2>7. Currency symbol</h2>
+      <label for="hra-curr">Prefix for the stake input and return / profit line (default ₦ Naira)</label>
+      <input type="text" id="hra-curr" value="₦" maxlength="4" />
+    </div>
+
+    <div class="panel">
+      <h2>8. CTA</h2>
+      <div class="row" style="grid-template-columns: 1fr 2fr;">
+        <div>
+          <label for="hra-ctaTxt">Button text</label>
+          <input type="text" id="hra-ctaTxt" value="Bet This Acca at Bet9ja" maxlength="50" />
+        </div>
+        <div>
+          <label for="hra-ctaUrl">Button URL</label>
+          <input type="text" id="hra-ctaUrl" value="https://www.afrik-foot.com/go-bet9ja-ng" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>9. Small print</h2>
+      <input type="text" id="hra-note" value="Odds correct at time of publication. High risk: only stake what you can afford to lose entirely." maxlength="200" />
+    </div>
+
+    <div class="panel">
+      <h2>Preview</h2>
+      <div class="preview-wrap" id="hra-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML to copy</h2>
+      <textarea id="hra-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="hra-copyBtn">Copy HTML</button>
+        <span class="status" id="hra-copyStatus"></span>
       </div>
     </div>
   </div>
@@ -5749,6 +5878,179 @@ function parsePlayerOddsFromText(text) {
   });
 
   ocsRender();
+})();
+
+// ========== WIDGET : High Risk Accumulator (catégorie Bet AF) — up to 4 picks with auto-combined odds ==========
+(function() {
+  const EMBED_CSS_HRA =
+    '<style>\n' +
+    '.af-hra{--t:#e2e8da;--tm:#ffffff;--card:#1e2516;--brd:rgba(134,174,97,.22);--sep:rgba(134,174,97,.15);--gl:rgba(134,174,97,.13);--glb:rgba(134,174,97,.26);--g:#86AE61;--gd:#9dc870;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Arial,sans-serif;max-width:700px;margin:0 auto;}\n' +
+    '.af-hra *{box-sizing:border-box;}\n' +
+    '.af-hra .hra-card{border:2px solid var(--g);border-radius:8px;overflow:hidden;}\n' +
+    '.af-hra .hra-hdr{background:var(--g);padding:11px 16px;}\n' +
+    '.af-hra .hra-hdr-l{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#fff;}\n' +
+    '.af-hra .hra-body{background:var(--card);padding:6px 18px 16px;}\n' +
+    '.af-hra .hra-pick{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0;border-bottom:1px solid var(--sep);}\n' +
+    '.af-hra .hra-pick:last-of-type{border-bottom:none;}\n' +
+    '.af-hra .hra-pick-info{flex:1;min-width:0;}\n' +
+    '.af-hra .hra-fix{font-size:17px;font-weight:700;color:var(--t);line-height:1.25;margin-bottom:3px;}\n' +
+    '.af-hra .hra-pred{font-size:13px;color:var(--gd);line-height:1.3;}\n' +
+    '.af-hra .hra-odds{font-size:24px;font-weight:800;color:var(--t);line-height:1;white-space:nowrap;flex-shrink:0;}\n' +
+    '.af-hra .hra-combined-box{background:var(--gl);border:1px solid var(--glb);border-radius:7px;padding:14px 16px;text-align:center;margin-top:14px;}\n' +
+    '.af-hra .hra-combined-lbl{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.3px;color:var(--gd);margin-bottom:6px;}\n' +
+    '.af-hra .hra-combined-val{font-size:38px;font-weight:800;color:var(--g);line-height:1;}\n' +
+    '.af-hra .hra-calc{margin-top:16px;}\n' +
+    '.af-hra .hra-calc-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gd);margin-bottom:8px;}\n' +
+    '.af-hra .hra-calc-row{display:flex;align-items:center;border:1px solid var(--brd);border-radius:6px;overflow:hidden;background:rgba(0,0,0,.2);}\n' +
+    '.af-hra .hra-curr{padding:0 10px;font-size:16px;font-weight:700;color:var(--g);flex-shrink:0;}\n' +
+    '.af-hra .hra-calc-row input{flex:1;background:transparent;border:none;color:var(--t);font-size:17px;font-family:inherit;padding:11px 10px 11px 0;outline:none;min-width:0;}\n' +
+    '.af-hra .hra-calc-row input::placeholder{color:rgba(255,255,255,.28);font-size:15px;}\n' +
+    '.af-hra .hra-calc-out{font-size:13.5px;color:var(--tm);margin-top:8px;line-height:1.6;}\n' +
+    '.af-hra .hra-calc-out .ret{font-size:18px;font-weight:800;color:var(--g);}\n' +
+    '.af-hra .hra-calc-out .prof{font-weight:700;color:var(--t);}\n' +
+    '.af-hra .hra-cta{display:block;background:var(--g);color:#fff!important;text-align:center;padding:14px 16px;font-weight:800;font-size:14px;text-decoration:none;letter-spacing:.2px;}\n' +
+    '.af-hra .hra-note{display:block;font-size:11.5px;color:var(--gd);font-style:italic;margin:6px 0 0;text-align:center;}\n' +
+    '</style>';
+
+  // The closing script tag literal is split so the outer script wrapper
+  // containing this JS is not closed prematurely by the HTML parser.
+  const HRA_CLOSE_SCRIPT = '<' + '/script>';
+
+  function computeCombined(picks) {
+    let product = 1;
+    let count = 0;
+    for (const p of picks) {
+      const n = parseFloat(p.odds);
+      if (!isNaN(n) && n > 0) {
+        product *= n;
+        count++;
+      }
+    }
+    if (count < 2) return '';
+    return (Math.round(product * 100) / 100).toFixed(2);
+  }
+
+  function buildHraHtml(d) {
+    const curr = d.curr || '₦';
+    const currJs = JSON.stringify(curr);
+    const safeUrl = d.ctaUrl || '#';
+
+    const picks = d.picks.filter(p => (p.fix && p.fix.trim()) || (p.pred && p.pred.trim()) || (p.odds && p.odds.trim()));
+    const combined = computeCombined(picks) || '—';
+
+    const picksHtml = picks.map(p =>
+      '      <div class="hra-pick">\n' +
+      '        <div class="hra-pick-info">\n' +
+      '          <div class="hra-fix">' + escapeHtml(p.fix || 'Team A vs Team B') + '</div>\n' +
+      '          <div class="hra-pred">' + escapeHtml(p.pred || '') + '</div>\n' +
+      '        </div>\n' +
+      '        <div class="hra-odds">' + escapeHtml(p.odds || '') + '</div>\n' +
+      '      </div>'
+    ).join('\n');
+
+    const cardHtml =
+      '<div class="af-hra">\n' +
+      '  <div class="hra-card">\n' +
+      '    <div class="hra-hdr">\n' +
+      '      <span class="hra-hdr-l">' + escapeHtml(d.header || 'HIGH RISK ACCUMULATOR') + '</span>\n' +
+      '    </div>\n' +
+      '    <div class="hra-body">\n' +
+      (picksHtml || '      <div class="hra-pick"><div class="hra-pick-info"><div class="hra-fix">Add at least one pick</div></div></div>') + '\n' +
+      '      <div class="hra-combined-box">\n' +
+      '        <div class="hra-combined-lbl">Combined odds</div>\n' +
+      '        <div class="hra-combined-val">' + escapeHtml(combined) + '</div>\n' +
+      '      </div>\n' +
+      '      <div class="hra-calc">\n' +
+      '        <div class="hra-calc-lbl">How much could you win?</div>\n' +
+      '        <div class="hra-calc-row">\n' +
+      '          <span class="hra-curr">' + escapeHtml(curr) + '</span>\n' +
+      '          <input type="number" placeholder="Enter your stake" min="0" step="100" aria-label="Stake">\n' +
+      '        </div>\n' +
+      '        <div class="hra-calc-out" aria-live="polite">Enter your stake above to see your potential return.</div>\n' +
+      '      </div>\n' +
+      '    </div>\n' +
+      '    <a href="' + escapeHtml(safeUrl) + '" class="hra-cta" target="_blank" rel="nofollow sponsored noopener">' + escapeHtml(d.ctaTxt || 'Bet Now') + '</a>\n' +
+      '  </div>\n' +
+      '  <span class="hra-note">' + escapeHtml(d.note || '') + '</span>\n' +
+      '</div>';
+
+    const calcScript =
+      '\n\n<script>\n' +
+      '(function(){\n' +
+      '  var wrap = document.querySelector(".af-hra");\n' +
+      '  if(!wrap) return;\n' +
+      '  var oddsEl = wrap.querySelector(".hra-combined-val");\n' +
+      '  var inp = wrap.querySelector(".hra-calc-row input");\n' +
+      '  var out = wrap.querySelector(".hra-calc-out");\n' +
+      '  if(!oddsEl || !inp || !out) return;\n' +
+      '  var curr = ' + currJs + ';\n' +
+      '  inp.addEventListener("input", function(){\n' +
+      '    var stake = parseFloat(this.value);\n' +
+      '    var odds = parseFloat(oddsEl.textContent);\n' +
+      '    if(!stake || stake <= 0 || !odds){\n' +
+      '      out.innerHTML = "Enter your stake above to see your potential return.";\n' +
+      '      return;\n' +
+      '    }\n' +
+      '    var ret = Math.round(stake * odds);\n' +
+      '    var profit = Math.round(ret - stake);\n' +
+      '    out.innerHTML = "Return: <span class=\\"ret\\">" + curr + ret.toLocaleString() + "</span>&nbsp;&nbsp;Profit: <span class=\\"prof\\">" + curr + profit.toLocaleString() + "</span>";\n' +
+      '  });\n' +
+      '})();\n' +
+      HRA_CLOSE_SCRIPT;
+
+    return EMBED_CSS_HRA + '\n\n' + cardHtml + calcScript;
+  }
+
+  function hraRender() {
+    const picks = [1, 2, 3, 4].map(i => ({
+      fix:  $('hra-p' + i + '-fix').value.trim(),
+      pred: $('hra-p' + i + '-pred').value.trim(),
+      odds: $('hra-p' + i + '-odds').value.trim()
+    }));
+    const data = {
+      header:  $('hra-header').value.trim(),
+      picks:   picks,
+      curr:    $('hra-curr').value.trim(),
+      ctaTxt:  $('hra-ctaTxt').value.trim(),
+      ctaUrl:  $('hra-ctaUrl').value.trim(),
+      note:    $('hra-note').value.trim()
+    };
+    // Mirror the combined odds into the read-only field for visibility.
+    const activePicks = picks.filter(p => p.fix || p.pred || p.odds);
+    $('hra-combined').value = computeCombined(activePicks) || '';
+
+    const html = buildHraHtml(data);
+    $('hra-preview').innerHTML = html;
+    $('hra-output').value = html;
+  }
+
+  [
+    'hra-header',
+    'hra-p1-fix','hra-p1-pred','hra-p1-odds',
+    'hra-p2-fix','hra-p2-pred','hra-p2-odds',
+    'hra-p3-fix','hra-p3-pred','hra-p3-odds',
+    'hra-p4-fix','hra-p4-pred','hra-p4-odds',
+    'hra-curr','hra-ctaTxt','hra-ctaUrl','hra-note'
+  ].forEach(id => {
+    const el = $(id);
+    if (!el) return;
+    el.addEventListener('input', hraRender);
+  });
+
+  $('hra-copyBtn').addEventListener('click', async () => {
+    const ta = $('hra-output');
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('hra-copyStatus').textContent = "✓ Copied.";
+      setTimeout(() => $('hra-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('hra-copyStatus').textContent = "✓ Copied.";
+    }
+  });
+
+  hraRender();
 })();
 
 // ========== WIDGET : Yesterday BOFD (catégorie Bet AF) — yesterday's result banner for Afrik-Foot NG ==========
