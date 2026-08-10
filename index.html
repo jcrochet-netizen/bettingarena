@@ -408,6 +408,7 @@
     <button type="button" class="drawer__item" data-tab="tab-others-bofd">Others BOFD</button>
     <button type="button" class="drawer__item" data-tab="tab-yesterday-bofd">Yesterday BOFD</button>
     <button type="button" class="drawer__item" data-tab="tab-correct-score-double">Correct Score Double</button>
+    <button type="button" class="drawer__item" data-tab="tab-other-correct-score">Other correct score</button>
     <div class="drawer__cat drawer__cat--sep">Autres</div>
     <button type="button" class="drawer__item" data-tab="tab-essentiel">L'Essentiel TM</button>
     <button type="button" class="drawer__item" data-tab="tab-essentiel-af">L'Essentiel AF</button>
@@ -1450,6 +1451,74 @@
       <div class="copy-row">
         <button type="button" id="ybofd-copyBtn">Copy HTML</button>
         <span class="status" id="ybofd-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-other-correct-score" role="tabpanel">
+    <h2 class="widget-title">Other correct score</h2>
+    <p class="subtitle">Compact secondary Correct Score card for Afrik-Foot NG (no header banner, no confidence tier — just fixture / meta / tip / odds / CTA). All fields are manual. Same layout as Others BOFD.</p>
+
+    <div class="panel">
+      <h2>1. Fixture</h2>
+      <label for="ocs-fixture">Match — e.g. Liverpool vs Man United</label>
+      <input type="text" id="ocs-fixture" placeholder="Liverpool vs Man United" maxlength="80" />
+    </div>
+
+    <div class="panel">
+      <h2>2. Match meta</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div>
+          <label for="ocs-comp">Competition</label>
+          <input type="text" id="ocs-comp" placeholder="Premier League" maxlength="40" />
+        </div>
+        <div>
+          <label for="ocs-time">Kick-off time</label>
+          <input type="text" id="ocs-time" placeholder="15:00 WAT" maxlength="20" />
+        </div>
+      </div>
+      <div class="hint" style="margin-top:6px">Rendered as: <code>Competition &middot; Kick-off</code></div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Tip</h2>
+      <div class="row" style="grid-template-columns: 2fr 1fr;">
+        <div>
+          <label for="ocs-tipVal">Tip value — e.g. Correct Score 2-1</label>
+          <input type="text" id="ocs-tipVal" placeholder="Correct Score 2-1" maxlength="60" />
+        </div>
+        <div>
+          <label for="ocs-odds">Odds</label>
+          <input type="text" id="ocs-odds" placeholder="8.50" maxlength="10" inputmode="decimal" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>4. CTA</h2>
+      <div class="row" style="grid-template-columns: 1fr 2fr;">
+        <div>
+          <label for="ocs-ctaTxt">Button text</label>
+          <input type="text" id="ocs-ctaTxt" value="Bet Now at Bet9ja" maxlength="40" />
+        </div>
+        <div>
+          <label for="ocs-ctaUrl">Button URL</label>
+          <input type="text" id="ocs-ctaUrl" value="https://www.afrik-foot.com/go-bet9ja-ng" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Preview</h2>
+      <div class="preview-wrap" id="ocs-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML to copy</h2>
+      <textarea id="ocs-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="ocs-copyBtn">Copy HTML</button>
+        <span class="status" id="ocs-copyStatus"></span>
       </div>
     </div>
   </div>
@@ -5603,6 +5672,83 @@ function parsePlayerOddsFromText(text) {
   });
 
   obfdRender();
+})();
+
+// ========== WIDGET : Other correct score (catégorie Bet AF) — duplicate of Others BOFD ==========
+(function() {
+  const EMBED_CSS_OCS =
+    '<style>\n' +
+    '.af-ob{--t:#e2e8da;--tm:#ffffff;--card:#1e2516;--brd:rgba(134,174,97,.22);--gl:rgba(134,174,97,.13);--glb:rgba(134,174,97,.26);--g:#86AE61;--gd:#9dc870;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Arial,sans-serif;max-width:700px;margin:0 auto;}\n' +
+    '.af-ob *{box-sizing:border-box;}\n' +
+    '.af-ob .obc{border:1px solid var(--brd);border-radius:8px;overflow:hidden;}\n' +
+    '.af-ob .obc-top{padding:12px 14px 8px;background:var(--card);text-align:center;}\n' +
+    '.af-ob .obc h3{font-size:15px;font-weight:700;color:var(--t);margin:0 0 2px;line-height:1.3;}\n' +
+    '.af-ob .obc-meta{font-size:12px;color:var(--gd);}\n' +
+    '.af-ob .obc-tip{background:var(--card);border-top:1px solid var(--glb);border-bottom:1px solid var(--glb);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px;}\n' +
+    '.af-ob .obc-tip-val{font-size:18px;font-weight:800;color:var(--t);line-height:1.2;}\n' +
+    '.af-ob .obc-tip-odds{font-size:18px;font-weight:800;color:var(--g);white-space:nowrap;}\n' +
+    '.af-ob .obc-cta{display:block;background:var(--g);color:#fff!important;text-align:center;padding:11px 14px;font-weight:800;font-size:13.5px;text-decoration:none;letter-spacing:.2px;}\n' +
+    '</style>';
+
+  function buildOcsHtml(d) {
+    const metaParts = [d.comp, d.time].filter(s => s && s.trim()).map(escapeHtml);
+    const meta = metaParts.join(' &middot; ');
+    const safeUrl = d.ctaUrl || '#';
+    return EMBED_CSS_OCS + '\n' +
+      '<div class="af-ob">\n' +
+      '  <div class="obc">\n' +
+      '    <div class="obc-top">\n' +
+      '      <h3>' + escapeHtml(d.fixture || 'Team A vs Team B') + '</h3>\n' +
+      '      <div class="obc-meta">' + (meta || '&nbsp;') + '</div>\n' +
+      '    </div>\n' +
+      '    <div class="obc-tip">\n' +
+      '      <span class="obc-tip-val">' + escapeHtml(d.tipVal || '') + '</span>\n' +
+      '      <span class="obc-tip-odds">' + escapeHtml(d.odds || '') + '</span>\n' +
+      '    </div>\n' +
+      '    <a href="' + escapeHtml(safeUrl) + '" class="obc-cta" target="_blank" rel="nofollow sponsored noopener">' + escapeHtml(d.ctaTxt || 'Bet Now') + '</a>\n' +
+      '  </div>\n' +
+      '</div>';
+  }
+
+  function ocsRender() {
+    const data = {
+      fixture: $('ocs-fixture').value.trim(),
+      comp:    $('ocs-comp').value.trim(),
+      time:    $('ocs-time').value.trim(),
+      tipVal:  $('ocs-tipVal').value.trim(),
+      odds:    $('ocs-odds').value.trim(),
+      ctaTxt:  $('ocs-ctaTxt').value.trim(),
+      ctaUrl:  $('ocs-ctaUrl').value.trim()
+    };
+    const html = buildOcsHtml(data);
+    $('ocs-preview').innerHTML = html;
+    $('ocs-output').value = html;
+  }
+
+  [
+    'ocs-fixture','ocs-comp','ocs-time',
+    'ocs-tipVal','ocs-odds',
+    'ocs-ctaTxt','ocs-ctaUrl'
+  ].forEach(id => {
+    const el = $(id);
+    if (!el) return;
+    el.addEventListener('input', ocsRender);
+  });
+
+  $('ocs-copyBtn').addEventListener('click', async () => {
+    const ta = $('ocs-output');
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('ocs-copyStatus').textContent = "✓ Copied.";
+      setTimeout(() => $('ocs-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('ocs-copyStatus').textContent = "✓ Copied.";
+    }
+  });
+
+  ocsRender();
 })();
 
 // ========== WIDGET : Yesterday BOFD (catégorie Bet AF) — yesterday's result banner for Afrik-Foot NG ==========
