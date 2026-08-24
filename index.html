@@ -180,9 +180,15 @@
     z-index: 100;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
   .drawer.open { transform: translateX(0); }
   .drawer__head {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #fff;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -410,6 +416,9 @@
     <button type="button" class="drawer__item" data-tab="tab-correct-score-double">Correct Score Double</button>
     <button type="button" class="drawer__item" data-tab="tab-other-correct-score">Other correct score</button>
     <button type="button" class="drawer__item" data-tab="tab-high-risk-acca">High Risk Accumulator</button>
+    <div class="drawer__cat drawer__cat--sep">Widget TNT</div>
+    <button type="button" class="drawer__item" data-tab="tab-tnt-overview">Overview</button>
+    <button type="button" class="drawer__item" data-tab="tab-tnt-match-stats">Match stats</button>
     <div class="drawer__cat drawer__cat--sep">Autres</div>
     <button type="button" class="drawer__item" data-tab="tab-essentiel">L'Essentiel TM</button>
     <button type="button" class="drawer__item" data-tab="tab-essentiel-af">L'Essentiel AF</button>
@@ -1452,6 +1461,186 @@
       <div class="copy-row">
         <button type="button" id="ybofd-copyBtn">Copy HTML</button>
         <span class="status" id="ybofd-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-tnt-overview" role="tabpanel">
+    <h2 class="widget-title">TNT — Overview</h2>
+    <p class="subtitle">Predictions overview table for TNT (up to 5 matches). Empty match rows are skipped — leave a match blank to hide it from the output.</p>
+
+    <div class="panel">
+      <h2>1. Widget title</h2>
+      <input type="text" id="tntov-title" value="Football predictions today" maxlength="80" />
+    </div>
+
+    <div class="panel">
+      <h2>2. Column headers</h2>
+      <div class="row" style="grid-template-columns: repeat(5, 1fr);">
+        <div><label for="tntov-h-date">Date</label><input type="text" id="tntov-h-date" value="Date" maxlength="20" /></div>
+        <div><label for="tntov-h-time">Time</label><input type="text" id="tntov-h-time" value="Time (BST)" maxlength="20" /></div>
+        <div><label for="tntov-h-match">Match</label><input type="text" id="tntov-h-match" value="Match" maxlength="20" /></div>
+        <div><label for="tntov-h-score">Score prediction</label><input type="text" id="tntov-h-score" value="Score prediction" maxlength="30" /></div>
+        <div><label for="tntov-h-tip">Top tip</label><input type="text" id="tntov-h-tip" value="Top tip" maxlength="20" /></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Match 1</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div><label for="tntov-m1-date">Date</label><input type="text" id="tntov-m1-date" placeholder="Fri 21 Aug" maxlength="30" /></div>
+        <div><label for="tntov-m1-time">Time</label><input type="text" id="tntov-m1-time" placeholder="20:00" maxlength="20" /></div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 1fr;margin-top:10px">
+        <div><label for="tntov-m1-stage">Stage / Competition</label><input type="text" id="tntov-m1-stage" placeholder="Premier League" maxlength="40" /></div>
+        <div><label for="tntov-m1-match">Match</label><input type="text" id="tntov-m1-match" placeholder="Arsenal vs Coventry City" maxlength="60" /></div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 1fr;margin-top:10px">
+        <div><label for="tntov-m1-score">Score prediction</label><input type="text" id="tntov-m1-score" placeholder="Arsenal 3-0 Coventry City" maxlength="60" /></div>
+        <div><label for="tntov-m1-tip">Top tip</label><input type="text" id="tntov-m1-tip" placeholder="Arsenal to win to nil" maxlength="60" /></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>4. Match 2</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div><label for="tntov-m2-date">Date</label><input type="text" id="tntov-m2-date" placeholder="Fri 21 Aug" maxlength="30" /></div>
+        <div><label for="tntov-m2-time">Time</label><input type="text" id="tntov-m2-time" placeholder="20:00" maxlength="20" /></div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 1fr;margin-top:10px">
+        <div><label for="tntov-m2-stage">Stage / Competition</label><input type="text" id="tntov-m2-stage" placeholder="La Liga" maxlength="40" /></div>
+        <div><label for="tntov-m2-match">Match</label><input type="text" id="tntov-m2-match" placeholder="Real Betis vs Real Sociedad" maxlength="60" /></div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 1fr;margin-top:10px">
+        <div><label for="tntov-m2-score">Score prediction</label><input type="text" id="tntov-m2-score" placeholder="Real Betis 2-1 Real Sociedad" maxlength="60" /></div>
+        <div><label for="tntov-m2-tip">Top tip</label><input type="text" id="tntov-m2-tip" placeholder="Over 2.5 goals" maxlength="60" /></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>5. Match 3 (optional)</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div><label for="tntov-m3-date">Date</label><input type="text" id="tntov-m3-date" maxlength="30" /></div>
+        <div><label for="tntov-m3-time">Time</label><input type="text" id="tntov-m3-time" maxlength="20" /></div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 1fr;margin-top:10px">
+        <div><label for="tntov-m3-stage">Stage / Competition</label><input type="text" id="tntov-m3-stage" maxlength="40" /></div>
+        <div><label for="tntov-m3-match">Match</label><input type="text" id="tntov-m3-match" maxlength="60" /></div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 1fr;margin-top:10px">
+        <div><label for="tntov-m3-score">Score prediction</label><input type="text" id="tntov-m3-score" maxlength="60" /></div>
+        <div><label for="tntov-m3-tip">Top tip</label><input type="text" id="tntov-m3-tip" maxlength="60" /></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>6. Match 4 (optional)</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div><label for="tntov-m4-date">Date</label><input type="text" id="tntov-m4-date" maxlength="30" /></div>
+        <div><label for="tntov-m4-time">Time</label><input type="text" id="tntov-m4-time" maxlength="20" /></div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 1fr;margin-top:10px">
+        <div><label for="tntov-m4-stage">Stage / Competition</label><input type="text" id="tntov-m4-stage" maxlength="40" /></div>
+        <div><label for="tntov-m4-match">Match</label><input type="text" id="tntov-m4-match" maxlength="60" /></div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 1fr;margin-top:10px">
+        <div><label for="tntov-m4-score">Score prediction</label><input type="text" id="tntov-m4-score" maxlength="60" /></div>
+        <div><label for="tntov-m4-tip">Top tip</label><input type="text" id="tntov-m4-tip" maxlength="60" /></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>7. Match 5 (optional)</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div><label for="tntov-m5-date">Date</label><input type="text" id="tntov-m5-date" maxlength="30" /></div>
+        <div><label for="tntov-m5-time">Time</label><input type="text" id="tntov-m5-time" maxlength="20" /></div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 1fr;margin-top:10px">
+        <div><label for="tntov-m5-stage">Stage / Competition</label><input type="text" id="tntov-m5-stage" maxlength="40" /></div>
+        <div><label for="tntov-m5-match">Match</label><input type="text" id="tntov-m5-match" maxlength="60" /></div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 1fr;margin-top:10px">
+        <div><label for="tntov-m5-score">Score prediction</label><input type="text" id="tntov-m5-score" maxlength="60" /></div>
+        <div><label for="tntov-m5-tip">Top tip</label><input type="text" id="tntov-m5-tip" maxlength="60" /></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Preview</h2>
+      <div class="preview-wrap" id="tntov-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML to copy</h2>
+      <textarea id="tntov-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="tntov-copyBtn">Copy HTML</button>
+        <span class="status" id="tntov-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-tnt-match-stats" role="tabpanel">
+    <h2 class="widget-title">TNT — Match stats</h2>
+    <p class="subtitle">Key numbers grid + top tip banner for TNT. Four stat cards (customizable numbers + labels) and a Top Tip pink row.</p>
+
+    <div class="panel">
+      <h2>1. Widget title</h2>
+      <label for="tntms-title">e.g. « Arsenal vs Coventry City: KEY NUMBERS »</label>
+      <input type="text" id="tntms-title" value="Arsenal vs Coventry City: KEY NUMBERS" maxlength="120" />
+    </div>
+
+    <div class="panel">
+      <h2>2. Stat 1</h2>
+      <div class="row" style="grid-template-columns: 1fr 3fr;">
+        <div><label for="tntms-s1-num">Number</label><input type="text" id="tntms-s1-num" placeholder="85" maxlength="10" /></div>
+        <div><label for="tntms-s1-lbl">Label</label><input type="text" id="tntms-s1-lbl" placeholder="The number of points Arsenal accumulated in the Premier League last season." maxlength="200" /></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Stat 2</h2>
+      <div class="row" style="grid-template-columns: 1fr 3fr;">
+        <div><label for="tntms-s2-num">Number</label><input type="text" id="tntms-s2-num" placeholder="95" maxlength="10" /></div>
+        <div><label for="tntms-s2-lbl">Label</label><input type="text" id="tntms-s2-lbl" placeholder="The number of points Coventry City accumulated in the Championship last season." maxlength="200" /></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>4. Stat 3</h2>
+      <div class="row" style="grid-template-columns: 1fr 3fr;">
+        <div><label for="tntms-s3-num">Number</label><input type="text" id="tntms-s3-num" placeholder="5" maxlength="10" /></div>
+        <div><label for="tntms-s3-lbl">Label</label><input type="text" id="tntms-s3-lbl" placeholder="The number of clean sheets kept by Arsenal across their last seven competitive matches." maxlength="200" /></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>5. Stat 4</h2>
+      <div class="row" style="grid-template-columns: 1fr 3fr;">
+        <div><label for="tntms-s4-num">Number</label><input type="text" id="tntms-s4-num" placeholder="6" maxlength="10" /></div>
+        <div><label for="tntms-s4-lbl">Label</label><input type="text" id="tntms-s4-lbl" placeholder="Arsenal's current winning streak against Premier League opposition." maxlength="200" /></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>6. Top tip banner</h2>
+      <div class="row" style="grid-template-columns: 1fr 3fr;">
+        <div><label for="tntms-tip-lbl">Label</label><input type="text" id="tntms-tip-lbl" value="TOP TIP" maxlength="30" /></div>
+        <div><label for="tntms-tip-val">Value</label><input type="text" id="tntms-tip-val" placeholder="Arsenal to win to nil." maxlength="120" /></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Preview</h2>
+      <div class="preview-wrap" id="tntms-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML to copy</h2>
+      <textarea id="tntms-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="tntms-copyBtn">Copy HTML</button>
+        <span class="status" id="tntms-copyStatus"></span>
       </div>
     </div>
   </div>
@@ -6051,6 +6240,188 @@ function parsePlayerOddsFromText(text) {
   });
 
   hraRender();
+})();
+
+// ========== WIDGET : TNT Overview (catégorie Widget TNT) — up to 5 match predictions table ==========
+(function() {
+  const EMBED_CSS_TNTOV =
+    '<style>\n' +
+    '.tntfx-wrap{width:100%;background:#14232D;border-radius:10px;padding:18px 16px;box-sizing:border-box;margin:0 0 24px;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,Arial,sans-serif;}\n' +
+    '.tntfx-title{font-size:13px;font-weight:700;letter-spacing:0.5px;color:#FF28FF;margin:0 0 12px;}\n' +
+    '.tntfx-scroll{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;}\n' +
+    '.tntfx-table{width:100%;min-width:560px;border-collapse:collapse;}\n' +
+    '.tntfx-table th{font-size:11px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;color:#8fa8b8;text-align:left;padding:0 10px 10px;border-bottom:1px solid rgba(255,255,255,0.12);white-space:nowrap;}\n' +
+    '.tntfx-table td{font-size:13px;color:#F7F7F7;padding:12px 10px;border-bottom:1px solid rgba(255,255,255,0.08);vertical-align:middle;}\n' +
+    '.tntfx-table tr:last-child td{border-bottom:none;}\n' +
+    '.tntfx-stage{display:block;font-size:10px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;color:#8fa8b8;margin-bottom:3px;}\n' +
+    '.tntfx-match{font-weight:600;color:#F7F7F7;white-space:nowrap;}\n' +
+    '.tntfx-score{font-weight:700;color:#FFFFFF;white-space:nowrap;}\n' +
+    '.tntfx-tip{color:#FFFFFF;}\n' +
+    '@media (max-width:480px){.tntfx-wrap{padding:14px 12px;}.tntfx-table th,.tntfx-table td{padding:10px 8px;font-size:12px;}}\n' +
+    '</style>';
+
+  function buildTntovHtml(d) {
+    const rows = d.matches.filter(m => (m.date && m.date.trim()) || (m.time && m.time.trim()) || (m.stage && m.stage.trim()) || (m.match && m.match.trim()) || (m.score && m.score.trim()) || (m.tip && m.tip.trim()));
+    const rowsHtml = rows.map(m =>
+      '        <tr>\n' +
+      '          <td>' + escapeHtml(m.date || '') + '</td>\n' +
+      '          <td>' + escapeHtml(m.time || '') + '</td>\n' +
+      '          <td>\n' +
+      '            <span class="tntfx-stage">' + escapeHtml(m.stage || '') + '</span>\n' +
+      '            <span class="tntfx-match">' + escapeHtml(m.match || '') + '</span>\n' +
+      '          </td>\n' +
+      '          <td class="tntfx-score">' + escapeHtml(m.score || '') + '</td>\n' +
+      '          <td class="tntfx-tip">' + escapeHtml(m.tip || '') + '</td>\n' +
+      '        </tr>'
+    ).join('\n');
+
+    return EMBED_CSS_TNTOV + '\n\n' +
+      '<div class="tntfx-wrap">\n' +
+      '  <p class="tntfx-title">' + escapeHtml(d.title || '') + '</p>\n' +
+      '  <div class="tntfx-scroll">\n' +
+      '    <table class="tntfx-table">\n' +
+      '      <thead>\n' +
+      '        <tr>\n' +
+      '          <th scope="col">' + escapeHtml(d.hDate || 'Date') + '</th>\n' +
+      '          <th scope="col">' + escapeHtml(d.hTime || 'Time') + '</th>\n' +
+      '          <th scope="col">' + escapeHtml(d.hMatch || 'Match') + '</th>\n' +
+      '          <th scope="col">' + escapeHtml(d.hScore || 'Score prediction') + '</th>\n' +
+      '          <th scope="col">' + escapeHtml(d.hTip || 'Top tip') + '</th>\n' +
+      '        </tr>\n' +
+      '      </thead>\n' +
+      '      <tbody>\n' +
+      (rowsHtml || '        <tr><td colspan="5" style="text-align:center;color:#8fa8b8">Fill in at least one match</td></tr>') + '\n' +
+      '      </tbody>\n' +
+      '    </table>\n' +
+      '  </div>\n' +
+      '</div>';
+  }
+
+  function tntovRender() {
+    const matches = [1, 2, 3, 4, 5].map(i => ({
+      date:  $('tntov-m' + i + '-date').value.trim(),
+      time:  $('tntov-m' + i + '-time').value.trim(),
+      stage: $('tntov-m' + i + '-stage').value.trim(),
+      match: $('tntov-m' + i + '-match').value.trim(),
+      score: $('tntov-m' + i + '-score').value.trim(),
+      tip:   $('tntov-m' + i + '-tip').value.trim()
+    }));
+    const data = {
+      title:   $('tntov-title').value.trim(),
+      hDate:   $('tntov-h-date').value.trim(),
+      hTime:   $('tntov-h-time').value.trim(),
+      hMatch:  $('tntov-h-match').value.trim(),
+      hScore:  $('tntov-h-score').value.trim(),
+      hTip:    $('tntov-h-tip').value.trim(),
+      matches: matches
+    };
+    const html = buildTntovHtml(data);
+    $('tntov-preview').innerHTML = html;
+    $('tntov-output').value = html;
+  }
+
+  const tntovIds = ['tntov-title','tntov-h-date','tntov-h-time','tntov-h-match','tntov-h-score','tntov-h-tip'];
+  for (let i = 1; i <= 5; i++) {
+    tntovIds.push('tntov-m' + i + '-date','tntov-m' + i + '-time','tntov-m' + i + '-stage','tntov-m' + i + '-match','tntov-m' + i + '-score','tntov-m' + i + '-tip');
+  }
+  tntovIds.forEach(id => {
+    const el = $(id);
+    if (el) el.addEventListener('input', tntovRender);
+  });
+
+  $('tntov-copyBtn').addEventListener('click', async () => {
+    const ta = $('tntov-output');
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('tntov-copyStatus').textContent = "✓ Copied.";
+      setTimeout(() => $('tntov-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('tntov-copyStatus').textContent = "✓ Copied.";
+    }
+  });
+
+  tntovRender();
+})();
+
+// ========== WIDGET : TNT Match stats (catégorie Widget TNT) — 4 stat cards + top tip banner ==========
+(function() {
+  const EMBED_CSS_TNTMS =
+    '<style>\n' +
+    '.tntargegy-stats-wrap{width:100%;max-width:680px;margin:24px auto;box-sizing:border-box;background:#14232D;border-radius:12px;padding:20px;font-family:Arial,Helvetica,sans-serif;}\n' +
+    '.tntargegy-stats-title{font-size:13px;font-weight:700;letter-spacing:0.5px;text-transform:none;color:#FF28FF;margin:0 0 14px 0;}\n' +
+    '.tntargegy-stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;width:100%;box-sizing:border-box;}\n' +
+    '.tntargegy-stat-card{background:rgba(255,255,255,0.06);border-radius:8px;padding:12px 10px;box-sizing:border-box;text-align:center;}\n' +
+    '.tntargegy-stat-num{font-size:26px;font-weight:800;color:#FF28FF;line-height:1;margin-bottom:4px;}\n' +
+    '.tntargegy-stat-label{font-size:12px;color:#a8c0cc;line-height:1.3;}\n' +
+    '.tntargegy-tip-row{margin-top:14px;background:#FF28FF;border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;box-sizing:border-box;flex-wrap:wrap;gap:6px;}\n' +
+    '.tntargegy-tip-label,.tntargegy-tip-value{font-size:13px;font-weight:700;color:#14232D;}\n' +
+    '@media (max-width:480px){.tntargegy-stats-grid{grid-template-columns:repeat(2,1fr);gap:8px;}.tntargegy-stat-num{font-size:22px;}.tntargegy-stat-label{font-size:11px;}}\n' +
+    '</style>';
+
+  function buildTntmsHtml(d) {
+    const cardHtml = d.stats.map(s =>
+      '    <div class="tntargegy-stat-card">\n' +
+      '        <div class="tntargegy-stat-num">' + escapeHtml(s.num || '') + '</div>\n' +
+      '        <div class="tntargegy-stat-label">' + escapeHtml(s.lbl || '') + '</div>\n' +
+      '    </div>'
+    ).join('\n\n');
+
+    return '<div class="tntargegy-stats-wrap">\n' +
+      EMBED_CSS_TNTMS + '\n\n' +
+      '<div class="tntargegy-stats-title">\n' +
+      '    ' + escapeHtml(d.title || '') + '\n' +
+      '</div>\n\n' +
+      '<div class="tntargegy-stats-grid">\n\n' +
+      cardHtml + '\n\n' +
+      '</div>\n\n' +
+      '<div class="tntargegy-tip-row">\n' +
+      '    <span class="tntargegy-tip-label">' + escapeHtml(d.tipLbl || 'TOP TIP') + '</span>\n' +
+      '    <span class="tntargegy-tip-value">' + escapeHtml(d.tipVal || '') + '</span>\n' +
+      '</div>\n\n' +
+      '</div>';
+  }
+
+  function tntmsRender() {
+    const stats = [1, 2, 3, 4].map(i => ({
+      num: $('tntms-s' + i + '-num').value.trim(),
+      lbl: $('tntms-s' + i + '-lbl').value.trim()
+    }));
+    const data = {
+      title:  $('tntms-title').value.trim(),
+      stats:  stats,
+      tipLbl: $('tntms-tip-lbl').value.trim(),
+      tipVal: $('tntms-tip-val').value.trim()
+    };
+    const html = buildTntmsHtml(data);
+    $('tntms-preview').innerHTML = html;
+    $('tntms-output').value = html;
+  }
+
+  const tntmsIds = ['tntms-title','tntms-tip-lbl','tntms-tip-val'];
+  for (let i = 1; i <= 4; i++) {
+    tntmsIds.push('tntms-s' + i + '-num','tntms-s' + i + '-lbl');
+  }
+  tntmsIds.forEach(id => {
+    const el = $(id);
+    if (el) el.addEventListener('input', tntmsRender);
+  });
+
+  $('tntms-copyBtn').addEventListener('click', async () => {
+    const ta = $('tntms-output');
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('tntms-copyStatus').textContent = "✓ Copied.";
+      setTimeout(() => $('tntms-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('tntms-copyStatus').textContent = "✓ Copied.";
+    }
+  });
+
+  tntmsRender();
 })();
 
 // ========== WIDGET : Yesterday BOFD (catégorie Bet AF) — yesterday's result banner for Afrik-Foot NG ==========
