@@ -409,6 +409,7 @@
     <button type="button" class="drawer__item" data-tab="tab-ultimate-guide">Ultimate Guide widget</button>
     <!-- <button type="button" class="drawer__item" data-tab="tab-wc-rankings">World Cup rankings A-L</button> -->
     <button type="button" class="drawer__item" data-tab="tab-formation-options">Formation options</button>
+    <button type="button" class="drawer__item" data-tab="tab-table-transfers">Table Transfers</button>
     <div class="drawer__cat drawer__cat--sep">Bet AF</div>
     <button type="button" class="drawer__item" data-tab="tab-botf-af-ng">BOTF AF NG</button>
     <button type="button" class="drawer__item" data-tab="tab-others-bofd">Others BOFD</button>
@@ -2087,6 +2088,79 @@
       <div class="copy-row">
         <button type="button" id="fo-copyBtn">Copy full code</button>
         <span class="status" id="fo-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-table-transfers" role="tabpanel">
+    <h2 class="widget-title">Table Transfers</h2>
+    <p class="subtitle">Two-column arrivals / departures table. All fields are manual — header title, column labels, and 15 name / source pairs. Fill only the rows you need, empty rows are skipped from the output. Site colour drives the header band.</p>
+
+    <div class="panel">
+      <h2>1. Select your website</h2>
+      <label for="ttf-site">Site palette drives the header background, the icon colour and the row hover tint</label>
+      <select id="ttf-site" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
+        <option value="topmercato" selected>Topmercato</option>
+        <option value="afrik-foot-fr">Afrik-Foot FR</option>
+        <option value="afrik-foot-za">Afrik-Foot ZA</option>
+        <option value="afrik-foot-ng">Afrik-Foot NG</option>
+        <option value="sports-mole">Sports Mole</option>
+        <option value="trivela">Trivela</option>
+        <option value="umdois">UmDoisEsportes</option>
+        <option value="football-whispers">Football Whispers</option>
+        <option value="football-ground-guide">Football Ground Guide</option>
+        <option value="mrfixit">MrFixIt's Tips</option>
+        <option value="al-aire-libre">Al-Aire Libre</option>
+        <option value="soccernet">Soccernet</option>
+        <option value="calciodangolo">Calciodangolo</option>
+      </select>
+    </div>
+
+    <div class="panel">
+      <h2>2. Header</h2>
+      <div class="row" style="grid-template-columns: 40px 1fr;align-items:end">
+        <div>
+          <label for="ttf-icon">Icon</label>
+          <input type="text" id="ttf-icon" value="↔" maxlength="4" style="text-align:center" />
+        </div>
+        <div>
+          <label for="ttf-title">Title</label>
+          <input type="text" id="ttf-title" value="Mercato 2026/2027 de Rennes" maxlength="80" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Column headers</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div>
+          <label for="ttf-col1">Left column</label>
+          <input type="text" id="ttf-col1" value="ARRIVÉES" maxlength="30" />
+        </div>
+        <div>
+          <label for="ttf-col2">Right column</label>
+          <input type="text" id="ttf-col2" value="DÉPARTS" maxlength="30" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>4. Rows (name + source, 15 slots — empty rows dropped)</h2>
+      <div class="hint" style="margin-bottom:10px">Format on output: <code>Name <span style="opacity:.7">(source)</span></code>. Leave one side empty to show a blank cell in that column.</div>
+      <div id="ttf-rows-container"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Preview</h2>
+      <div class="preview-wrap" id="ttf-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML to copy</h2>
+      <textarea id="ttf-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="ttf-copyBtn">Copy HTML</button>
+        <span class="status" id="ttf-copyStatus"></span>
       </div>
     </div>
   </div>
@@ -6422,6 +6496,158 @@ function parsePlayerOddsFromText(text) {
   });
 
   tntmsRender();
+})();
+
+// ========== WIDGET : Table Transfers (catégorie Editorial) — arrivals / departures mercato table ==========
+(function() {
+  const SITES_TTF = SITES_BETTING;
+  const TTF_ROW_COUNT = 15;
+
+  function getTtfTheme() {
+    const slug = $('ttf-site').value;
+    const theme = SITES_TTF[slug] || SITES_TTF["topmercato"];
+    return Object.assign({}, theme, { slug });
+  }
+
+  function buildRowsEditor() {
+    const container = $('ttf-rows-container');
+    container.innerHTML = '';
+    // Column headers
+    const head = document.createElement('div');
+    head.className = 'row';
+    head.style.cssText = 'grid-template-columns: 32px 1.4fr 1fr 1.4fr 1fr; gap:6px; margin-bottom:6px; font-size:11px; font-weight:600; color:#6b7280';
+    head.innerHTML =
+      '<div style="text-align:center">#</div>' +
+      '<div>Arrival name</div>' +
+      '<div>Arrival (source)</div>' +
+      '<div>Departure name</div>' +
+      '<div>Departure (source)</div>';
+    container.appendChild(head);
+
+    for (let i = 1; i <= TTF_ROW_COUNT; i++) {
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.style.cssText = 'grid-template-columns: 32px 1.4fr 1fr 1.4fr 1fr; gap:6px; margin-bottom:4px; align-items:center';
+      row.innerHTML =
+        '<div style="text-align:center;font-size:12px;color:#6b7280">' + i + '</div>' +
+        '<input type="text" id="ttf-r' + i + '-arrName" maxlength="60" />' +
+        '<input type="text" id="ttf-r' + i + '-arrSrc" maxlength="40" />' +
+        '<input type="text" id="ttf-r' + i + '-depName" maxlength="60" />' +
+        '<input type="text" id="ttf-r' + i + '-depSrc" maxlength="40" />';
+      container.appendChild(row);
+      ['arrName','arrSrc','depName','depSrc'].forEach(f => {
+        const el = $('ttf-r' + i + '-' + f);
+        if (el) el.addEventListener('input', ttfRender);
+      });
+    }
+  }
+
+  function ttfCell(name, src) {
+    const n = name && name.trim();
+    const s = src && src.trim();
+    if (!n && !s) return '';
+    if (!n) return '<span>(' + escapeHtml(s) + ')</span>';
+    if (!s) return escapeHtml(n);
+    return escapeHtml(n) + ' <span>(' + escapeHtml(s) + ')</span>';
+  }
+
+  function buildTtfCss(theme) {
+    const accent = theme.accent || '#C20202';
+    const hover  = theme.accentBg || '#fff1f1';
+    return '<style>\n' +
+      '.tm-transfers-box{max-width:760px;margin:20px auto;background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;font-family:Arial,Helvetica,sans-serif;box-shadow:0 3px 12px rgba(0,0,0,.08);}\n' +
+      '.tm-transfers-header{display:flex;align-items:center;gap:9px;padding:12px 16px;background:' + accent + ';color:#fff;}\n' +
+      '.tm-transfers-icon{display:flex;align-items:center;justify-content:center;width:30px;height:30px;background:#fff;color:' + accent + ';border-radius:50%;font-size:19px;font-weight:700;flex-shrink:0;}\n' +
+      '.tm-transfers-header h3{margin:0;font-size:19px;font-weight:800;text-transform:uppercase;line-height:1.2;}\n' +
+      '.tm-transfers-table{width:100%;border-collapse:collapse;table-layout:fixed;}\n' +
+      '.tm-transfers-table th{background:' + accent + ';color:#fff;padding:10px 14px;font-size:12px;font-weight:800;letter-spacing:.8px;text-align:left;}\n' +
+      '.tm-transfers-table th:first-child{border-right:1px solid rgba(255,255,255,.35);}\n' +
+      '.tm-transfers-table td{width:50%;padding:9px 14px;border-bottom:1px solid #e8e8e8;color:#222;font-size:13px;font-weight:700;line-height:1.35;word-break:break-word;}\n' +
+      '.tm-transfers-table td:first-child{border-right:1px solid #e0e0e0;}\n' +
+      '.tm-transfers-table tr:last-child td{border-bottom:none;}\n' +
+      '.tm-transfers-table tbody tr:nth-child(even){background:#fafafa;}\n' +
+      '.tm-transfers-table tbody tr:hover{background:' + hover + ';}\n' +
+      '.tm-transfers-table td span{color:#666;font-weight:400;display:inline-block;}\n' +
+      '@media(max-width:600px){.tm-transfers-box{border-radius:6px;}.tm-transfers-header{padding:10px 12px;}.tm-transfers-header h3{font-size:16px;}.tm-transfers-icon{width:26px;height:26px;font-size:16px;}.tm-transfers-table th{padding:8px;font-size:10px;}.tm-transfers-table td{padding:8px;font-size:11px;}}\n' +
+      '</style>';
+  }
+
+  function buildTtfHtml(d) {
+    const theme = getTtfTheme();
+    const css = buildTtfCss(theme);
+    const rows = d.rows.filter(r => (r.arrName && r.arrName.trim()) || (r.arrSrc && r.arrSrc.trim()) || (r.depName && r.depName.trim()) || (r.depSrc && r.depSrc.trim()));
+    const rowsHtml = rows.map(r =>
+      '            <tr>\n' +
+      '                <td>' + ttfCell(r.arrName, r.arrSrc) + '</td>\n' +
+      '                <td>' + ttfCell(r.depName, r.depSrc) + '</td>\n' +
+      '            </tr>'
+    ).join('\n');
+
+    return css + '\n\n' +
+      '<div class="tm-transfers-box">\n' +
+      '    <div class="tm-transfers-header">\n' +
+      '        <span class="tm-transfers-icon">' + escapeHtml(d.icon || '↔') + '</span>\n' +
+      '        <h3>' + escapeHtml(d.title || '') + '</h3>\n' +
+      '    </div>\n\n' +
+      '    <table class="tm-transfers-table">\n' +
+      '        <thead>\n' +
+      '            <tr>\n' +
+      '                <th>' + escapeHtml(d.col1 || 'ARRIVÉES') + '</th>\n' +
+      '                <th>' + escapeHtml(d.col2 || 'DÉPARTS') + '</th>\n' +
+      '            </tr>\n' +
+      '        </thead>\n\n' +
+      '        <tbody>\n' +
+      (rowsHtml || '            <tr><td>&nbsp;</td><td>&nbsp;</td></tr>') + '\n' +
+      '        </tbody>\n' +
+      '    </table>\n' +
+      '</div>';
+  }
+
+  function ttfRender() {
+    const rows = [];
+    for (let i = 1; i <= TTF_ROW_COUNT; i++) {
+      rows.push({
+        arrName: ($('ttf-r' + i + '-arrName') || {value:''}).value.trim(),
+        arrSrc:  ($('ttf-r' + i + '-arrSrc')  || {value:''}).value.trim(),
+        depName: ($('ttf-r' + i + '-depName') || {value:''}).value.trim(),
+        depSrc:  ($('ttf-r' + i + '-depSrc')  || {value:''}).value.trim()
+      });
+    }
+    const data = {
+      icon:  $('ttf-icon').value.trim(),
+      title: $('ttf-title').value.trim(),
+      col1:  $('ttf-col1').value.trim(),
+      col2:  $('ttf-col2').value.trim(),
+      rows:  rows
+    };
+    const html = buildTtfHtml(data);
+    $('ttf-preview').innerHTML = html;
+    $('ttf-output').value = html;
+  }
+
+  buildRowsEditor();
+
+  ['ttf-site','ttf-icon','ttf-title','ttf-col1','ttf-col2'].forEach(id => {
+    const el = $(id);
+    if (!el) return;
+    const ev = el.tagName === 'SELECT' ? 'change' : 'input';
+    el.addEventListener(ev, ttfRender);
+  });
+
+  $('ttf-copyBtn').addEventListener('click', async () => {
+    const ta = $('ttf-output');
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('ttf-copyStatus').textContent = "✓ Copied.";
+      setTimeout(() => $('ttf-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('ttf-copyStatus').textContent = "✓ Copied.";
+    }
+  });
+
+  ttfRender();
 })();
 
 // ========== WIDGET : Yesterday BOFD (catégorie Bet AF) — yesterday's result banner for Afrik-Foot NG ==========
