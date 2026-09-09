@@ -417,6 +417,7 @@
     <button type="button" class="drawer__item" data-tab="tab-correct-score-double">Correct Score Double</button>
     <button type="button" class="drawer__item" data-tab="tab-other-correct-score">Other correct score</button>
     <button type="button" class="drawer__item" data-tab="tab-high-risk-acca">High Risk Accumulator</button>
+    <button type="button" class="drawer__item" data-tab="tab-form-tracker">Form Tracker</button>
     <div class="drawer__cat drawer__cat--sep">Widget TNT</div>
     <button type="button" class="drawer__item" data-tab="tab-tnt-overview">Overview</button>
     <button type="button" class="drawer__item" data-tab="tab-tnt-match-stats">Match stats</button>
@@ -1770,6 +1771,105 @@
       <div class="copy-row">
         <button type="button" id="hra-copyBtn">Copy HTML</button>
         <span class="status" id="hra-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-form-tracker" role="tabpanel">
+    <h2 class="widget-title">Form Tracker</h2>
+    <p class="subtitle">Dark-background « Our Recent Record » block: 10 form badges (W/L/V), stats line, and 10 table rows (date, match, tip, odds, result). Site palette drives the accent green (title underline, badge tints, hover). Leave a row's fields blank to skip it.</p>
+
+    <div class="panel">
+      <h2>1. Select your website</h2>
+      <label for="ftk-site">Site accent drives the header underline, badge colours and row hover tint</label>
+      <select id="ftk-site" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;">
+        <option value="afrik-foot-ng" selected>Afrik-Foot NG</option>
+        <option value="afrik-foot-fr">Afrik-Foot FR</option>
+        <option value="afrik-foot-za">Afrik-Foot ZA</option>
+        <option value="topmercato">Topmercato</option>
+        <option value="sports-mole">Sports Mole</option>
+        <option value="trivela">Trivela</option>
+        <option value="umdois">UmDoisEsportes</option>
+        <option value="football-whispers">Football Whispers</option>
+        <option value="football-ground-guide">Football Ground Guide</option>
+        <option value="mrfixit">MrFixIt's Tips</option>
+        <option value="al-aire-libre">Al-Aire Libre</option>
+        <option value="soccernet">Soccernet</option>
+        <option value="calciodangolo">Calciodangolo</option>
+      </select>
+    </div>
+
+    <div class="panel">
+      <h2>2. Header</h2>
+      <label for="ftk-header">Title above the badges</label>
+      <input type="text" id="ftk-header" value="Our Recent Record" maxlength="80" />
+    </div>
+
+    <div class="panel">
+      <h2>3. Form badges — 10 slots (oldest → newest, left → right)</h2>
+      <div class="hint" style="margin-bottom:10px">W = win, L = loss, V = void, — = skip that slot.</div>
+      <div id="ftk-badges-container"></div>
+    </div>
+
+    <div class="panel">
+      <h2>4. Stats line</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div>
+          <label for="ftk-recentW">Last 10 — wins</label>
+          <input type="text" id="ftk-recentW" value="8" maxlength="6" />
+        </div>
+        <div>
+          <label for="ftk-recentL">Last 10 — losses</label>
+          <input type="text" id="ftk-recentL" value="2" maxlength="6" />
+        </div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 1fr 1fr 1fr;margin-top:10px">
+        <div>
+          <label for="ftk-yearW">Overall wins</label>
+          <input type="text" id="ftk-yearW" value="47" maxlength="6" />
+        </div>
+        <div>
+          <label for="ftk-yearL">Overall losses</label>
+          <input type="text" id="ftk-yearL" value="28" maxlength="6" />
+        </div>
+        <div>
+          <label for="ftk-yearV">Overall voids</label>
+          <input type="text" id="ftk-yearV" value="3" maxlength="6" />
+        </div>
+        <div>
+          <label for="ftk-yearTotal">Total tips</label>
+          <input type="text" id="ftk-yearTotal" value="78" maxlength="6" />
+        </div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 1fr;margin-top:10px">
+        <div>
+          <label for="ftk-yearLabel">Overall period label</label>
+          <input type="text" id="ftk-yearLabel" value="Overall 2026" maxlength="40" />
+        </div>
+        <div>
+          <label for="ftk-winRate">Win rate (auto — leave blank to auto-calc from overall wins / (wins+losses))</label>
+          <input type="text" id="ftk-winRate" placeholder="Auto — 62.7%" maxlength="10" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>5. Table rows — 10 slots (newest at top)</h2>
+      <div class="hint" style="margin-bottom:10px">Result: <strong>W</strong> win · <strong>L</strong> loss · <strong>V</strong> void · <strong>P</strong> pending (TBD) · <strong>—</strong> skip row. Row shading (green/red) follows the result automatically. Leave every field of a row blank to drop it.</div>
+      <div id="ftk-rows-container"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Preview</h2>
+      <div class="preview-wrap" id="ftk-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML to copy</h2>
+      <textarea id="ftk-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="ftk-copyBtn">Copy HTML</button>
+        <span class="status" id="ftk-copyStatus"></span>
       </div>
     </div>
   </div>
@@ -6896,6 +6996,301 @@ function parsePlayerOddsFromText(text) {
   });
 
   csdRender();
+})();
+
+// ========== WIDGET : Form Tracker (catégorie Bet AF) — dark-background « Our Recent Record » with 10 badges + 10 rows ==========
+(function() {
+  const SITES_FTK = SITES_BETTING;
+  const FTK_BADGE_COUNT = 10;
+  const FTK_ROW_COUNT = 10;
+
+  function getFtkTheme() {
+    const slug = $('ftk-site').value;
+    const theme = SITES_FTK[slug] || SITES_FTK["afrik-foot-ng"];
+    return Object.assign({}, theme, { slug });
+  }
+
+  function buildBadgesEditor() {
+    const container = $('ftk-badges-container');
+    container.innerHTML = '';
+    const grid = document.createElement('div');
+    grid.style.cssText = 'display:grid;grid-template-columns:repeat(10, 1fr);gap:6px';
+    // Preset that matches the sample: W W L W W W L W W W
+    const preset = ['W','W','L','W','W','W','L','W','W','W'];
+    for (let i = 1; i <= FTK_BADGE_COUNT; i++) {
+      const cell = document.createElement('div');
+      cell.innerHTML =
+        '<div style="text-align:center;font-size:11px;color:#6b7280;margin-bottom:3px">#' + i + '</div>' +
+        '<select id="ftk-b' + i + '" style="width:100%;padding:6px 4px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-weight:700;text-align:center;background:#fff">' +
+        '<option value="W"' + (preset[i-1] === 'W' ? ' selected' : '') + '>W</option>' +
+        '<option value="L"' + (preset[i-1] === 'L' ? ' selected' : '') + '>L</option>' +
+        '<option value="V"' + (preset[i-1] === 'V' ? ' selected' : '') + '>V</option>' +
+        '<option value="">—</option>' +
+        '</select>';
+      grid.appendChild(cell);
+    }
+    container.appendChild(grid);
+    for (let i = 1; i <= FTK_BADGE_COUNT; i++) {
+      const el = $('ftk-b' + i);
+      if (el) el.addEventListener('change', ftkRender);
+    }
+  }
+
+  function buildRowsEditor() {
+    const container = $('ftk-rows-container');
+    container.innerHTML = '';
+    // Header row
+    const head = document.createElement('div');
+    head.className = 'row';
+    head.style.cssText = 'grid-template-columns: 30px 0.9fr 1.6fr 1.2fr 0.7fr 0.7fr; gap:6px; margin-bottom:6px; font-size:11px; font-weight:600; color:#6b7280';
+    head.innerHTML =
+      '<div style="text-align:center">#</div>' +
+      '<div>Date</div>' +
+      '<div>Match</div>' +
+      '<div>Tip</div>' +
+      '<div>Odds</div>' +
+      '<div>Result</div>';
+    container.appendChild(head);
+
+    // First row sample matches the template's "TBD" example
+    const sampleDates  = ['Jul 30','','','','','','','','',''];
+    const sampleMatch  = ['Senegal vs Kenya','','','','','','','','',''];
+    const sampleTip    = ['BTTS No','','','','','','','','',''];
+    const sampleOdds   = ['1.70','','','','','','','','',''];
+    const sampleResult = ['P','W','W','L','W','W','W','L','W','W'];
+
+    for (let i = 1; i <= FTK_ROW_COUNT; i++) {
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.style.cssText = 'grid-template-columns: 30px 0.9fr 1.6fr 1.2fr 0.7fr 0.7fr; gap:6px; margin-bottom:4px; align-items:center';
+      const r = sampleResult[i-1] || '';
+      row.innerHTML =
+        '<div style="text-align:center;font-size:12px;color:#6b7280">' + i + '</div>' +
+        '<input type="text" id="ftk-r' + i + '-date" maxlength="20" value="' + escapeHtml(sampleDates[i-1] || '') + '" placeholder="Aug 5" />' +
+        '<input type="text" id="ftk-r' + i + '-match" maxlength="60" value="' + escapeHtml(sampleMatch[i-1] || '') + '" placeholder="Team A vs Team B" />' +
+        '<input type="text" id="ftk-r' + i + '-tip" maxlength="60" value="' + escapeHtml(sampleTip[i-1] || '') + '" placeholder="BTTS Yes" />' +
+        '<input type="text" id="ftk-r' + i + '-odds" maxlength="10" value="' + escapeHtml(sampleOdds[i-1] || '') + '" placeholder="1.80" />' +
+        '<select id="ftk-r' + i + '-res" style="padding:6px 4px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-weight:700;text-align:center;background:#fff">' +
+        '<option value="W"' + (r === 'W' ? ' selected' : '') + '>W</option>' +
+        '<option value="L"' + (r === 'L' ? ' selected' : '') + '>L</option>' +
+        '<option value="V"' + (r === 'V' ? ' selected' : '') + '>V</option>' +
+        '<option value="P"' + (r === 'P' ? ' selected' : '') + '>P (TBD)</option>' +
+        '<option value=""' + (r === '' ? ' selected' : '') + '>—</option>' +
+        '</select>';
+      container.appendChild(row);
+      ['date','match','tip','odds'].forEach(f => {
+        const el = $('ftk-r' + i + '-' + f);
+        if (el) el.addEventListener('input', ftkRender);
+      });
+      const sel = $('ftk-r' + i + '-res');
+      if (sel) sel.addEventListener('change', ftkRender);
+    }
+  }
+
+  // Convert an accent hex (#RRGGBB) into an "rgba(r,g,b,a)" string. Falls
+  // back to opaque if parsing fails so we never emit malformed CSS.
+  function ftkRgba(hex, alpha) {
+    const m = /^#?([a-f0-9]{6})$/i.exec((hex || '').trim());
+    if (!m) return hex || '#86AE61';
+    const n = parseInt(m[1], 16);
+    const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+  }
+
+  function buildFtkCss(theme) {
+    const green = theme.accent || '#86AE61';
+    const greenTint05 = ftkRgba(green, 0.05);
+    return '<style>\n' +
+      '.af-rec{--t:#e2e8da;--tm:#8aa070;--brd:rgba(255,255,255,.08);--wb:rgba(92,191,96,.13);--wt:#5cbf60;--lb:rgba(239,83,80,.13);--lt:#e06060;--vb:rgba(158,158,158,.12);--vt:#9e9e9e;--g:' + green + ';font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Arial,sans-serif;max-width:700px;}\n' +
+      '.af-rec *{box-sizing:border-box;}\n' +
+      '.af-rec h2{font-size:17px;font-weight:700;color:var(--t);border-bottom:2px solid var(--g);padding-bottom:8px;margin:0 0 12px;line-height:1.3;}\n' +
+      '.af-rec .rec-badges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}\n' +
+      '.af-rec .rec-fb{width:36px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;}\n' +
+      '.af-rec .rec-fb.W{background:var(--wb);color:var(--wt);}\n' +
+      '.af-rec .rec-fb.L{background:var(--lb);color:var(--lt);}\n' +
+      '.af-rec .rec-fb.V{background:var(--vb);color:var(--vt);}\n' +
+      '.af-rec .rec-stats{font-size:13px;color:var(--tm);line-height:1.6;margin:0 0 14px;}\n' +
+      '.af-rec .rec-stats strong{color:var(--t);}\n' +
+      '.af-rec .rec-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}\n' +
+      '.af-rec .rec-table{width:100%;min-width:400px;border-collapse:collapse;font-size:13px;}\n' +
+      '.af-rec .rec-table th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--tm);text-align:left;padding:6px 8px;border-bottom:2px solid var(--brd);}\n' +
+      '.af-rec .rec-table td{padding:9px 8px;border-bottom:1px solid var(--brd);vertical-align:top;}\n' +
+      '.af-rec .rec-table .rec-match{font-size:13.5px;font-weight:600;color:var(--t);display:block;}\n' +
+      '.af-rec .rec-table .rec-tip-sub{font-size:12px;color:var(--tm);display:block;}\n' +
+      '.af-rec .rec-table .rec-date-val{font-size:12px;color:var(--tm);}\n' +
+      '.af-rec .rec-table .rec-odds-val{font-size:13px;color:var(--tm);}\n' +
+      '.af-rec .rec-badge{display:inline-flex;width:30px;height:30px;border-radius:5px;align-items:center;justify-content:center;font-weight:800;font-size:12.5px;}\n' +
+      '.af-rec .rec-badge.W{background:var(--wb);color:var(--wt);}\n' +
+      '.af-rec .rec-badge.L{background:var(--lb);color:var(--lt);}\n' +
+      '.af-rec .rec-badge.V{background:var(--vb);color:var(--vt);}\n' +
+      '.af-rec .rec-badge.P{background:var(--vb);color:var(--vt);font-size:9.5px;font-weight:700;letter-spacing:-.3px;}\n' +
+      '.af-rec .rec-table tr.rec-win td{background:rgba(92,191,96,.05);}\n' +
+      '.af-rec .rec-table tr.rec-loss td{background:rgba(239,83,80,.05);}\n' +
+      '</style>';
+  }
+
+  function ftkComputeWinRate(w, l, override) {
+    const o = (override || '').trim();
+    if (o) return o;
+    const wn = parseFloat(w), ln = parseFloat(l);
+    if (isNaN(wn) || isNaN(ln) || (wn + ln) <= 0) return '';
+    const pct = (wn / (wn + ln)) * 100;
+    return (Math.round(pct * 10) / 10).toFixed(1) + '%';
+  }
+
+  function ftkResultToClass(r) {
+    if (r === 'W') return 'rec-win';
+    if (r === 'L') return 'rec-loss';
+    if (r === 'V') return 'rec-void';
+    return '';
+  }
+
+  function ftkResultBadge(r) {
+    if (r === 'W') return '<span class="rec-badge W">W</span>';
+    if (r === 'L') return '<span class="rec-badge L">L</span>';
+    if (r === 'V') return '<span class="rec-badge V">V</span>';
+    if (r === 'P') return '<span class="rec-badge P">TBD</span>';
+    return '';
+  }
+
+  function buildFtkHtml(d) {
+    const theme = getFtkTheme();
+    const css = buildFtkCss(theme);
+
+    // Badges — drop empty slots so the row is always tight even if the
+    // publisher only tracks 8 recent bets. Present in DOM order (oldest→newest).
+    const badges = d.badges.filter(b => b === 'W' || b === 'L' || b === 'V');
+    const badgesHtml = badges.map(b => '    <div class="rec-fb ' + b + '">' + b + '</div>').join('\n');
+
+    // Stats line — win-rate can be overridden manually, otherwise derived from
+    // overall wins / (wins+losses).
+    const winRate = ftkComputeWinRate(d.yearW, d.yearL, d.winRate);
+    const winRateBit = winRate ? ' (<strong>' + escapeHtml(winRate) + ' win rate</strong>)' : '';
+    const overallLabel = (d.yearLabel || 'Overall').trim();
+    const statsHtml =
+      '  <p class="rec-stats">\n' +
+      '    Last 10 main bets: <strong>' + escapeHtml((d.recentW || '0')) + ' wins, ' + escapeHtml((d.recentL || '0')) + ' losses.</strong>\n' +
+      '    &nbsp;&middot;&nbsp;\n' +
+      '    ' + escapeHtml(overallLabel) + ': <strong>' + escapeHtml((d.yearW || '0')) + 'W &middot; ' + escapeHtml((d.yearL || '0')) + 'L &middot; ' + escapeHtml((d.yearV || '0')) + 'V</strong> from ' + escapeHtml((d.yearTotal || '0')) + ' tips' + winRateBit + '\n' +
+      '  </p>';
+
+    // Table rows — an entirely blank row is dropped. Otherwise it renders with
+    // whichever cells the editor filled in.
+    const rows = d.rows.filter(r => (r.date && r.date.trim()) || (r.match && r.match.trim()) || (r.tip && r.tip.trim()) || (r.odds && r.odds.trim()) || (r.res && r.res.trim()));
+    const rowsHtml = rows.map(r => {
+      const cls = ftkResultToClass(r.res);
+      const trOpen = cls ? '        <tr class="' + cls + '">' : '        <tr>';
+      const badge = ftkResultBadge(r.res);
+      return trOpen + '\n' +
+        '          <td class="rec-date-val">' + escapeHtml(r.date || '') + '</td>\n' +
+        '          <td>\n' +
+        '            <span class="rec-match">' + escapeHtml(r.match || '') + '</span>\n' +
+        '            <span class="rec-tip-sub">' + escapeHtml(r.tip || '') + '</span>\n' +
+        '          </td>\n' +
+        '          <td class="rec-odds-val">' + escapeHtml(r.odds || '') + '</td>\n' +
+        '          <td>' + badge + '</td>\n' +
+        '        </tr>';
+    }).join('\n');
+
+    const cardHtml =
+      '<div class="af-rec">\n\n' +
+      '  <h2>' + escapeHtml(d.header || 'Our Recent Record') + '</h2>\n\n' +
+      '  <div class="rec-badges" aria-label="Last 10 results, oldest to newest">\n' +
+      (badgesHtml || '    <div class="rec-fb V">—</div>') + '\n' +
+      '  </div>\n\n' +
+      statsHtml + '\n\n' +
+      '  <div class="rec-scroll">\n' +
+      '    <table class="rec-table">\n' +
+      '      <colgroup>\n' +
+      '        <col style="width:58px;">\n' +
+      '        <col>\n' +
+      '        <col style="width:52px;">\n' +
+      '        <col style="width:50px;">\n' +
+      '      </colgroup>\n' +
+      '      <thead>\n' +
+      '        <tr>\n' +
+      '          <th>Date</th>\n' +
+      '          <th>Match &amp; tip</th>\n' +
+      '          <th>Odds</th>\n' +
+      '          <th>Result</th>\n' +
+      '        </tr>\n' +
+      '      </thead>\n' +
+      '      <tbody>\n\n' +
+      (rowsHtml || '        <tr><td colspan="4" style="text-align:center;color:var(--tm)">Fill rows in the editor.</td></tr>') + '\n\n' +
+      '      </tbody>\n' +
+      '    </table>\n' +
+      '  </div>\n\n' +
+      '</div>';
+
+    return css + '\n\n' + cardHtml;
+  }
+
+  function ftkRender() {
+    const badges = [];
+    for (let i = 1; i <= FTK_BADGE_COUNT; i++) {
+      badges.push(($('ftk-b' + i) || {value:''}).value);
+    }
+    const rows = [];
+    for (let i = 1; i <= FTK_ROW_COUNT; i++) {
+      rows.push({
+        date:  ($('ftk-r' + i + '-date')  || {value:''}).value.trim(),
+        match: ($('ftk-r' + i + '-match') || {value:''}).value.trim(),
+        tip:   ($('ftk-r' + i + '-tip')   || {value:''}).value.trim(),
+        odds:  ($('ftk-r' + i + '-odds')  || {value:''}).value.trim(),
+        res:   ($('ftk-r' + i + '-res')   || {value:''}).value.trim()
+      });
+    }
+    const data = {
+      header:     $('ftk-header').value.trim(),
+      badges:     badges,
+      recentW:    $('ftk-recentW').value.trim(),
+      recentL:    $('ftk-recentL').value.trim(),
+      yearLabel:  $('ftk-yearLabel').value.trim(),
+      yearW:      $('ftk-yearW').value.trim(),
+      yearL:      $('ftk-yearL').value.trim(),
+      yearV:      $('ftk-yearV').value.trim(),
+      yearTotal:  $('ftk-yearTotal').value.trim(),
+      winRate:    $('ftk-winRate').value.trim(),
+      rows:       rows
+    };
+    // Reflect the auto-computed win-rate back into its input placeholder so
+    // publishers know what the widget will emit when they leave it blank.
+    const auto = ftkComputeWinRate(data.yearW, data.yearL, '');
+    if (auto) $('ftk-winRate').placeholder = 'Auto — ' + auto;
+
+    const html = buildFtkHtml(data);
+    $('ftk-preview').innerHTML = html;
+    $('ftk-output').value = html;
+  }
+
+  buildBadgesEditor();
+  buildRowsEditor();
+
+  [
+    'ftk-site','ftk-header',
+    'ftk-recentW','ftk-recentL',
+    'ftk-yearLabel','ftk-yearW','ftk-yearL','ftk-yearV','ftk-yearTotal','ftk-winRate'
+  ].forEach(id => {
+    const el = $(id);
+    if (!el) return;
+    const ev = el.tagName === 'SELECT' ? 'change' : 'input';
+    el.addEventListener(ev, ftkRender);
+  });
+
+  $('ftk-copyBtn').addEventListener('click', async () => {
+    const ta = $('ftk-output');
+    ta.select();
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      $('ftk-copyStatus').textContent = "✓ Copied.";
+      setTimeout(() => $('ftk-copyStatus').textContent = '', 2000);
+    } catch (e) {
+      document.execCommand('copy');
+      $('ftk-copyStatus').textContent = "✓ Copied.";
+    }
+  });
+
+  ftkRender();
 })();
 
 </script>
