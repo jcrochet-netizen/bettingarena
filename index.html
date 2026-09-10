@@ -7113,7 +7113,8 @@ function parsePlayerOddsFromText(text) {
       '.af-rec .rec-stats strong{color:var(--t);}\n' +
       '.af-rec .rec-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}\n' +
       '.af-rec .rec-table{width:100%;min-width:400px;border-collapse:collapse;font-size:13px;}\n' +
-      '.af-rec .rec-table th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--tm);text-align:left;padding:6px 8px;border-bottom:2px solid var(--brd);}\n' +
+      '.af-rec .rec-table th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--tm);text-align:left;padding:6px 8px;border-bottom:2px solid var(--brd);white-space:nowrap;}\n' +
+      '.af-rec .rec-table td.rec-odds-val,.af-rec .rec-table td.rec-res-cell{white-space:nowrap;}\n' +
       '.af-rec .rec-table td{padding:9px 8px;border-bottom:1px solid var(--brd);vertical-align:top;}\n' +
       '.af-rec .rec-table .rec-match{font-size:13.5px;font-weight:600;color:var(--t);display:block;}\n' +
       '.af-rec .rec-table .rec-tip-sub{font-size:12px;color:var(--tm);display:block;}\n' +
@@ -7188,7 +7189,7 @@ function parsePlayerOddsFromText(text) {
         '            <span class="rec-tip-sub">' + escapeHtml(r.tip || '') + '</span>\n' +
         '          </td>\n' +
         '          <td class="rec-odds-val">' + escapeHtml(r.odds || '') + '</td>\n' +
-        '          <td>' + badge + '</td>\n' +
+        '          <td class="rec-res-cell">' + badge + '</td>\n' +
         '        </tr>';
     }).join('\n');
 
@@ -7202,10 +7203,10 @@ function parsePlayerOddsFromText(text) {
       '  <div class="rec-scroll">\n' +
       '    <table class="rec-table">\n' +
       '      <colgroup>\n' +
-      '        <col style="width:58px;">\n' +
+      '        <col style="width:56px;">\n' +
       '        <col>\n' +
-      '        <col style="width:52px;">\n' +
-      '        <col style="width:50px;">\n' +
+      '        <col style="width:64px;">\n' +
+      '        <col style="width:64px;">\n' +
       '      </colgroup>\n' +
       '      <thead>\n' +
       '        <tr>\n' +
