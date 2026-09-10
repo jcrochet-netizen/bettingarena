@@ -7364,10 +7364,12 @@ function parsePlayerOddsFromText(text) {
       const dateStr = cellStr(rc[iDate]);
       const parsedDate = ftkParseDdmmyy(dateStr);
       if (!parsedDate) continue; // skip header repeats / blank rows
+      const matchStr = cellStr(rc[iMatch]);
+      if (!matchStr) continue;   // skip future-dated placeholder rows (no bet yet)
       parsed.push({
         _dt:   parsedDate.dt,
         date:  parsedDate.label,
-        match: cellStr(rc[iMatch]),
+        match: matchStr,
         tip:   cellStr(rc[iBet]),
         odds:  cellStr(rc[iOdds]),
         res:   ftkMapResult(cellStr(rc[iRes]))
