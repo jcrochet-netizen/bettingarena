@@ -96,6 +96,10 @@
   button.secondary { background: #fff; color: var(--text); border: 1px solid var(--border); }
   button.secondary:hover { background: #f3f4f6; }
   .preview-wrap { padding: 24px; background: #fafbfc; border: 1px dashed var(--border); border-radius: 10px; }
+  /* Form Tracker preview only — the exported widget renders on a dark background where its own
+     light --t / --tm tokens are legible; on the light generator preview they wash out, so we
+     override the tokens for #ftk-preview specifically. Copied HTML is unaffected. */
+  #ftk-preview .af-rec { --t: #111827; --tm: #4b5563; }
   textarea {
     width: 100%;
     min-height: 220px;
