@@ -1856,6 +1856,11 @@
     <div class="panel">
       <h2>5. Table rows — 10 slots (newest at top)</h2>
       <div class="hint" style="margin-bottom:10px">Result: <strong>W</strong> win · <strong>L</strong> loss · <strong>V</strong> void · <strong>P</strong> pending (TBD) · <strong>—</strong> skip row. Row shading (green/red) follows the result automatically. Leave every field of a row blank to drop it.</div>
+      <div class="copy-row" style="margin:0 0 12px">
+        <button type="button" id="ftk-fetchBtn">Remplir depuis le Sheet</button>
+        <span class="status" id="ftk-fetchStatus"></span>
+      </div>
+      <div class="hint" style="margin:-4px 0 12px">Lit les 10 lignes les plus récentes (colonne Date, DD/MM/YY) du <a href="https://docs.google.com/spreadsheets/d/1KinWJ4xjiKf-1bZLZugb-_vnQK-DQIjevN_sBku39x4/edit" target="_blank" rel="noopener">Sheet BOTD</a> et remplit les 10 lignes du tableau <em>et</em> les 10 badges de forme ci-dessus. Les compteurs « last 10 wins/losses » sont recalculés automatiquement. Un champ blanc peut être édité à la main ensuite.</div>
       <div id="ftk-rows-container"></div>
     </div>
 
@@ -7276,6 +7281,162 @@ function parsePlayerOddsFromText(text) {
     if (!el) return;
     const ev = el.tagName === 'SELECT' ? 'change' : 'input';
     el.addEventListener(ev, ftkRender);
+  });
+
+  // ---------- Google Sheet auto-fill ----------
+  // Sheet columns are Date | Match | Bet | Win/Lose | Odds (+ unrelated stats
+  // to the right that we ignore). Dates are DD/MM/YY. We fetch via gviz which
+  // returns access-control-allow-origin for jcrochet-netizen.github.io, so it
+  // works from the deployed generator; from file:// most browsers block CORS.
+  const FTK_SHEET_ID  = '1KinWJ4xjiKf-1bZLZugb-_vnQK-DQIjevN_sBku39x4';
+  const FTK_SHEET_GID = '0';
+  const FTK_MONTHS_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  function ftkParseDdmmyy(raw) {
+    if (!raw) return null;
+    const m = String(raw).trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/);
+    if (!m) return null;
+    const d = parseInt(m[1], 10), mo = parseInt(m[2], 10) - 1;
+    let y = parseInt(m[3], 10);
+    if (y < 100) y += 2000;
+    if (mo < 0 || mo > 11 || d < 1 || d > 31) return null;
+    const dt = new Date(Date.UTC(y, mo, d));
+    return { dt, label: FTK_MONTHS_EN[mo] + ' ' + d };
+  }
+
+  function ftkMapResult(raw) {
+    const s = String(raw || '').trim().toLowerCase();
+    if (!s) return 'P';
+    if (s === 'w' || s === 'win' || s === 'won') return 'W';
+    if (s === 'l' || s === 'lose' || s === 'loss' || s === 'lost') return 'L';
+    if (s === 'v' || s === 'void' || s === 'push' || s === 'draw') return 'V';
+    if (s === 'p' || s === 'pending' || s === 'tbd') return 'P';
+    return '';
+  }
+
+  async function ftkFetchSheetRows() {
+    // gviz returns JSONP-ish text; slice off the wrapper before JSON.parse.
+    const url = 'https://docs.google.com/spreadsheets/d/' + FTK_SHEET_ID +
+      '/gviz/tq?tqx=out:json&gid=' + FTK_SHEET_GID + '&_=' + Date.now();
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const text = await res.text();
+    const first = text.indexOf('{');
+    const last  = text.lastIndexOf('}');
+    if (first < 0 || last < 0) throw new Error('Unexpected gviz response');
+    const json = JSON.parse(text.slice(first, last + 1));
+    const table = (json.table) || {};
+    const cols  = (table.cols || []).map(c => (c && (c.label || c.id) || '').toString().trim());
+    const rows  = (table.rows || []).map(r => (r && r.c) || []);
+
+    // Build a case-insensitive column index. Sheet header row shows:
+    // Date | Match | Bet | Win/Lose | Odds — accept a couple of aliases in
+    // case the editor renames "Bet" to "Tip" or "Win/Lose" to "Result".
+    const findCol = (aliases) => {
+      const wanted = aliases.map(a => a.toLowerCase());
+      for (let i = 0; i < cols.length; i++) {
+        if (wanted.indexOf(cols[i].toLowerCase()) >= 0) return i;
+      }
+      return -1;
+    };
+    const iDate = findCol(['date']);
+    const iMatch = findCol(['match','fixture']);
+    const iBet   = findCol(['bet','tip','prediction','pick']);
+    const iRes   = findCol(['win/lose','result','outcome','status']);
+    const iOdds  = findCol(['odds','odd','price']);
+
+    if ([iDate, iMatch, iBet, iRes, iOdds].some(i => i < 0)) {
+      throw new Error('Colonnes attendues manquantes (Date, Match, Bet, Win/Lose, Odds).');
+    }
+
+    // Cell values: prefer .v (raw) except for the date, where .f (formatted)
+    // is the DD/MM/YY string the sheet was authored with. Number cells (Odds)
+    // come through as JS numbers so we .toString() to keep the input as text.
+    const cellStr = (c) => {
+      if (!c) return '';
+      if (c.f != null && c.f !== '') return String(c.f).trim();
+      if (c.v == null) return '';
+      return String(c.v).trim();
+    };
+
+    const parsed = [];
+    for (const rc of rows) {
+      const dateStr = cellStr(rc[iDate]);
+      const parsedDate = ftkParseDdmmyy(dateStr);
+      if (!parsedDate) continue; // skip header repeats / blank rows
+      parsed.push({
+        _dt:   parsedDate.dt,
+        date:  parsedDate.label,
+        match: cellStr(rc[iMatch]),
+        tip:   cellStr(rc[iBet]),
+        odds:  cellStr(rc[iOdds]),
+        res:   ftkMapResult(cellStr(rc[iRes]))
+      });
+    }
+    parsed.sort((a, b) => b._dt - a._dt);
+    return parsed.slice(0, FTK_ROW_COUNT);
+  }
+
+  function ftkApplyRows(rows) {
+    // Wipe all editor row inputs first so an "old" partial fill is not left
+    // showing when the sheet returns fewer than 10 rows.
+    for (let i = 1; i <= FTK_ROW_COUNT; i++) {
+      const r = rows[i - 1];
+      const date  = r ? r.date  : '';
+      const match = r ? r.match : '';
+      const tip   = r ? r.tip   : '';
+      const odds  = r ? r.odds  : '';
+      const res   = r ? r.res   : '';
+      const set = (id, val) => { const el = $(id); if (el) el.value = val; };
+      set('ftk-r' + i + '-date',  date);
+      set('ftk-r' + i + '-match', match);
+      set('ftk-r' + i + '-tip',   tip);
+      set('ftk-r' + i + '-odds',  odds);
+      set('ftk-r' + i + '-res',   res);
+    }
+
+    // Sync form badges to the same 10 games, but reversed so the OLDEST of the
+    // 10 lands on the left (badge #1) and the NEWEST on the right — matching
+    // the template comment "OLDEST left → NEWEST right". Only W / L / V play in
+    // recent form; pending (P) becomes a blank slot.
+    const badges = rows.slice().reverse().map(r => (r.res === 'W' || r.res === 'L' || r.res === 'V') ? r.res : '');
+    // Pad from the left with blanks so a short return (e.g. 6 rows) still
+    // lines up the newest against badge #10.
+    while (badges.length < FTK_BADGE_COUNT) badges.unshift('');
+    for (let i = 1; i <= FTK_BADGE_COUNT; i++) {
+      const el = $('ftk-b' + i);
+      if (el) el.value = badges[i - 1] || '';
+    }
+
+    // Recalculate the "Last 10 wins/losses" counters from the played bets
+    // only (skip pending/void so they match the badge count).
+    const played = rows.filter(r => r.res === 'W' || r.res === 'L');
+    const wins   = played.filter(r => r.res === 'W').length;
+    const losses = played.filter(r => r.res === 'L').length;
+    $('ftk-recentW').value = String(wins);
+    $('ftk-recentL').value = String(losses);
+  }
+
+  $('ftk-fetchBtn').addEventListener('click', async () => {
+    const btn  = $('ftk-fetchBtn');
+    const stat = $('ftk-fetchStatus');
+    btn.disabled = true;
+    stat.textContent = 'Chargement…';
+    stat.style.color = '';
+    try {
+      const rows = await ftkFetchSheetRows();
+      if (!rows.length) throw new Error('Aucune ligne exploitable dans le Sheet.');
+      ftkApplyRows(rows);
+      ftkRender();
+      stat.textContent = '✓ ' + rows.length + ' ligne(s) chargée(s) — la plus récente : ' + rows[0].date + '.';
+      stat.style.color = '#0f7a3e';
+    } catch (e) {
+      stat.textContent = '✗ ' + (e && e.message ? e.message : 'Échec du fetch.');
+      stat.style.color = '#c20202';
+    } finally {
+      btn.disabled = false;
+      setTimeout(() => { stat.textContent = ''; stat.style.color = ''; }, 12000);
+    }
   });
 
   $('ftk-copyBtn').addEventListener('click', async () => {
