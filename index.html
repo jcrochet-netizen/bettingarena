@@ -425,6 +425,12 @@
     <div class="drawer__cat drawer__cat--sep">Widget TNT</div>
     <button type="button" class="drawer__item" data-tab="tab-tnt-overview">Overview</button>
     <button type="button" class="drawer__item" data-tab="tab-tnt-match-stats">Match stats</button>
+    <div class="drawer__cat drawer__cat--sep">FW Previews</div>
+    <button type="button" class="drawer__item" data-tab="tab-fw-quick-predictions">Quick predictions</button>
+    <button type="button" class="drawer__item" data-tab="tab-fw-tale-of-tape">Tale of the Tape</button>
+    <button type="button" class="drawer__item" data-tab="tab-fw-form-guide">Form guide</button>
+    <button type="button" class="drawer__item" data-tab="tab-fw-whispers-tips">Whispers predicts</button>
+    <button type="button" class="drawer__item" data-tab="tab-fw-form-cup">Form (cup competitions)</button>
     <div class="drawer__cat drawer__cat--sep">Autres</div>
     <button type="button" class="drawer__item" data-tab="tab-essentiel">L'Essentiel TM</button>
     <button type="button" class="drawer__item" data-tab="tab-essentiel-af">L'Essentiel AF</button>
@@ -1650,6 +1656,239 @@
       </div>
     </div>
   </div>
+
+  <!-- ================== FW Previews : 5 widgets ================== -->
+
+  <div class="tab-panel" id="tab-fw-quick-predictions" role="tabpanel">
+    <h2 class="widget-title">Quick predictions</h2>
+    <p class="subtitle">Bloc encadré vert clair « Quick Predictions » avec 4 paires label / valeur. La 1re paire est pré-remplie « Score prediction / Team A X-Y Team B », la 4e « Top tip / … ». Toutes les paires sont éditables — laisse une ligne vide pour la retirer.</p>
+
+    <div class="panel">
+      <h2>1. Lignes (label + valeur)</h2>
+      <div class="row" style="grid-template-columns: 1fr 2fr;">
+        <div><label for="fwqp-l1">Label 1</label><input type="text" id="fwqp-l1" value="Score prediction" maxlength="60" /></div>
+        <div><label for="fwqp-v1">Valeur 1</label><input type="text" id="fwqp-v1" value="Team A X-Y Team B" maxlength="140" /></div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 2fr;margin-top:8px">
+        <div><label for="fwqp-l2">Label 2</label><input type="text" id="fwqp-l2" value="Both teams to score" maxlength="60" /></div>
+        <div><label for="fwqp-v2">Valeur 2</label><input type="text" id="fwqp-v2" value="Yes" maxlength="140" /></div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 2fr;margin-top:8px">
+        <div><label for="fwqp-l3">Label 3</label><input type="text" id="fwqp-l3" value="Total goals" maxlength="60" /></div>
+        <div><label for="fwqp-v3">Valeur 3</label><input type="text" id="fwqp-v3" value="Over 2.5" maxlength="140" /></div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 2fr;margin-top:8px">
+        <div><label for="fwqp-l4">Label 4</label><input type="text" id="fwqp-l4" value="Top tip" maxlength="60" /></div>
+        <div><label for="fwqp-v4">Valeur 4</label><input type="text" id="fwqp-v4" value="" placeholder="ex. Home win &amp; BTTS Yes @ 3.20" maxlength="140" /></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Preview</h2>
+      <div class="preview-wrap" id="fwqp-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML to copy</h2>
+      <textarea id="fwqp-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="fwqp-copyBtn">Copy HTML</button>
+        <span class="status" id="fwqp-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-fw-tale-of-tape" role="tabpanel">
+    <h2 class="widget-title">Tale of the Tape</h2>
+    <p class="subtitle">Tableau comparatif Home vs Away (6 lignes de stats). Pour chaque ligne, coche <em>Winner</em> = Home / Away pour l'entourer en vert (classe <code>stat-win</code>).</p>
+
+    <div class="panel">
+      <h2>1. Header</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div><label for="fwtot-home">Home team</label><input type="text" id="fwtot-home" value="Home Team" maxlength="60" /></div>
+        <div><label for="fwtot-away">Away team</label><input type="text" id="fwtot-away" value="Away Team" maxlength="60" /></div>
+      </div>
+      <div style="margin-top:10px">
+        <label for="fwtot-title">Titre (auto si vide : « [Home] vs [Away] — Tale of the Tape »)</label>
+        <input type="text" id="fwtot-title" value="" placeholder="Auto" maxlength="140" />
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>2. Lignes stats (6 slots)</h2>
+      <div class="hint" style="margin-bottom:10px">Coche <strong>Winner</strong> = Home ou Away pour surligner la cellule gagnante en vert.</div>
+      <div id="fwtot-rows-container"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Preview</h2>
+      <div class="preview-wrap" id="fwtot-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML to copy</h2>
+      <textarea id="fwtot-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="fwtot-copyBtn">Copy HTML</button>
+        <span class="status" id="fwtot-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-fw-form-guide" role="tabpanel">
+    <h2 class="widget-title">Form guide</h2>
+    <p class="subtitle">Last-5 Form Guide (championnat) — pilules W/D/L colorées. Tape la série sous la forme <code>WWDLW</code> (5 lettres, la plus récente à droite). Les autres lignes sont numériques (Points, Goals For/Against) ou textuelles (Form Table = « 3rd »).</p>
+
+    <div class="panel">
+      <h2>1. Header</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div><label for="fwfg-home">Home team</label><input type="text" id="fwfg-home" value="Home Team" maxlength="60" /></div>
+        <div><label for="fwfg-away">Away team</label><input type="text" id="fwfg-away" value="Away Team" maxlength="60" /></div>
+      </div>
+      <div style="margin-top:10px">
+        <label for="fwfg-title">Titre (auto si vide : « [Home] vs. [Away] — Last 5 Form Guide »)</label>
+        <input type="text" id="fwfg-title" value="" placeholder="Auto" maxlength="140" />
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>2. Form (5 dernières journées de championnat)</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div><label for="fwfg-form-home">Home — 5 lettres (W/D/L)</label><input type="text" id="fwfg-form-home" value="WWDLW" maxlength="10" style="text-transform:uppercase" /></div>
+        <div><label for="fwfg-form-away">Away — 5 lettres (W/D/L)</label><input type="text" id="fwfg-form-away" value="LWWDW" maxlength="10" style="text-transform:uppercase" /></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Stats numériques</h2>
+      <div id="fwfg-num-container"></div>
+    </div>
+
+    <div class="panel">
+      <h2>4. Form (All Comps)</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div><label for="fwfg-formall-home">Home — 5 lettres (W/D/L)</label><input type="text" id="fwfg-formall-home" value="WWWDL" maxlength="10" style="text-transform:uppercase" /></div>
+        <div><label for="fwfg-formall-away">Away — 5 lettres (W/D/L)</label><input type="text" id="fwfg-formall-away" value="DWLWW" maxlength="10" style="text-transform:uppercase" /></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Preview</h2>
+      <div class="preview-wrap" id="fwfg-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML to copy</h2>
+      <textarea id="fwfg-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="fwfg-copyBtn">Copy HTML</button>
+        <span class="status" id="fwfg-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-fw-whispers-tips" role="tabpanel">
+    <h2 class="widget-title">Whispers predicts</h2>
+    <p class="subtitle">Bloc encadré vert avec jusqu'à 5 tips. Chaque ligne : Pari + Cote + Likelihood. Laisse un pari vide pour retirer la ligne.</p>
+
+    <div class="panel">
+      <h2>1. Header</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div><label for="fwtips-home">Home team</label><input type="text" id="fwtips-home" value="Home Team" maxlength="60" /></div>
+        <div><label for="fwtips-away">Away team</label><input type="text" id="fwtips-away" value="Away Team" maxlength="60" /></div>
+      </div>
+      <div style="margin-top:10px">
+        <label for="fwtips-title">Titre (auto si vide : « 📈 [Home] vs. [Away] — Whispers' Tips »)</label>
+        <input type="text" id="fwtips-title" value="" placeholder="Auto" maxlength="140" />
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>2. Tips (5 slots)</h2>
+      <div id="fwtips-rows-container"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Preview</h2>
+      <div class="preview-wrap" id="fwtips-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML to copy</h2>
+      <textarea id="fwtips-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="fwtips-copyBtn">Copy HTML</button>
+        <span class="status" id="fwtips-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-fw-form-cup" role="tabpanel">
+    <h2 class="widget-title">Form (cup competitions)</h2>
+    <p class="subtitle">Variante Form guide pour compétition à élimination directe. 4 lignes : Form (5 pills), Goals For, Goals Against, [Competition] (3 pills).</p>
+
+    <div class="panel">
+      <h2>1. Header</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div><label for="fwfgc-home">Home team</label><input type="text" id="fwfgc-home" value="Home Team" maxlength="60" /></div>
+        <div><label for="fwfgc-away">Away team</label><input type="text" id="fwfgc-away" value="Away Team" maxlength="60" /></div>
+      </div>
+      <div style="margin-top:10px">
+        <label for="fwfgc-title">Titre (auto si vide : « [Home] vs. [Away] — Last 5 Form Guide »)</label>
+        <input type="text" id="fwfgc-title" value="" placeholder="Auto" maxlength="140" />
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>2. Form (5 pills)</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div><label for="fwfgc-form-home">Home — 5 lettres (W/D/L)</label><input type="text" id="fwfgc-form-home" value="WWDLW" maxlength="10" style="text-transform:uppercase" /></div>
+        <div><label for="fwfgc-form-away">Away — 5 lettres (W/D/L)</label><input type="text" id="fwfgc-form-away" value="LWWDW" maxlength="10" style="text-transform:uppercase" /></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Goals</h2>
+      <div class="row" style="grid-template-columns: 1fr 1fr 90px;">
+        <div><label for="fwfgc-gf-home">Home — Goals For</label><input type="text" id="fwfgc-gf-home" value="12" maxlength="10" /></div>
+        <div><label for="fwfgc-gf-away">Away — Goals For</label><input type="text" id="fwfgc-gf-away" value="9" maxlength="10" /></div>
+        <div><label for="fwfgc-gf-win">Winner</label><select id="fwfgc-gf-win" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:5px"><option value="">—</option><option value="home">Home</option><option value="away">Away</option></select></div>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 1fr 90px;margin-top:8px">
+        <div><label for="fwfgc-ga-home">Home — Goals Against</label><input type="text" id="fwfgc-ga-home" value="4" maxlength="10" /></div>
+        <div><label for="fwfgc-ga-away">Away — Goals Against</label><input type="text" id="fwfgc-ga-away" value="7" maxlength="10" /></div>
+        <div><label for="fwfgc-ga-win">Winner</label><select id="fwfgc-ga-win" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:5px"><option value="">—</option><option value="home">Home</option><option value="away">Away</option></select></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>4. Competition (3 pills)</h2>
+      <div style="margin-bottom:8px">
+        <label for="fwfgc-comp-label">Label de la compétition (affiché au centre)</label>
+        <input type="text" id="fwfgc-comp-label" value="UEFA Champions League" maxlength="60" />
+      </div>
+      <div class="row" style="grid-template-columns: 1fr 1fr;">
+        <div><label for="fwfgc-comp-home">Home — 3 lettres (W/D/L)</label><input type="text" id="fwfgc-comp-home" value="WDW" maxlength="6" style="text-transform:uppercase" /></div>
+        <div><label for="fwfgc-comp-away">Away — 3 lettres (W/D/L)</label><input type="text" id="fwfgc-comp-away" value="LDW" maxlength="6" style="text-transform:uppercase" /></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Preview</h2>
+      <div class="preview-wrap" id="fwfgc-preview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>HTML to copy</h2>
+      <textarea id="fwfgc-output" readonly></textarea>
+      <div class="copy-row">
+        <button type="button" id="fwfgc-copyBtn">Copy HTML</button>
+        <span class="status" id="fwfgc-copyStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================== /FW Previews ================== -->
 
   <div class="tab-panel" id="tab-high-risk-acca" role="tabpanel">
     <h2 class="widget-title">High Risk Accumulator</h2>
@@ -7459,6 +7698,556 @@ function parsePlayerOddsFromText(text) {
   });
 
   ftkRender();
+})();
+
+// ========== FW Previews shared helpers (copy handler, pills renderer) ==========
+(function() {
+  window.fwWireCopy = function(prefix) {
+    const btn = $(prefix + '-copyBtn');
+    if (!btn) return;
+    btn.addEventListener('click', async () => {
+      const ta = $(prefix + '-output');
+      ta.select();
+      try {
+        await navigator.clipboard.writeText(ta.value);
+        $(prefix + '-copyStatus').textContent = "✓ Copied.";
+        setTimeout(() => $(prefix + '-copyStatus').textContent = '', 2000);
+      } catch (e) {
+        document.execCommand('copy');
+        $(prefix + '-copyStatus').textContent = "✓ Copied.";
+      }
+    });
+  };
+
+  // "WWDLW" (or "wwdlw", spaces ok) → the 5 W/D/L pill spans. Unknown
+  // characters are dropped so the string length caps naturally at n.
+  window.fwBuildPills = function(raw, max) {
+    const chars = String(raw || '').toUpperCase().replace(/\s+/g, '').split('');
+    const out = [];
+    for (const c of chars) {
+      if (c !== 'W' && c !== 'D' && c !== 'L') continue;
+      const cls = c === 'W' ? 'fp-w' : (c === 'D' ? 'fp-d' : 'fp-l');
+      out.push('<span class="fp ' + cls + '">' + c + '</span>');
+      if (max && out.length >= max) break;
+    }
+    return out.join('');
+  };
+})();
+
+// ========== WIDGET : FW Quick predictions (catégorie FW Previews) ==========
+(function() {
+  function buildFwqpHtml(d) {
+    const rows = d.rows.filter(r => (r.label && r.label.trim()) || (r.value && r.value.trim()));
+    const rowsHtml = rows.map((r, i) => {
+      const isLast = i === rows.length - 1;
+      const mb = isLast ? '' : 'margin-bottom:2px;';
+      return '<div style="display:flex;flex-wrap:wrap;gap:0 6px;' + mb + '">' +
+        '<dt style="font-weight:700;flex-shrink:0;">' + escapeHtml((r.label || '').trim()) + ':</dt>' +
+        '<dd style="margin:0;">' + escapeHtml((r.value || '').trim()) + '</dd>' +
+        '</div>';
+    }).join('\n');
+    return '<aside aria-label="Quick Predictions" id="quick-summary" style="background:#f0fce8;border-left:4px solid #44BD32;padding:16px 20px;margin:0 0 24px;border-radius:0 6px 6px 0;font-family:sans-serif;box-sizing:border-box;">\n' +
+      '<h2 style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2a7a1a;margin:0 0 10px;padding:0;">Quick Predictions</h2>\n' +
+      '<dl style="margin:0;padding:0;font-size:14px;line-height:1.9;color:#0C0C0C;">\n' +
+      (rowsHtml || '<div style="opacity:.6">Renseigne au moins une ligne.</div>') + '\n' +
+      '</dl></aside>';
+  }
+
+  function fwqpRender() {
+    const data = {
+      rows: [1,2,3,4].map(i => ({
+        label: $('fwqp-l' + i).value,
+        value: $('fwqp-v' + i).value
+      }))
+    };
+    const html = buildFwqpHtml(data);
+    $('fwqp-preview').innerHTML = html;
+    $('fwqp-output').value = html;
+  }
+
+  ['fwqp-l1','fwqp-v1','fwqp-l2','fwqp-v2','fwqp-l3','fwqp-v3','fwqp-l4','fwqp-v4']
+    .forEach(id => { const el = $(id); if (el) el.addEventListener('input', fwqpRender); });
+  fwWireCopy('fwqp');
+  fwqpRender();
+})();
+
+// ========== WIDGET : FW Tale of the Tape (catégorie FW Previews) ==========
+(function() {
+  const FWTOT_ROWS = [
+    { key: 'position',   label: 'Position',          h: '2nd',  a: '5th',  win: '' },
+    { key: 'points',     label: 'Points',            h: '38',   a: '31',   win: 'home' },
+    { key: 'goalsfor',   label: 'Goals For',         h: '52',   a: '44',   win: 'home' },
+    { key: 'goalsagainst', label: 'Goals Against',   h: '18',   a: '25',   win: 'home' },
+    { key: 'cleansheets', label: 'Clean Sheets',     h: '9',    a: '6',    win: 'home' },
+    { key: 'rank',       label: 'Home / Away Rank',  h: '1st (H)', a: '7th (A)', win: 'home' }
+  ];
+
+  function buildFwtotEditor() {
+    const container = $('fwtot-rows-container');
+    container.innerHTML = '';
+    const head = document.createElement('div');
+    head.className = 'row';
+    head.style.cssText = 'grid-template-columns: 1.4fr 1fr 1fr 90px; gap:6px; margin-bottom:6px; font-size:11px; font-weight:600; color:#6b7280';
+    head.innerHTML = '<div>Label</div><div>Home value</div><div>Away value</div><div>Winner</div>';
+    container.appendChild(head);
+    FWTOT_ROWS.forEach((r, i) => {
+      const idx = i + 1;
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.style.cssText = 'grid-template-columns: 1.4fr 1fr 1fr 90px; gap:6px; margin-bottom:4px';
+      row.innerHTML =
+        '<input type="text" id="fwtot-r' + idx + '-label" maxlength="50" value="' + escapeHtml(r.label) + '" />' +
+        '<input type="text" id="fwtot-r' + idx + '-home"  maxlength="30" value="' + escapeHtml(r.h)     + '" />' +
+        '<input type="text" id="fwtot-r' + idx + '-away"  maxlength="30" value="' + escapeHtml(r.a)     + '" />' +
+        '<select id="fwtot-r' + idx + '-win" style="padding:6px 4px;border:1px solid var(--border);border-radius:5px;background:#fff">' +
+        '<option value=""' + (r.win===''?' selected':'') + '>—</option>' +
+        '<option value="home"' + (r.win==='home'?' selected':'') + '>Home</option>' +
+        '<option value="away"' + (r.win==='away'?' selected':'') + '>Away</option></select>';
+      container.appendChild(row);
+      ['label','home','away'].forEach(f => {
+        const el = $('fwtot-r' + idx + '-' + f);
+        if (el) el.addEventListener('input', fwtotRender);
+      });
+      const sel = $('fwtot-r' + idx + '-win');
+      if (sel) sel.addEventListener('change', fwtotRender);
+    });
+  }
+
+  function buildFwtotCss() {
+    return '<style>\n' +
+      '.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}\n' +
+      '.fwtot{font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,Helvetica,Arial,sans-serif;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;margin:24px 0;box-sizing:border-box}\n' +
+      '.fwtot-hdr{background:#44BD32;padding:14px 18px;text-align:center}\n' +
+      '.fwtot-hdr h3{color:#0C0C0C;font-size:18px;font-weight:700;margin:0;line-height:1.3}\n' +
+      '.fwtot-body{padding:0 16px 16px}\n' +
+      '.fwtot-tbl{width:100%;border-collapse:collapse;table-layout:fixed;text-align:center}\n' +
+      '.fwtot-tbl thead tr{border-bottom:2px solid #0C0C0C}\n' +
+      '.fwtot-tbl th{padding:12px 8px 10px;font-size:13px;font-weight:700;color:#0C0C0C}\n' +
+      '.fwtot-tbl th:nth-child(1),.fwtot-tbl td:nth-child(1),\n' +
+      '.fwtot-tbl th:nth-child(3),.fwtot-tbl td:nth-child(3){width:40%;word-break:break-word}\n' +
+      '.fwtot-tbl th:nth-child(2),.fwtot-tbl td:nth-child(2){width:20%;color:#777777;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px}\n' +
+      '.fwtot-tbl td{padding:9px 8px;font-size:13px;color:#0C0C0C;vertical-align:middle;border-bottom:1px solid #F2F2F2}\n' +
+      '.fwtot-tbl tbody tr:last-child td{border-bottom:none}\n' +
+      '.stat-win{font-weight:700;background:#edfae9;outline:2px solid #44BD32;outline-offset:-2px;border-radius:5px}\n' +
+      '@media(max-width:480px){\n' +
+      '  .fwtot-tbl th,.fwtot-tbl td{padding:7px 4px;font-size:11px}\n' +
+      '  .fwtot-hdr h3{font-size:15px}\n' +
+      '}\n' +
+      '</style>';
+  }
+
+  function buildFwtotHtml(d) {
+    const title = (d.title || '').trim() || (d.home + ' vs ' + d.away + ' — Tale of the Tape');
+    const rowsHtml = d.rows.map(r => {
+      const homeCls = r.win === 'home' ? ' class="stat-win"' : '';
+      const awayCls = r.win === 'away' ? ' class="stat-win"' : '';
+      return '        <tr><td' + homeCls + '>' + escapeHtml(r.home || '') + '</td><th scope="row">' + escapeHtml(r.label || '') + '</th><td' + awayCls + '>' + escapeHtml(r.away || '') + '</td></tr>';
+    }).join('\n');
+    return buildFwtotCss() + '\n\n' +
+      '<section class="fwtot" aria-labelledby="fwtot-title">\n' +
+      '  <div class="fwtot-hdr">\n' +
+      '    <h3 id="fwtot-title">' + escapeHtml(title) + '</h3>\n' +
+      '  </div>\n' +
+      '  <div class="fwtot-body">\n' +
+      '    <table class="fwtot-tbl" aria-label="Statistical comparison">\n' +
+      '      <thead>\n' +
+      '        <tr>\n' +
+      '          <th scope="col">' + escapeHtml(d.home || '') + '</th>\n' +
+      '          <th scope="col">vs</th>\n' +
+      '          <th scope="col">' + escapeHtml(d.away || '') + '</th>\n' +
+      '        </tr>\n' +
+      '      </thead>\n' +
+      '      <tbody>\n' +
+      rowsHtml + '\n' +
+      '      </tbody>\n' +
+      '    </table>\n' +
+      '  </div>\n' +
+      '</section>';
+  }
+
+  function fwtotRender() {
+    const rows = FWTOT_ROWS.map((_, i) => {
+      const idx = i + 1;
+      return {
+        label: ($('fwtot-r' + idx + '-label') || {value:''}).value,
+        home:  ($('fwtot-r' + idx + '-home')  || {value:''}).value,
+        away:  ($('fwtot-r' + idx + '-away')  || {value:''}).value,
+        win:   ($('fwtot-r' + idx + '-win')   || {value:''}).value
+      };
+    });
+    const data = {
+      home:  $('fwtot-home').value.trim(),
+      away:  $('fwtot-away').value.trim(),
+      title: $('fwtot-title').value.trim(),
+      rows:  rows
+    };
+    const html = buildFwtotHtml(data);
+    $('fwtot-preview').innerHTML = html;
+    $('fwtot-output').value = html;
+  }
+
+  buildFwtotEditor();
+  ['fwtot-home','fwtot-away','fwtot-title'].forEach(id => {
+    const el = $(id); if (el) el.addEventListener('input', fwtotRender);
+  });
+  fwWireCopy('fwtot');
+  fwtotRender();
+})();
+
+// ========== WIDGET : FW Form guide (catégorie FW Previews) — league last 5 + all comps ==========
+(function() {
+  // Numeric-row model shared with the editor. Winner select applies stat-win.
+  const FWFG_NUMS = [
+    { key: 'points',       label: 'Points',       h: '32', a: '27', win: 'home' },
+    { key: 'formtable',    label: 'Form Table',   h: '3rd', a: '1st', win: 'away' },
+    { key: 'goalsfor',     label: 'Goals For',    h: '12', a: '10', win: 'home' },
+    { key: 'goalsagainst', label: 'Goals Against',h: '4',  a: '7',  win: 'home' }
+  ];
+
+  function buildFwfgNumEditor() {
+    const container = $('fwfg-num-container');
+    container.innerHTML = '';
+    const head = document.createElement('div');
+    head.className = 'row';
+    head.style.cssText = 'grid-template-columns: 1.4fr 1fr 1fr 90px; gap:6px; margin-bottom:6px; font-size:11px; font-weight:600; color:#6b7280';
+    head.innerHTML = '<div>Label</div><div>Home</div><div>Away</div><div>Winner</div>';
+    container.appendChild(head);
+    FWFG_NUMS.forEach((r, i) => {
+      const idx = i + 1;
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.style.cssText = 'grid-template-columns: 1.4fr 1fr 1fr 90px; gap:6px; margin-bottom:4px';
+      row.innerHTML =
+        '<input type="text" id="fwfg-n' + idx + '-label" maxlength="40" value="' + escapeHtml(r.label) + '" />' +
+        '<input type="text" id="fwfg-n' + idx + '-home"  maxlength="20" value="' + escapeHtml(r.h)     + '" />' +
+        '<input type="text" id="fwfg-n' + idx + '-away"  maxlength="20" value="' + escapeHtml(r.a)     + '" />' +
+        '<select id="fwfg-n' + idx + '-win" style="padding:6px 4px;border:1px solid var(--border);border-radius:5px;background:#fff">' +
+        '<option value=""' + (r.win===''?' selected':'') + '>—</option>' +
+        '<option value="home"' + (r.win==='home'?' selected':'') + '>Home</option>' +
+        '<option value="away"' + (r.win==='away'?' selected':'') + '>Away</option></select>';
+      container.appendChild(row);
+      ['label','home','away'].forEach(f => {
+        const el = $('fwfg-n' + idx + '-' + f);
+        if (el) el.addEventListener('input', fwfgRender);
+      });
+      const sel = $('fwfg-n' + idx + '-win');
+      if (sel) sel.addEventListener('change', fwfgRender);
+    });
+  }
+
+  function buildFwfgCss() {
+    return '<style>\n' +
+      '.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}\n' +
+      '.fwfg{font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,Helvetica,Arial,sans-serif;border:2px solid #44BD32;border-radius:14px;background:#f3f4f6;margin:30px 0;overflow:hidden;box-sizing:border-box}\n' +
+      '.fwfg-hdr{background:#44BD32;color:#0C0C0C;padding:14px 20px;text-align:center;font-weight:700;font-size:17px}\n' +
+      '.fwfg-body{padding:0 16px 16px}\n' +
+      '.fwfg-tbl{width:100%;border-collapse:collapse;table-layout:fixed;text-align:center}\n' +
+      '.fwfg-tbl thead tr{border-bottom:2px solid #0C0C0C}\n' +
+      '.fwfg-tbl th{padding:12px 8px 10px;font-size:13px;font-weight:700;color:#0C0C0C}\n' +
+      '.fwfg-tbl th:nth-child(1),.fwfg-tbl td:nth-child(1),\n' +
+      '.fwfg-tbl th:nth-child(3),.fwfg-tbl td:nth-child(3){width:40%;word-break:break-word}\n' +
+      '.fwfg-tbl th:nth-child(2),.fwfg-tbl td:nth-child(2){width:20%;color:#777777;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px}\n' +
+      '.fwfg-tbl td{padding:9px 8px;font-size:13px;color:#0C0C0C;vertical-align:middle;border-bottom:1px solid #F2F2F2}\n' +
+      '.fwfg-tbl tbody tr:last-child td{border-bottom:none}\n' +
+      '.stat-win{font-weight:700;background:#edfae9;outline:2px solid #44BD32;outline-offset:-2px;border-radius:5px}\n' +
+      '.fwfg-pills{display:flex;justify-content:center;gap:3px;flex-wrap:wrap}\n' +
+      '.fp{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}\n' +
+      '.fp-w{background:#2ecc71}\n' +
+      '.fp-d{background:#95a5a6}\n' +
+      '.fp-l{background:#e74c3c}\n' +
+      '@media(max-width:480px){\n' +
+      '  .fwfg-tbl th,.fwfg-tbl td{padding:7px 4px;font-size:11px}\n' +
+      '  .fwfg-hdr{font-size:15px}\n' +
+      '  .fp{width:22px;height:22px;font-size:10px}\n' +
+      '}\n' +
+      '</style>';
+  }
+
+  function buildFwfgHtml(d) {
+    const title = (d.title || '').trim() || (d.home + ' vs. ' + d.away + ' — Last 5 Form Guide');
+    const pillsFormHome = fwBuildPills(d.formHome, 5);
+    const pillsFormAway = fwBuildPills(d.formAway, 5);
+    const pillsAllHome  = fwBuildPills(d.formAllHome, 5);
+    const pillsAllAway  = fwBuildPills(d.formAllAway, 5);
+    const numRowsHtml = d.nums.map(r => {
+      const hCls = r.win === 'home' ? ' class="stat-win"' : '';
+      const aCls = r.win === 'away' ? ' class="stat-win"' : '';
+      return '        <tr><td' + hCls + '>' + escapeHtml(r.home || '') + '</td><th scope="row">' + escapeHtml(r.label || '') + '</th><td' + aCls + '>' + escapeHtml(r.away || '') + '</td></tr>';
+    }).join('\n');
+    return buildFwfgCss() + '\n\n' +
+      '<section class="fwfg" aria-labelledby="fwfg-title">\n' +
+      '  <div class="fwfg-hdr" id="fwfg-title">' + escapeHtml(title) + '</div>\n' +
+      '  <div class="fwfg-body">\n' +
+      '    <table class="fwfg-tbl" aria-label="Form guide comparison">\n' +
+      '      <thead>\n' +
+      '        <tr>\n' +
+      '          <th scope="col">' + escapeHtml(d.home || '') + '</th>\n' +
+      '          <th scope="col">vs</th>\n' +
+      '          <th scope="col">' + escapeHtml(d.away || '') + '</th>\n' +
+      '        </tr>\n' +
+      '      </thead>\n' +
+      '      <tbody>\n' +
+      '        <tr>\n' +
+      '          <td><div class="fwfg-pills">' + pillsFormHome + '</div></td>\n' +
+      '          <th scope="row">Form</th>\n' +
+      '          <td><div class="fwfg-pills">' + pillsFormAway + '</div></td>\n' +
+      '        </tr>\n' +
+      numRowsHtml + '\n' +
+      '        <tr>\n' +
+      '          <td><div class="fwfg-pills">' + pillsAllHome + '</div></td>\n' +
+      '          <th scope="row">Form (All Comps)</th>\n' +
+      '          <td><div class="fwfg-pills">' + pillsAllAway + '</div></td>\n' +
+      '        </tr>\n' +
+      '      </tbody>\n' +
+      '    </table>\n' +
+      '  </div>\n' +
+      '</section>';
+  }
+
+  function fwfgRender() {
+    const nums = FWFG_NUMS.map((_, i) => {
+      const idx = i + 1;
+      return {
+        label: ($('fwfg-n' + idx + '-label') || {value:''}).value,
+        home:  ($('fwfg-n' + idx + '-home')  || {value:''}).value,
+        away:  ($('fwfg-n' + idx + '-away')  || {value:''}).value,
+        win:   ($('fwfg-n' + idx + '-win')   || {value:''}).value
+      };
+    });
+    const data = {
+      home:        $('fwfg-home').value.trim(),
+      away:        $('fwfg-away').value.trim(),
+      title:       $('fwfg-title').value.trim(),
+      formHome:    $('fwfg-form-home').value,
+      formAway:    $('fwfg-form-away').value,
+      formAllHome: $('fwfg-formall-home').value,
+      formAllAway: $('fwfg-formall-away').value,
+      nums:        nums
+    };
+    const html = buildFwfgHtml(data);
+    $('fwfg-preview').innerHTML = html;
+    $('fwfg-output').value = html;
+  }
+
+  buildFwfgNumEditor();
+  ['fwfg-home','fwfg-away','fwfg-title','fwfg-form-home','fwfg-form-away','fwfg-formall-home','fwfg-formall-away']
+    .forEach(id => { const el = $(id); if (el) el.addEventListener('input', fwfgRender); });
+  fwWireCopy('fwfg');
+  fwfgRender();
+})();
+
+// ========== WIDGET : FW Whispers predicts (catégorie FW Previews) ==========
+(function() {
+  const FWTIPS_ROW_COUNT = 5;
+
+  function buildFwtipsEditor() {
+    const container = $('fwtips-rows-container');
+    container.innerHTML = '';
+    const head = document.createElement('div');
+    head.className = 'row';
+    head.style.cssText = 'grid-template-columns: 30px 2fr 0.7fr 1fr; gap:6px; margin-bottom:6px; font-size:11px; font-weight:600; color:#6b7280';
+    head.innerHTML = '<div style="text-align:center">#</div><div>Bet</div><div>Odds</div><div>Likelihood</div>';
+    container.appendChild(head);
+    for (let i = 1; i <= FWTIPS_ROW_COUNT; i++) {
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.style.cssText = 'grid-template-columns: 30px 2fr 0.7fr 1fr; gap:6px; margin-bottom:4px; align-items:center';
+      row.innerHTML =
+        '<div style="text-align:center;font-size:12px;color:#6b7280">' + i + '</div>' +
+        '<input type="text" id="fwtips-r' + i + '-bet"  maxlength="80" placeholder="Both teams to score" />' +
+        '<input type="text" id="fwtips-r' + i + '-odds" maxlength="12" placeholder="1.80" />' +
+        '<input type="text" id="fwtips-r' + i + '-lk"   maxlength="40" placeholder="High" />';
+      container.appendChild(row);
+      ['bet','odds','lk'].forEach(f => {
+        const el = $('fwtips-r' + i + '-' + f);
+        if (el) el.addEventListener('input', fwtipsRender);
+      });
+    }
+    // Seed the first tip so the preview is not empty on load
+    $('fwtips-r1-bet').value  = 'Both teams to score';
+    $('fwtips-r1-odds').value = '1.80';
+    $('fwtips-r1-lk').value   = 'High';
+    $('fwtips-r2-bet').value  = 'Over 2.5 goals';
+    $('fwtips-r2-odds').value = '1.95';
+    $('fwtips-r2-lk').value   = 'Medium';
+  }
+
+  function buildFwtipsCss() {
+    return '<style>\n' +
+      '.fwtips{font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,Helvetica,Arial,sans-serif;border:2px solid #44BD32;border-radius:14px;background-color:#f3f4f6;margin:30px 0;overflow:hidden;box-sizing:border-box}\n' +
+      '.fwtips-hdr{background-color:#44BD32;color:#0C0C0C;padding:14px 20px;font-size:17px;font-weight:700}\n' +
+      '.fwtips-body{padding:20px;font-size:14px;line-height:1.6;color:#0C0C0C}\n' +
+      '.fwtips-body p{margin:0 0 8px}\n' +
+      '.fwtips-body p:last-child{margin-bottom:0}\n' +
+      '@media(min-width:768px){.fwtips-body{font-size:15px}}\n' +
+      '</style>';
+  }
+
+  function buildFwtipsHtml(d) {
+    const title = (d.title || '').trim() || ('📈 ' + d.home + ' vs. ' + d.away + ' — Whispers\' Tips');
+    const rows = d.rows.filter(r => (r.bet && r.bet.trim()));
+    const rowsHtml = rows.map(r => {
+      const bet   = escapeHtml((r.bet   || '').trim());
+      const odds  = escapeHtml((r.odds  || '').trim());
+      const lk    = escapeHtml((r.lk    || '').trim());
+      const atBit = odds ? (' at ' + odds) : '';
+      const lkBit = lk ? (' | <strong>Likelihood: ' + lk + '</strong>') : '';
+      return '    <p>&gt; ' + bet + atBit + lkBit + '</p>';
+    }).join('\n');
+    return buildFwtipsCss() + '\n\n' +
+      '<section class="fwtips" aria-labelledby="fwtips-title">\n' +
+      '  <div class="fwtips-hdr" id="fwtips-title">' + escapeHtml(title) + '</div>\n' +
+      '  <div class="fwtips-body">\n' +
+      (rowsHtml || '    <p>&gt; Add at least one tip.</p>') + '\n' +
+      '  </div>\n' +
+      '</section>';
+  }
+
+  function fwtipsRender() {
+    const rows = [];
+    for (let i = 1; i <= FWTIPS_ROW_COUNT; i++) {
+      rows.push({
+        bet:  ($('fwtips-r' + i + '-bet')  || {value:''}).value,
+        odds: ($('fwtips-r' + i + '-odds') || {value:''}).value,
+        lk:   ($('fwtips-r' + i + '-lk')   || {value:''}).value
+      });
+    }
+    const data = {
+      home:  $('fwtips-home').value.trim(),
+      away:  $('fwtips-away').value.trim(),
+      title: $('fwtips-title').value.trim(),
+      rows:  rows
+    };
+    const html = buildFwtipsHtml(data);
+    $('fwtips-preview').innerHTML = html;
+    $('fwtips-output').value = html;
+  }
+
+  buildFwtipsEditor();
+  ['fwtips-home','fwtips-away','fwtips-title'].forEach(id => {
+    const el = $(id); if (el) el.addEventListener('input', fwtipsRender);
+  });
+  fwWireCopy('fwtips');
+  fwtipsRender();
+})();
+
+// ========== WIDGET : FW Form guide — cup competitions (catégorie FW Previews) ==========
+(function() {
+  function buildFwfgcHtml(d) {
+    const title = (d.title || '').trim() || (d.home + ' vs. ' + d.away + ' — Last 5 Form Guide');
+    const pillsFormHome = fwBuildPills(d.formHome, 5);
+    const pillsFormAway = fwBuildPills(d.formAway, 5);
+    const pillsCompHome = fwBuildPills(d.compHome, 3);
+    const pillsCompAway = fwBuildPills(d.compAway, 3);
+    const gfHome = escapeHtml((d.gfHome || '').toString());
+    const gfAway = escapeHtml((d.gfAway || '').toString());
+    const gaHome = escapeHtml((d.gaHome || '').toString());
+    const gaAway = escapeHtml((d.gaAway || '').toString());
+    const gfHomeCls = d.gfWin === 'home' ? ' class="stat-win"' : '';
+    const gfAwayCls = d.gfWin === 'away' ? ' class="stat-win"' : '';
+    const gaHomeCls = d.gaWin === 'home' ? ' class="stat-win"' : '';
+    const gaAwayCls = d.gaWin === 'away' ? ' class="stat-win"' : '';
+    // Same CSS as the league form-guide widget → reuse via a module-scoped helper
+    // to keep the class names identical. Publishers pasting both on one page get
+    // one CSS declaration total, which is intentional.
+    return buildFwfgcCss() + '\n\n' +
+      '<section class="fwfg" aria-labelledby="fwfg-title">\n' +
+      '  <div class="fwfg-hdr" id="fwfg-title">' + escapeHtml(title) + '</div>\n' +
+      '  <div class="fwfg-body">\n' +
+      '    <table class="fwfg-tbl" aria-label="Form guide comparison">\n' +
+      '      <thead>\n' +
+      '        <tr>\n' +
+      '          <th scope="col">' + escapeHtml(d.home || '') + '</th>\n' +
+      '          <th scope="col">vs</th>\n' +
+      '          <th scope="col">' + escapeHtml(d.away || '') + '</th>\n' +
+      '        </tr>\n' +
+      '      </thead>\n' +
+      '      <tbody>\n' +
+      '        <tr>\n' +
+      '          <td><div class="fwfg-pills">' + pillsFormHome + '</div></td>\n' +
+      '          <th scope="row">Form</th>\n' +
+      '          <td><div class="fwfg-pills">' + pillsFormAway + '</div></td>\n' +
+      '        </tr>\n' +
+      '        <tr><td' + gfHomeCls + '>' + gfHome + '</td><th scope="row">Goals For</th><td' + gfAwayCls + '>' + gfAway + '</td></tr>\n' +
+      '        <tr><td' + gaHomeCls + '>' + gaHome + '</td><th scope="row">Goals Against</th><td' + gaAwayCls + '>' + gaAway + '</td></tr>\n' +
+      '        <tr>\n' +
+      '          <td><div class="fwfg-pills">' + pillsCompHome + '</div></td>\n' +
+      '          <th scope="row">' + escapeHtml(d.compLabel || 'Competition') + '</th>\n' +
+      '          <td><div class="fwfg-pills">' + pillsCompAway + '</div></td>\n' +
+      '        </tr>\n' +
+      '      </tbody>\n' +
+      '    </table>\n' +
+      '  </div>\n' +
+      '</section>';
+  }
+
+  // Duplicated intentionally so this widget is fully self-contained when copied
+  // separately from the league Form guide.
+  function buildFwfgcCss() {
+    return '<style>\n' +
+      '.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}\n' +
+      '.fwfg{font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,Helvetica,Arial,sans-serif;border:2px solid #44BD32;border-radius:14px;background:#f3f4f6;margin:30px 0;overflow:hidden;box-sizing:border-box}\n' +
+      '.fwfg-hdr{background:#44BD32;color:#0C0C0C;padding:14px 20px;text-align:center;font-weight:700;font-size:17px}\n' +
+      '.fwfg-body{padding:0 16px 16px}\n' +
+      '.fwfg-tbl{width:100%;border-collapse:collapse;table-layout:fixed;text-align:center}\n' +
+      '.fwfg-tbl thead tr{border-bottom:2px solid #0C0C0C}\n' +
+      '.fwfg-tbl th{padding:12px 8px 10px;font-size:13px;font-weight:700;color:#0C0C0C}\n' +
+      '.fwfg-tbl th:nth-child(1),.fwfg-tbl td:nth-child(1),\n' +
+      '.fwfg-tbl th:nth-child(3),.fwfg-tbl td:nth-child(3){width:40%;word-break:break-word}\n' +
+      '.fwfg-tbl th:nth-child(2),.fwfg-tbl td:nth-child(2){width:20%;color:#777777;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px}\n' +
+      '.fwfg-tbl td{padding:9px 8px;font-size:13px;color:#0C0C0C;vertical-align:middle;border-bottom:1px solid #F2F2F2}\n' +
+      '.fwfg-tbl tbody tr:last-child td{border-bottom:none}\n' +
+      '.stat-win{font-weight:700;background:#edfae9;outline:2px solid #44BD32;outline-offset:-2px;border-radius:5px}\n' +
+      '.fwfg-pills{display:flex;justify-content:center;gap:3px;flex-wrap:wrap}\n' +
+      '.fp{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}\n' +
+      '.fp-w{background:#2ecc71}\n' +
+      '.fp-d{background:#95a5a6}\n' +
+      '.fp-l{background:#e74c3c}\n' +
+      '@media(max-width:480px){\n' +
+      '  .fwfg-tbl th,.fwfg-tbl td{padding:7px 4px;font-size:11px}\n' +
+      '  .fwfg-hdr{font-size:15px}\n' +
+      '  .fp{width:22px;height:22px;font-size:10px}\n' +
+      '}\n' +
+      '</style>';
+  }
+
+  function fwfgcRender() {
+    const data = {
+      home:      $('fwfgc-home').value.trim(),
+      away:      $('fwfgc-away').value.trim(),
+      title:     $('fwfgc-title').value.trim(),
+      formHome:  $('fwfgc-form-home').value,
+      formAway:  $('fwfgc-form-away').value,
+      gfHome:    $('fwfgc-gf-home').value,
+      gfAway:    $('fwfgc-gf-away').value,
+      gfWin:     $('fwfgc-gf-win').value,
+      gaHome:    $('fwfgc-ga-home').value,
+      gaAway:    $('fwfgc-ga-away').value,
+      gaWin:     $('fwfgc-ga-win').value,
+      compLabel: $('fwfgc-comp-label').value.trim(),
+      compHome:  $('fwfgc-comp-home').value,
+      compAway:  $('fwfgc-comp-away').value
+    };
+    const html = buildFwfgcHtml(data);
+    $('fwfgc-preview').innerHTML = html;
+    $('fwfgc-output').value = html;
+  }
+
+  [
+    'fwfgc-home','fwfgc-away','fwfgc-title',
+    'fwfgc-form-home','fwfgc-form-away',
+    'fwfgc-gf-home','fwfgc-gf-away',
+    'fwfgc-ga-home','fwfgc-ga-away',
+    'fwfgc-comp-label','fwfgc-comp-home','fwfgc-comp-away'
+  ].forEach(id => {
+    const el = $(id); if (!el) return;
+    el.addEventListener('input', fwfgcRender);
+  });
+  ['fwfgc-gf-win','fwfgc-ga-win'].forEach(id => {
+    const el = $(id); if (el) el.addEventListener('change', fwfgcRender);
+  });
+  fwWireCopy('fwfgc');
+  fwfgcRender();
 })();
 
 </script>
